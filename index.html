@@ -2,8 +2,15 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ICT Online Examination System</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="description" content="ICT Online Examination System for school students Std V to VIII. Covers ICT and Computer Science subjects with MCQ, True/False, Match the Following, and Full Form sections.">
+<meta name="theme-color" content="#1a237e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ICT Exam">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231a237e'/><text y='.9em' font-size='70' x='50%' text-anchor='middle'>📚</text></svg>">
+<title>ICT Online Examination System | Std V–VIII</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
@@ -898,6 +905,33 @@
     background: #e3f2fd; border: 1px solid #90caf9; border-radius: 10px;
     padding: 14px 18px; font-size: 0.85rem; color: #0d47a1; font-weight: 600; margin-bottom: 16px;
   }
+
+  /* ═══════════════════════════════════════════════
+     PRINT STYLESHEET — for result page printing
+  ═══════════════════════════════════════════════ */
+  @media print {
+    #loading-screen, .top-bar, .page:not(#page-result),
+    #page-result .btn, #page-result button,
+    .dash-sidebar, .dash-main .filter-bar,
+    #submit-modal, #sidebar-overlay { display: none !important; }
+    body { background: #fff !important; font-size: 12pt; }
+    #page-result { display: block !important; }
+    .main-container { max-width: 100% !important; padding: 0 !important; }
+    .card { box-shadow: none !important; border: 1px solid #ddd !important; }
+    @page { margin: 15mm; }
+  }
+
+  /* INPUT VALIDATION ERROR STATES */
+  .field-error input, .field-error select {
+    border-color: var(--danger) !important;
+    background: #fff5f5 !important;
+    animation: shake .35s ease;
+  }
+  .field-error label { color: var(--danger) !important; }
+  .field-err-msg {
+    font-size: .75rem; font-weight: 800; color: var(--danger);
+    margin-top: 4px; display: flex; align-items: center; gap: 4px;
+  }
 </style>
 </head>
 <body>
@@ -911,163 +945,473 @@
 
 <!-- ===================== PAGE 1: REGISTRATION ===================== -->
 <div class="page active" id="page-register">
-  <div class="top-bar">
-    <div class="brand">📚 ICT <span>Exam</span> Portal</div>
-    <div style="color:#9fa8da; font-size:0.85rem; font-weight:700;">Student Registration</div>
-  </div>
-  <div class="main-container">
-    <div class="card">
-      <div class="card-header">
-        <h2>🎓 Student Registration</h2>
-        <p>Please fill all details carefully before starting the exam.</p>
+  <!-- Hero Header -->
+  <div style="background:linear-gradient(135deg,#1a237e 0%,#283593 40%,#3949ab 100%);
+    padding:0;position:relative;overflow:hidden;">
+    <!-- Decorative circles -->
+    <div style="position:absolute;width:300px;height:300px;border-radius:50%;
+      background:rgba(255,111,0,.08);top:-80px;right:-60px;pointer-events:none;"></div>
+    <div style="position:absolute;width:200px;height:200px;border-radius:50%;
+      background:rgba(255,255,255,.04);bottom:-50px;left:-40px;pointer-events:none;"></div>
+    <div style="max-width:980px;margin:0 auto;padding:24px 20px 20px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:14px;">
+          <div style="width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#ff6f00,#ff8f00);
+            display:flex;align-items:center;justify-content:center;font-size:1.6rem;
+            box-shadow:0 6px 20px rgba(255,111,0,.4);flex-shrink:0;">📚</div>
+          <div>
+            <div style="color:#fff;font-size:1.35rem;font-weight:900;line-height:1.1;">ICT Exam Portal</div>
+            <div style="color:#9fa8da;font-size:.75rem;font-weight:700;letter-spacing:.5px;">Online Examination System · Std V–VIII</div>
+          </div>
+        </div>
+        <button onclick="goToTeacherLogin()" style="padding:9px 18px;border-radius:99px;
+          border:2px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);
+          color:#c5cae9;font-family:inherit;font-weight:800;font-size:.82rem;cursor:pointer;
+          display:flex;align-items:center;gap:6px;transition:all .2s;white-space:nowrap;"
+          onmouseover="this.style.background='rgba(255,255,255,.18)'"
+          onmouseout="this.style.background='rgba(255,255,255,.08)'">
+          🔐 Teacher Login
+        </button>
       </div>
-      <div class="card-body">
-        <div class="alert alert-info">ℹ️ Make sure all details are correct. They cannot be changed after starting the exam.</div>
-        <div class="form-grid" id="reg-form">
-          <div class="form-group">
-            <label>Student Name *</label>
-            <input type="text" id="reg-name" placeholder="Enter your full name" autocomplete="off">
+      <!-- Welcome banner -->
+      <div style="margin-top:28px;padding:22px 24px;background:rgba(255,255,255,.06);
+        border-radius:18px;border:1px solid rgba(255,255,255,.1);display:flex;
+        align-items:center;gap:18px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:200px;">
+          <div style="font-size:1.7rem;font-weight:900;color:#fff;margin-bottom:4px;">
+            Welcome, Student! 👋
           </div>
-          <div class="form-group">
-            <label>Roll Number *</label>
-            <input type="text" id="reg-roll" placeholder="Enter roll number" autocomplete="off">
+          <div style="color:#9fa8da;font-size:.88rem;font-weight:700;line-height:1.6;">
+            Please fill in your details below to begin your ICT examination.<br>
+            Ensure all information is accurate before proceeding.
           </div>
+        </div>
+        <!-- Stats pills -->
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <div style="background:rgba(255,111,0,.2);border:1px solid rgba(255,111,0,.3);
+            border-radius:12px;padding:10px 16px;text-align:center;">
+            <div style="color:#ffcc80;font-size:1.2rem;font-weight:900;">40</div>
+            <div style="color:#ff8f00;font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;">Total Marks</div>
+          </div>
+          <div style="background:rgba(0,200,83,.15);border:1px solid rgba(0,200,83,.25);
+            border-radius:12px;padding:10px 16px;text-align:center;">
+            <div style="color:#a5d6a7;font-size:1.2rem;font-weight:900;">45</div>
+            <div style="color:#66bb6a;font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;">Minutes</div>
+          </div>
+          <div style="background:rgba(0,188,212,.15);border:1px solid rgba(0,188,212,.25);
+            border-radius:12px;padding:10px 16px;text-align:center;">
+            <div style="color:#80deea;font-size:1.2rem;font-weight:900;">4</div>
+            <div style="color:#4dd0e1;font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;">Sections</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Card -->
+  <div style="max-width:980px;margin:0 auto;padding:24px 16px 40px;">
+    <div style="background:#fff;border-radius:22px;box-shadow:0 8px 40px rgba(26,35,126,.14);
+      overflow:hidden;animation:slideInUp .4s ease;">
+
+      <!-- Form header -->
+      <div style="background:linear-gradient(90deg,#f5f7ff,#fff);padding:22px 28px;
+        border-bottom:2px solid #e8eaf6;display:flex;align-items:center;gap:14px;">
+        <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#1a237e,#3949ab);
+          display:flex;align-items:center;justify-content:center;font-size:1.3rem;">🎓</div>
+        <div>
+          <div style="font-size:1.15rem;font-weight:900;color:var(--text);">Student Registration</div>
+          <div style="font-size:.8rem;color:var(--muted);font-weight:700;">Fill all fields marked with * to continue</div>
+        </div>
+      </div>
+
+      <div style="padding:26px 28px;">
+        <!-- Info alert -->
+        <div style="background:linear-gradient(90deg,#e3f2fd,#f5f7ff);border-left:4px solid #2196f3;
+          border-radius:10px;padding:13px 16px;display:flex;align-items:center;gap:10px;
+          margin-bottom:22px;font-size:.9rem;color:#0d47a1;font-weight:700;">
+          <span style="font-size:1.2rem;">ℹ️</span>
+          <span>Make sure all details are correct — they cannot be changed after starting the exam.</span>
+        </div>
+
+        <!-- Form grid -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;" id="reg-form"
+          class="reg-form-grid">
+          <!-- Name -->
           <div class="form-group">
-            <label>Standard *</label>
-            <select id="reg-std">
+            <label>👤 Student Name *</label>
+            <input type="text" id="reg-name" placeholder="Enter your full name" autocomplete="off"
+              style="font-size:1rem;"
+              onfocus="this.parentNode.querySelector('label').style.color='var(--accent)'"
+              onblur="this.parentNode.querySelector('label').style.color=''">
+          </div>
+          <!-- Roll -->
+          <div class="form-group">
+            <label>🔢 Roll Number *</label>
+            <input type="text" id="reg-roll" placeholder="Enter your roll number" autocomplete="off"
+              style="font-size:1rem;"
+              onfocus="this.parentNode.querySelector('label').style.color='var(--accent)'"
+              onblur="this.parentNode.querySelector('label').style.color=''">
+          </div>
+          <!-- Std -->
+          <div class="form-group">
+            <label>📚 Standard *</label>
+            <select id="reg-std" style="font-size:1rem;"
+              onfocus="this.parentNode.querySelector('label').style.color='var(--accent)'"
+              onblur="this.parentNode.querySelector('label').style.color=''">
               <option value="">-- Select Standard --</option>
-              <option value="V">Std V (5th)</option>
-              <option value="VI">Std VI (6th)</option>
-              <option value="VII">Std VII (7th)</option>
-              <option value="VIII">Std VIII (8th)</option>
+              <option value="V">Std V (5th Grade)</option>
+              <option value="VI">Std VI (6th Grade)</option>
+              <option value="VII">Std VII (7th Grade)</option>
+              <option value="VIII">Std VIII (8th Grade)</option>
             </select>
           </div>
+          <!-- Division -->
           <div class="form-group">
-            <label>Division *</label>
-            <select id="reg-div">
+            <label>🏫 Division *</label>
+            <select id="reg-div" style="font-size:1rem;"
+              onfocus="this.parentNode.querySelector('label').style.color='var(--accent)'"
+              onblur="this.parentNode.querySelector('label').style.color=''">
               <option value="">-- Select Division --</option>
-              <option value="A">A</option>
-              <option value="B">B</option>
-              <option value="C">C</option>
-              <option value="D">D</option>
+              <option value="A">Division A</option>
+              <option value="B">Division B</option>
+              <option value="C">Division C</option>
+              <option value="D">Division D</option>
             </select>
           </div>
+          <!-- Subject -->
           <div class="form-group">
-            <label>Subject *</label>
-            <select id="reg-sub">
+            <label>💻 Subject *</label>
+            <select id="reg-sub" style="font-size:1rem;"
+              onfocus="this.parentNode.querySelector('label').style.color='var(--accent)'"
+              onblur="this.parentNode.querySelector('label').style.color=''">
               <option value="">-- Select Subject --</option>
               <option value="ICT">ICT (Information & Communication Technology)</option>
               <option value="Computer">Computer Science</option>
             </select>
           </div>
+          <!-- Mobile -->
           <div class="form-group">
-            <label>Mobile Number *</label>
-            <input type="tel" id="reg-mobile" placeholder="Parent/Student mobile number" maxlength="10" autocomplete="off">
+            <label>📱 Mobile Number *</label>
+            <input type="tel" id="reg-mobile" placeholder="10-digit mobile number" maxlength="10"
+              autocomplete="off" style="font-size:1rem;"
+              onfocus="this.parentNode.querySelector('label').style.color='var(--accent)'"
+              onblur="this.parentNode.querySelector('label').style.color=''">
           </div>
         </div>
-        <div style="margin-top:24px; text-align:center;">
-          <button class="btn btn-primary btn-lg" onclick="goToInstructions()">
-            📋 View Instructions & Proceed
+
+        <!-- Exam Pattern preview -->
+        <div style="margin-top:22px;background:#f5f7ff;border-radius:14px;padding:16px 18px;
+          border:2px solid #e8eaf6;">
+          <div style="font-size:.78rem;font-weight:900;color:var(--muted);text-transform:uppercase;
+            letter-spacing:.5px;margin-bottom:12px;">📋 Exam Pattern Overview</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">
+            <div style="background:#fff;border-radius:10px;padding:10px;text-align:center;
+              border:2px solid #e8eaf6;border-top:3px solid #3949ab;">
+              <div style="font-size:.68rem;font-weight:800;color:#3949ab;text-transform:uppercase;letter-spacing:.3px;margin-bottom:4px;">Section 1</div>
+              <div style="font-size:.9rem;font-weight:900;color:var(--text);">MCQ</div>
+              <div style="font-size:.7rem;color:var(--muted);font-weight:700;margin-top:2px;">10 × 1 Mark</div>
+            </div>
+            <div style="background:#fff;border-radius:10px;padding:10px;text-align:center;
+              border:2px solid #e8eaf6;border-top:3px solid #00838f;">
+              <div style="font-size:.68rem;font-weight:800;color:#00838f;text-transform:uppercase;letter-spacing:.3px;margin-bottom:4px;">Section 2</div>
+              <div style="font-size:.9rem;font-weight:900;color:var(--text);">True/False</div>
+              <div style="font-size:.7rem;color:var(--muted);font-weight:700;margin-top:2px;">10 × 1 Mark</div>
+            </div>
+            <div style="background:#fff;border-radius:10px;padding:10px;text-align:center;
+              border:2px solid #e8eaf6;border-top:3px solid #2e7d32;">
+              <div style="font-size:.68rem;font-weight:800;color:#2e7d32;text-transform:uppercase;letter-spacing:.3px;margin-bottom:4px;">Section 3</div>
+              <div style="font-size:.9rem;font-weight:900;color:var(--text);">Match</div>
+              <div style="font-size:.7rem;color:var(--muted);font-weight:700;margin-top:2px;">10 × 1 Mark</div>
+            </div>
+            <div style="background:#fff;border-radius:10px;padding:10px;text-align:center;
+              border:2px solid #e8eaf6;border-top:3px solid #e65100;">
+              <div style="font-size:.68rem;font-weight:800;color:#e65100;text-transform:uppercase;letter-spacing:.3px;margin-bottom:4px;">Section 4</div>
+              <div style="font-size:.9rem;font-weight:900;color:var(--text);">Full Form</div>
+              <div style="font-size:.7rem;color:var(--muted);font-weight:700;margin-top:2px;">10 × 1 Mark</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CTA button -->
+        <div style="text-align:center;margin-top:26px;">
+          <button onclick="goToInstructions()"
+            style="padding:17px 52px;border-radius:99px;border:none;
+              background:linear-gradient(135deg,#ff6f00,#ff8f00);color:#fff;
+              font-family:inherit;font-weight:900;font-size:1.08rem;cursor:pointer;
+              box-shadow:0 8px 28px rgba(255,111,0,.4);
+              display:inline-flex;align-items:center;gap:10px;
+              transition:all .25s;"
+            onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 14px 36px rgba(255,111,0,.5)'"
+            onmouseout="this.style.transform='';this.style.boxShadow='0 8px 28px rgba(255,111,0,.4)'">
+            📋 View Instructions &amp; Proceed
+            <span style="font-size:.9rem;opacity:.8;">→</span>
           </button>
+          <div style="margin-top:12px;font-size:.78rem;color:var(--muted);font-weight:700;">
+            By proceeding you agree to the exam rules
+          </div>
         </div>
       </div>
     </div>
-    <div style="text-align:center; margin-top:12px;">
-      <button class="btn btn-outline btn-sm" onclick="goToTeacherLogin()">🔐 Teacher Login</button>
+
+    <!-- Footer -->
+    <div style="text-align:center;margin-top:20px;color:#9fa8da;font-size:.76rem;font-weight:700;letter-spacing:.3px;">
+      🏫 ICT Online Exam Portal · Designed for School Examinations · Std V–VIII
     </div>
   </div>
 </div>
+<style>
+@media(max-width:600px){
+  .reg-form-grid { grid-template-columns:1fr !important; }
+}
+</style>
 
 <!-- ===================== PAGE 2: INSTRUCTIONS ===================== -->
 <div class="page" id="page-instructions">
-  <div class="top-bar">
-    <div class="brand">📚 ICT <span>Exam</span> Portal</div>
-    <div style="color:#9fa8da; font-size:0.85rem; font-weight:700;">Instructions</div>
+  <div style="background:linear-gradient(135deg,#1a237e 0%,#283593 60%,#3949ab 100%);
+    padding:16px 20px;position:sticky;top:0;z-index:100;
+    box-shadow:0 2px 20px rgba(26,35,126,.35);display:flex;
+    align-items:center;justify-content:space-between;">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div style="width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#ff6f00,#ff8f00);
+        display:flex;align-items:center;justify-content:center;font-size:1.2rem;">📚</div>
+      <div style="color:#fff;font-weight:900;font-size:1.1rem;">ICT <span style="color:#ff8f00;">Exam</span> Portal</div>
+    </div>
+    <div style="color:#9fa8da;font-size:.8rem;font-weight:700;background:rgba(255,255,255,.08);
+      padding:6px 14px;border-radius:99px;border:1px solid rgba(255,255,255,.12);">
+      📋 Instructions
+    </div>
   </div>
-  <div class="main-container">
-    <div class="card">
-      <div class="card-header">
-        <h2>📋 Exam Instructions</h2>
-        <p>Read all instructions carefully before starting.</p>
+
+  <div style="max-width:860px;margin:0 auto;padding:24px 16px 40px;">
+    <!-- Student info card -->
+    <div style="background:linear-gradient(135deg,#ff6f00,#ff8f00);border-radius:18px;
+      padding:18px 22px;margin-bottom:20px;box-shadow:0 8px 28px rgba(255,111,0,.35);
+      animation:slideInUp .4s ease;">
+      <div style="color:rgba(255,255,255,.8);font-size:.72rem;font-weight:900;
+        text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;">🎓 Your Details</div>
+      <div id="student-info-preview"
+        style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;"></div>
+    </div>
+
+    <!-- Instructions Card -->
+    <div style="background:#fff;border-radius:20px;box-shadow:0 6px 30px rgba(26,35,126,.12);
+      overflow:hidden;margin-bottom:18px;animation:slideInUp .45s ease;">
+      <div style="background:linear-gradient(90deg,#1a237e,#283593);padding:18px 24px;
+        display:flex;align-items:center;gap:12px;">
+        <div style="width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,.12);
+          display:flex;align-items:center;justify-content:center;font-size:1.3rem;">📋</div>
+        <div>
+          <div style="color:#fff;font-size:1.1rem;font-weight:900;">Exam Instructions</div>
+          <div style="color:#9fa8da;font-size:.78rem;font-weight:700;">Read all rules carefully before starting</div>
+        </div>
       </div>
-      <div class="card-body">
-        <div id="student-info-preview" style="background:#f5f7ff; border-radius:12px; padding:16px; margin-bottom:20px; display:grid; grid-template-columns: repeat(3,1fr); gap:10px;"></div>
-
-        <ul class="instructions-list">
-          <li><div class="inst-icon">1</div><div><strong>Read Carefully:</strong> Read all questions carefully before answering. Once an answer is selected for Match the Following, it cannot be changed.</div></li>
-          <li><div class="inst-icon">⚡</div><div><strong>Time Limit:</strong> The exam has a 45-minute time limit. A timer will be shown at the top.</div></li>
-          <li><div class="inst-icon">4</div><div><strong>4 Sections:</strong> MCQ, True/False, Match the Following, and Full Form (Answer MCQ). Complete all sections.</div></li>
-          <li><div class="inst-icon">🚫</div><div><strong>No Refresh:</strong> Do not refresh or close the browser during the exam. Your progress may be lost.</div></li>
-          <li><div class="inst-icon">📱</div><div><strong>No Cheating:</strong> Do not use any external resources. The exam is monitored.</div></li>
-          <li><div class="inst-icon">✅</div><div><strong>Review:</strong> You can navigate between questions using the navigation panel on the right.</div></li>
-          <li><div class="inst-icon">💾</div><div><strong>Auto Save:</strong> Your answers are automatically saved. Click Submit only when you are done.</div></li>
-          <li><div class="inst-icon">📊</div><div><strong>Result:</strong> Results will be displayed immediately after submission with section-wise marks and grade.</div></li>
-        </ul>
-
-        <div style="background: linear-gradient(135deg,#1a237e,#3949ab); border-radius:12px; padding:20px; color:#fff; margin-top:20px;">
-          <div style="font-weight:800; font-size:1.1rem; margin-bottom:12px;">📊 Exam Pattern</div>
-          <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:12px;">
-            <div style="background:rgba(255,255,255,0.1); border-radius:8px; padding:12px;">
-              <div style="font-size:0.8rem; color:#9fa8da; margin-bottom:4px;">Section 1 — MCQ</div>
-              <div style="font-weight:800;">10 Questions × 1 Mark</div>
-            </div>
-            <div style="background:rgba(255,255,255,0.1); border-radius:8px; padding:12px;">
-              <div style="font-size:0.8rem; color:#9fa8da; margin-bottom:4px;">Section 2 — True/False</div>
-              <div style="font-weight:800;">10 Questions × 1 Mark</div>
-            </div>
-            <div style="background:rgba(255,255,255,0.1); border-radius:8px; padding:12px;">
-              <div style="font-size:0.8rem; color:#9fa8da; margin-bottom:4px;">Section 3 — Match the Following</div>
-              <div style="font-weight:800;">10 Questions × 1 Mark</div>
-            </div>
-            <div style="background:rgba(255,255,255,0.1); border-radius:8px; padding:12px;">
-              <div style="font-size:0.8rem; color:#9fa8da; margin-bottom:4px;">Section 4 — Full Form (Answer MCQ)</div>
-              <div style="font-weight:800;">10 Questions × 1 Mark</div>
-            </div>
+      <div style="padding:22px 24px;">
+        <div style="display:flex;flex-direction:column;gap:0;">
+          <!-- instruction items -->
+          <div style="display:flex;gap:14px;padding:13px 0;border-bottom:1px solid #f0f2ff;align-items:flex-start;">
+            <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#e8eaf6,#c5cae9);
+              display:flex;align-items:center;justify-content:center;font-size:1rem;
+              color:var(--primary);font-weight:900;flex-shrink:0;">1</div>
+            <div><strong style="color:var(--text);">Read Carefully:</strong>
+              <span style="color:#546e7a;"> Read all questions carefully before answering. For Match the Following, once locked, the answer cannot be changed.</span></div>
           </div>
-          <div style="margin-top:14px; font-weight:800; font-size:1.1rem;">Total: 40 Marks | Time: 45 Minutes</div>
-        </div>
-
-        <div style="margin-top:24px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
-          <button class="btn btn-outline" onclick="showPage('page-register')">← Back</button>
-          <button class="btn btn-primary btn-lg" onclick="startExam()">🚀 Start Exam Now</button>
+          <div style="display:flex;gap:14px;padding:13px 0;border-bottom:1px solid #f0f2ff;align-items:flex-start;">
+            <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#fff3e0,#ffe0b2);
+              display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">⏱️</div>
+            <div><strong style="color:var(--text);">Time Limit:</strong>
+              <span style="color:#546e7a;"> The exam has a 45-minute time limit. Timer shown at the top turns red at 5 minutes — auto-submits at 0:00.</span></div>
+          </div>
+          <div style="display:flex;gap:14px;padding:13px 0;border-bottom:1px solid #f0f2ff;align-items:flex-start;">
+            <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#e8f5e9,#c8e6c9);
+              display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">4️⃣</div>
+            <div><strong style="color:var(--text);">4 Sections:</strong>
+              <span style="color:#546e7a;"> MCQ, True/False, Match the Following, and Full Form. Each section has 10 questions worth 1 mark each. Complete all sections.</span></div>
+          </div>
+          <div style="display:flex;gap:14px;padding:13px 0;border-bottom:1px solid #f0f2ff;align-items:flex-start;">
+            <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#fce4ec,#f8bbd9);
+              display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">🖥️</div>
+            <div><strong style="color:var(--text);">Fullscreen Mode:</strong>
+              <span style="color:#546e7a;"> The exam runs in fullscreen. Switching tabs or windows will generate a warning. Three violations = auto-submit.</span></div>
+          </div>
+          <div style="display:flex;gap:14px;padding:13px 0;border-bottom:1px solid #f0f2ff;align-items:flex-start;">
+            <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#f3e5f5,#e1bee7);
+              display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">🚫</div>
+            <div><strong style="color:var(--text);">No Refresh/Close:</strong>
+              <span style="color:#546e7a;"> Do not refresh or close the browser. Your session may be lost and the exam will be submitted automatically.</span></div>
+          </div>
+          <div style="display:flex;gap:14px;padding:13px 0;border-bottom:1px solid #f0f2ff;align-items:flex-start;">
+            <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#e3f2fd,#bbdefb);
+              display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">🧭</div>
+            <div><strong style="color:var(--text);">Navigation:</strong>
+              <span style="color:#546e7a;"> Use the Question Navigator panel to jump to any question. Arrow keys also work. Green = answered, Red = unanswered.</span></div>
+          </div>
+          <div style="display:flex;gap:14px;padding:13px 0;border-bottom:1px solid #f0f2ff;align-items:flex-start;">
+            <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#e8f5e9,#c8e6c9);
+              display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">💾</div>
+            <div><strong style="color:var(--text);">Auto Save:</strong>
+              <span style="color:#546e7a;"> Answers are automatically saved as you go. Click Submit only when you are completely done with all sections.</span></div>
+          </div>
+          <div style="display:flex;gap:14px;padding:13px 0;align-items:flex-start;">
+            <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#fff8e1,#ffecb3);
+              display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">📊</div>
+            <div><strong style="color:var(--text);">Instant Results:</strong>
+              <span style="color:#546e7a;"> After submission, you will see your complete results with section-wise marks, grade, and a detailed answer review showing right/wrong answers.</span></div>
+          </div>
         </div>
       </div>
+    </div>
+
+    <!-- Exam Pattern -->
+    <div style="background:linear-gradient(135deg,#1a237e,#283593,#3949ab);border-radius:18px;
+      padding:20px 24px;margin-bottom:22px;animation:slideInUp .5s ease;">
+      <div style="color:#fff;font-size:1rem;font-weight:900;margin-bottom:14px;">
+        📊 Exam Pattern Summary
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;">
+        <div style="background:rgba(255,255,255,.1);border-radius:12px;padding:12px;text-align:center;">
+          <div style="font-size:.7rem;color:#9fa8da;font-weight:700;text-transform:uppercase;letter-spacing:.3px;margin-bottom:4px;">Sec 1</div>
+          <div style="color:#fff;font-weight:900;font-size:.95rem;">MCQ</div>
+          <div style="color:#ffcc80;font-size:.72rem;font-weight:800;margin-top:3px;">10 × 1</div>
+        </div>
+        <div style="background:rgba(255,255,255,.1);border-radius:12px;padding:12px;text-align:center;">
+          <div style="font-size:.7rem;color:#9fa8da;font-weight:700;text-transform:uppercase;letter-spacing:.3px;margin-bottom:4px;">Sec 2</div>
+          <div style="color:#fff;font-weight:900;font-size:.95rem;">True/False</div>
+          <div style="color:#80deea;font-size:.72rem;font-weight:800;margin-top:3px;">10 × 1</div>
+        </div>
+        <div style="background:rgba(255,255,255,.1);border-radius:12px;padding:12px;text-align:center;">
+          <div style="font-size:.7rem;color:#9fa8da;font-weight:700;text-transform:uppercase;letter-spacing:.3px;margin-bottom:4px;">Sec 3</div>
+          <div style="color:#fff;font-weight:900;font-size:.95rem;">Match</div>
+          <div style="color:#a5d6a7;font-size:.72rem;font-weight:800;margin-top:3px;">10 × 1</div>
+        </div>
+        <div style="background:rgba(255,255,255,.1);border-radius:12px;padding:12px;text-align:center;">
+          <div style="font-size:.7rem;color:#9fa8da;font-weight:700;text-transform:uppercase;letter-spacing:.3px;margin-bottom:4px;">Sec 4</div>
+          <div style="color:#fff;font-weight:900;font-size:.95rem;">Full Form</div>
+          <div style="color:#ffab91;font-size:.72rem;font-weight:800;margin-top:3px;">10 × 1</div>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,.1);border-radius:10px;padding:11px 16px;
+        display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+        <span style="color:#fff;font-weight:900;font-size:1.05rem;">Total: 40 Marks</span>
+        <span style="color:#ffcc80;font-weight:900;">⏱️ Duration: 45 Minutes</span>
+        <span style="color:#a5d6a7;font-weight:800;font-size:.88rem;">Passing: 16/40 (40%)</span>
+      </div>
+    </div>
+
+    <!-- Action buttons -->
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+      <button onclick="showPage('page-register')"
+        style="padding:14px 28px;border-radius:99px;border:2px solid #c5cae9;
+          background:#fff;color:var(--primary);font-family:inherit;font-weight:800;
+          font-size:.95rem;cursor:pointer;display:flex;align-items:center;gap:8px;">
+        ← Back
+      </button>
+      <button onclick="startExam()"
+        style="padding:16px 44px;border-radius:99px;border:none;
+          background:linear-gradient(135deg,#ff6f00,#ff8f00);color:#fff;
+          font-family:inherit;font-weight:900;font-size:1.05rem;cursor:pointer;
+          box-shadow:0 8px 28px rgba(255,111,0,.4);
+          display:flex;align-items:center;gap:10px;
+          transition:all .25s;"
+        onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 14px 36px rgba(255,111,0,.5)'"
+        onmouseout="this.style.transform='';this.style.boxShadow='0 8px 28px rgba(255,111,0,.4)'">
+        🚀 Start Exam Now
+      </button>
     </div>
   </div>
 </div>
 
 <!-- ===================== PAGE 3: EXAM ===================== -->
 <div class="page" id="page-exam">
-  <div class="top-bar">
-    <div class="brand">📚 ICT <span>Exam</span></div>
-    <div id="timer-display" class="timer-display">45:00</div>
+  <!-- Exam top bar with student name + timer -->
+  <div style="background:linear-gradient(135deg,#1a237e 0%,#283593 100%);
+    padding:12px 20px;position:sticky;top:0;z-index:100;
+    box-shadow:0 2px 20px rgba(26,35,126,.4);
+    display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,#ff6f00,#ff8f00);
+        display:flex;align-items:center;justify-content:center;font-size:1.1rem;">📚</div>
+      <div>
+        <div style="color:#fff;font-weight:900;font-size:1rem;line-height:1.1;">ICT Exam</div>
+        <div id="exam-student-name" style="color:#9fa8da;font-size:.7rem;font-weight:700;">Student</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="background:rgba(255,255,255,.08);border-radius:8px;padding:5px 12px;
+        font-size:.72rem;font-weight:800;color:#9fa8da;text-align:center;">
+        <span id="exam-progress-pill">0/40</span>
+      </div>
+      <div id="timer-display" class="timer-display">45:00</div>
+    </div>
   </div>
+
   <div class="main-container">
-    <div class="progress-wrap">
-      <div class="progress-label">
+    <!-- Progress bar -->
+    <div style="margin:-10px 0 18px;">
+      <div style="display:flex;justify-content:space-between;font-size:.75rem;font-weight:800;
+        color:var(--muted);margin-bottom:5px;">
         <span>Overall Progress</span>
         <span id="progress-text">0 / 40 Answered</span>
       </div>
       <div class="progress-bar"><div class="progress-fill" id="overall-progress" style="width:0%"></div></div>
     </div>
-    <div class="section-tabs" id="section-tabs">
-      <button class="section-tab active" onclick="switchSection(0)" data-sec="0">📝 Section 1: MCQ</button>
-      <button class="section-tab" onclick="switchSection(1)" data-sec="1">✅ Section 2: True/False</button>
-      <button class="section-tab" onclick="switchSection(2)" data-sec="2">🔗 Section 3: Match</button>
-      <button class="section-tab" onclick="switchSection(3)" data-sec="3">💡 Section 4: Full Form</button>
+
+    <!-- Section tabs - improved design -->
+    <div style="display:flex;gap:0;margin-bottom:20px;background:#e8eaf6;
+      border-radius:14px;padding:5px;overflow-x:auto;" id="section-tabs">
+      <button class="section-tab active" onclick="switchSection(0)" data-sec="0"
+        style="flex:1;border-radius:10px;font-size:.82rem;white-space:nowrap;
+          display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 8px;
+          min-width:80px;">
+        <span style="font-size:1.1rem;">📝</span>
+        <span>MCQ</span>
+        <span id="tab-count-0" style="font-size:.62rem;background:rgba(0,0,0,.08);
+          border-radius:99px;padding:1px 7px;font-weight:900;"></span>
+      </button>
+      <button class="section-tab" onclick="switchSection(1)" data-sec="1"
+        style="flex:1;border-radius:10px;font-size:.82rem;white-space:nowrap;
+          display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 8px;
+          min-width:80px;">
+        <span style="font-size:1.1rem;">✅</span>
+        <span>True/False</span>
+        <span id="tab-count-1" style="font-size:.62rem;background:rgba(0,0,0,.08);
+          border-radius:99px;padding:1px 7px;font-weight:900;"></span>
+      </button>
+      <button class="section-tab" onclick="switchSection(2)" data-sec="2"
+        style="flex:1;border-radius:10px;font-size:.82rem;white-space:nowrap;
+          display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 8px;
+          min-width:80px;">
+        <span style="font-size:1.1rem;">🔗</span>
+        <span>Match</span>
+        <span id="tab-count-2" style="font-size:.62rem;background:rgba(0,0,0,.08);
+          border-radius:99px;padding:1px 7px;font-weight:900;"></span>
+      </button>
+      <button class="section-tab" onclick="switchSection(3)" data-sec="3"
+        style="flex:1;border-radius:10px;font-size:.82rem;white-space:nowrap;
+          display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 8px;
+          min-width:80px;">
+        <span style="font-size:1.1rem;">💡</span>
+        <span>Full Form</span>
+        <span id="tab-count-3" style="font-size:.62rem;background:rgba(0,0,0,.08);
+          border-radius:99px;padding:1px 7px;font-weight:900;"></span>
+      </button>
     </div>
+
     <div class="exam-layout">
       <div>
         <div id="section-content"></div>
         <div class="exam-nav-buttons">
           <button class="btn btn-secondary" id="btn-prev" onclick="prevQuestion()">← Back</button>
           <button class="btn btn-primary" id="btn-next" onclick="nextQuestion()">Next →</button>
-          <button class="btn btn-success" id="btn-submit" onclick="showSubmitModal()">🏁 Submit Exam</button>
+          <button class="btn btn-success" id="btn-submit" onclick="showSubmitModal()"
+            style="background:linear-gradient(135deg,#00c853,#00e676);
+              box-shadow:0 4px 15px rgba(0,200,83,.4);">
+            🏁 Submit Exam
+          </button>
         </div>
       </div>
       <div class="nav-panel">
         <div class="nav-panel-inner">
-          <div class="nav-panel-title">Question Navigator</div>
+          <div class="nav-panel-title">🧭 Question Navigator</div>
           <div class="nav-legend">
             <div class="legend-item"><div class="legend-dot a"></div>Answered</div>
             <div class="legend-item"><div class="legend-dot n"></div>Unanswered</div>
@@ -1082,9 +1426,22 @@
 
 <!-- ===================== PAGE 4: RESULT ===================== -->
 <div class="page" id="page-result">
-  <div class="top-bar">
-    <div class="brand">📚 ICT <span>Result</span></div>
-    <div style="color:#9fa8da; font-size:0.85rem; font-weight:700;" id="result-topbar-name"></div>
+  <div style="background:linear-gradient(135deg,#1a237e 0%,#283593 100%);
+    padding:14px 20px;position:sticky;top:0;z-index:100;
+    box-shadow:0 2px 20px rgba(26,35,126,.35);display:flex;
+    align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="width:36px;height:36px;border-radius:9px;
+        background:linear-gradient(135deg,#ff6f00,#ff8f00);
+        display:flex;align-items:center;justify-content:center;font-size:1.1rem;">📊</div>
+      <div style="color:#fff;font-weight:900;font-size:1rem;">
+        ICT <span style="color:#ff8f00;">Result</span>
+      </div>
+    </div>
+    <div style="color:#9fa8da;font-size:.8rem;font-weight:700;
+      background:rgba(255,255,255,.08);padding:5px 14px;
+      border-radius:99px;border:1px solid rgba(255,255,255,.12);"
+      id="result-topbar-name"></div>
   </div>
   <div class="main-container" style="max-width:860px;">
     <div id="result-full-body"></div>
@@ -1093,58 +1450,275 @@
 
 <!-- ===================== PAGE 5: TEACHER LOGIN ===================== -->
 <div class="page" id="page-teacher-login">
-  <div class="login-page">
-    <div class="login-card">
-      <div class="login-logo">🔐</div>
-      <h2>Teacher Login</h2>
-      <p>Access the teacher dashboard to view student results and analytics.</p>
-      <div class="alert-warning alert" id="login-error" style="display:none;">❌ Invalid username or password.</div>
-      <div class="form-group mb-2">
-        <label>Username</label>
-        <input type="text" id="t-user" placeholder="Enter username" autocomplete="off">
+  <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,#1a237e 0%,#283593 40%,#3949ab 80%,#1565c0 100%);
+    padding:20px;position:relative;overflow:hidden;">
+    <!-- Decorative circles -->
+    <div style="position:absolute;width:500px;height:500px;border-radius:50%;
+      background:rgba(255,255,255,.03);top:-100px;right:-100px;pointer-events:none;"></div>
+    <div style="position:absolute;width:300px;height:300px;border-radius:50%;
+      background:rgba(255,111,0,.06);bottom:-60px;left:-60px;pointer-events:none;"></div>
+
+    <!-- ── PANEL: Login ── -->
+    <div id="auth-panel-login" style="background:#fff;border-radius:26px;padding:40px 38px;
+      width:100%;max-width:420px;box-shadow:0 30px 80px rgba(0,0,0,.3);
+      animation:popIn .5s cubic-bezier(.34,1.56,.64,1);">
+
+      <div style="text-align:center;margin-bottom:26px;">
+        <div style="width:70px;height:70px;border-radius:20px;
+          background:linear-gradient(135deg,#1a237e,#3949ab);
+          display:flex;align-items:center;justify-content:center;
+          margin:0 auto 14px;font-size:2.1rem;
+          box-shadow:0 12px 32px rgba(26,35,126,.4);">🔐</div>
+        <h2 style="font-size:1.6rem;font-weight:900;color:var(--text);margin-bottom:4px;">Teacher Login</h2>
+        <p style="color:var(--muted);font-size:.85rem;font-weight:700;">Access the teacher dashboard &amp; control panel</p>
       </div>
-      <div class="form-group" style="margin-bottom:24px;">
-        <label>Password</label>
-        <input type="password" id="t-pass" placeholder="Enter password">
+
+      <!-- Error box -->
+      <div id="login-error" style="display:none;background:#ffebee;border-left:4px solid #ff1744;
+        border-radius:10px;padding:11px 14px;margin-bottom:16px;
+        color:#b71c1c;font-weight:800;font-size:.86rem;align-items:center;gap:8px;">
+        ❌ Invalid username or password.
       </div>
-      <button class="btn btn-primary" style="width:100%; justify-content:center;" onclick="teacherLogin()">Login →</button>
-      <div style="margin-top:16px; text-align:center;">
-        <button class="btn btn-outline btn-sm" onclick="showPage('page-register')">← Back to Exam</button>
+
+      <!-- Attempts warning -->
+      <div id="login-attempts-warn" style="display:none;background:#fff8e1;border-left:4px solid #ff6f00;
+        border-radius:10px;padding:10px 14px;margin-bottom:16px;
+        color:#e65100;font-weight:800;font-size:.82rem;">
       </div>
-      <div style="margin-top:20px; font-size:0.8rem; color:var(--muted); text-align:center; background:#f5f7ff; border-radius:8px; padding:10px;">
-        Demo credentials: <strong>admin</strong> / <strong>teacher123</strong>
+
+      <!-- Username -->
+      <div style="margin-bottom:14px;">
+        <label style="font-size:.78rem;font-weight:900;color:var(--muted);text-transform:uppercase;
+          letter-spacing:.5px;margin-bottom:6px;display:block;">👤 Username</label>
+        <input type="text" id="t-user" placeholder="Enter username" autocomplete="off"
+          style="width:100%;border:2px solid #e8eaf6;border-radius:12px;padding:13px 16px;
+            font-size:1rem;font-family:inherit;color:var(--text);outline:none;
+            transition:all .2s;background:#f5f7ff;box-sizing:border-box;"
+          onfocus="this.style.borderColor='var(--accent)';this.style.background='#fff'"
+          onblur="this.style.borderColor='#e8eaf6';this.style.background='#f5f7ff'"
+          onkeydown="if(event.key==='Enter')document.getElementById('t-pass').focus()">
+      </div>
+
+      <!-- Password with show/hide -->
+      <div style="margin-bottom:20px;">
+        <label style="font-size:.78rem;font-weight:900;color:var(--muted);text-transform:uppercase;
+          letter-spacing:.5px;margin-bottom:6px;display:block;">🔑 Password</label>
+        <div style="position:relative;">
+          <input type="password" id="t-pass" placeholder="Enter password"
+            style="width:100%;border:2px solid #e8eaf6;border-radius:12px;padding:13px 48px 13px 16px;
+              font-size:1rem;font-family:inherit;color:var(--text);outline:none;
+              transition:all .2s;background:#f5f7ff;box-sizing:border-box;"
+            onfocus="this.style.borderColor='var(--accent)';this.style.background='#fff'"
+            onblur="this.style.borderColor='#e8eaf6';this.style.background='#f5f7ff'"
+            onkeydown="if(event.key==='Enter')teacherLogin()">
+          <button onclick="authTogglePass('t-pass',this)"
+            style="position:absolute;right:12px;top:50%;transform:translateY(-50%);
+              background:none;border:none;cursor:pointer;font-size:1.1rem;padding:4px;"
+            title="Show/hide password">👁️</button>
+        </div>
+      </div>
+
+      <!-- Login btn -->
+      <button onclick="teacherLogin()" id="login-btn"
+        style="width:100%;padding:14px;border-radius:12px;border:none;
+          background:linear-gradient(135deg,#ff6f00,#ff8f00);color:#fff;
+          font-family:inherit;font-weight:900;font-size:1rem;cursor:pointer;
+          box-shadow:0 6px 20px rgba(255,111,0,.35);transition:all .25s;"
+        onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 10px 28px rgba(255,111,0,.5)'"
+        onmouseout="this.style.transform='';this.style.boxShadow='0 6px 20px rgba(255,111,0,.35)'">
+        🔓 Login to Dashboard
+      </button>
+
+      <!-- Forgot password link -->
+      <div style="text-align:center;margin-top:14px;">
+        <button onclick="authShowPanel('forgot')"
+          style="background:none;border:none;color:#3949ab;font-family:inherit;
+            font-weight:800;font-size:.85rem;cursor:pointer;text-decoration:underline;">
+          🔑 Forgot Password?
+        </button>
+      </div>
+
+      <!-- Back -->
+      <div style="text-align:center;margin-top:10px;">
+        <button onclick="showPage('page-register')"
+          style="background:none;border:none;color:var(--muted);font-family:inherit;
+            font-weight:700;font-size:.84rem;cursor:pointer;">
+          ← Back to Student Exam
+        </button>
+      </div>
+
+      <!-- Default hint -->
+      <div style="margin-top:18px;background:#f5f7ff;border-radius:10px;
+        padding:11px 14px;font-size:.76rem;color:var(--muted);
+        text-align:center;border:1px dashed #c5cae9;">
+        🔒 Default: <strong style="color:var(--text);">admin</strong> /
+        <strong style="color:var(--text);">teacher123</strong>
+        &nbsp;|&nbsp; Security Q: <em>school name</em>
       </div>
     </div>
+
+    <!-- ── PANEL: Forgot Password ── -->
+    <div id="auth-panel-forgot" style="display:none;background:#fff;border-radius:26px;
+      padding:36px 38px;width:100%;max-width:440px;box-shadow:0 30px 80px rgba(0,0,0,.3);
+      animation:popIn .45s cubic-bezier(.34,1.56,.64,1);">
+
+      <div style="text-align:center;margin-bottom:22px;">
+        <div style="width:64px;height:64px;border-radius:18px;
+          background:linear-gradient(135deg,#ff6f00,#ff8f00);
+          display:flex;align-items:center;justify-content:center;
+          margin:0 auto 12px;font-size:1.9rem;
+          box-shadow:0 10px 28px rgba(255,111,0,.4);">🔑</div>
+        <h2 style="font-size:1.45rem;font-weight:900;color:var(--text);margin-bottom:4px;">Forgot Password</h2>
+        <p style="color:var(--muted);font-size:.82rem;font-weight:700;">Answer your security question to reset</p>
+      </div>
+
+      <div id="forgot-error" style="display:none;background:#ffebee;border-left:4px solid #ff1744;
+        border-radius:10px;padding:10px 14px;margin-bottom:14px;
+        color:#b71c1c;font-weight:800;font-size:.84rem;"></div>
+      <div id="forgot-success" style="display:none;background:#e8f5e9;border-left:4px solid #00c853;
+        border-radius:10px;padding:10px 14px;margin-bottom:14px;
+        color:#1b5e20;font-weight:800;font-size:.84rem;"></div>
+
+      <!-- Step 1: enter username -->
+      <div id="forgot-step1">
+        <div style="margin-bottom:14px;">
+          <label style="font-size:.78rem;font-weight:900;color:var(--muted);text-transform:uppercase;
+            letter-spacing:.5px;margin-bottom:6px;display:block;">👤 Your Username</label>
+          <input type="text" id="fp-user" placeholder="Enter your username"
+            style="width:100%;border:2px solid #e8eaf6;border-radius:12px;padding:12px 16px;
+              font-size:.95rem;font-family:inherit;outline:none;background:#f5f7ff;box-sizing:border-box;"
+            onfocus="this.style.borderColor='var(--accent)'"
+            onblur="this.style.borderColor='#e8eaf6'">
+        </div>
+        <button onclick="authForgotStep1()"
+          style="width:100%;padding:13px;border-radius:12px;border:none;
+            background:linear-gradient(135deg,#1a237e,#3949ab);color:#fff;
+            font-family:inherit;font-weight:900;font-size:.95rem;cursor:pointer;">
+          Next →
+        </button>
+      </div>
+
+      <!-- Step 2: answer security question + new password -->
+      <div id="forgot-step2" style="display:none;">
+        <div style="background:#e3f2fd;border-radius:10px;padding:12px 14px;margin-bottom:14px;">
+          <div style="font-size:.72rem;font-weight:900;color:#0d47a1;text-transform:uppercase;letter-spacing:.5px;">Security Question</div>
+          <div id="fp-question-display" style="font-weight:800;color:#1a237e;margin-top:4px;font-size:.95rem;"></div>
+        </div>
+        <div style="margin-bottom:14px;">
+          <label style="font-size:.78rem;font-weight:900;color:var(--muted);text-transform:uppercase;
+            letter-spacing:.5px;margin-bottom:6px;display:block;">💬 Your Answer</label>
+          <input type="text" id="fp-answer" placeholder="Type your answer"
+            style="width:100%;border:2px solid #e8eaf6;border-radius:12px;padding:12px 16px;
+              font-size:.95rem;font-family:inherit;outline:none;background:#f5f7ff;box-sizing:border-box;"
+            onfocus="this.style.borderColor='var(--accent)'"
+            onblur="this.style.borderColor='#e8eaf6'">
+        </div>
+        <div style="margin-bottom:14px;">
+          <label style="font-size:.78rem;font-weight:900;color:var(--muted);text-transform:uppercase;
+            letter-spacing:.5px;margin-bottom:6px;display:block;">🔒 New Password</label>
+          <div style="position:relative;">
+            <input type="password" id="fp-newpass" placeholder="Enter new password (min 6 chars)"
+              style="width:100%;border:2px solid #e8eaf6;border-radius:12px;padding:12px 48px 12px 16px;
+                font-size:.95rem;font-family:inherit;outline:none;background:#f5f7ff;box-sizing:border-box;"
+              onfocus="this.style.borderColor='var(--accent)'"
+              onblur="this.style.borderColor='#e8eaf6'">
+            <button onclick="authTogglePass('fp-newpass',this)"
+              style="position:absolute;right:12px;top:50%;transform:translateY(-50%);
+                background:none;border:none;cursor:pointer;font-size:1rem;">👁️</button>
+          </div>
+        </div>
+        <button onclick="authForgotStep2()"
+          style="width:100%;padding:13px;border-radius:12px;border:none;
+            background:linear-gradient(135deg,#00c853,#00e676);color:#fff;
+            font-family:inherit;font-weight:900;font-size:.95rem;cursor:pointer;
+            box-shadow:0 4px 14px rgba(0,200,83,.3);">
+          ✅ Reset Password
+        </button>
+      </div>
+
+      <div style="text-align:center;margin-top:16px;">
+        <button onclick="authShowPanel('login')"
+          style="background:none;border:none;color:var(--muted);font-family:inherit;
+            font-weight:700;font-size:.84rem;cursor:pointer;">
+          ← Back to Login
+        </button>
+      </div>
+    </div>
+
   </div>
 </div>
 
 <!-- ===================== PAGE 6: TEACHER DASHBOARD ===================== -->
 <div class="page" id="page-dashboard">
   <div class="dash-sidebar" id="sidebar">
-    <div class="sidebar-logo">📚 ICT <span>Dashboard</span></div>
+    <!-- Sidebar logo -->
+    <div style="padding:0 8px 20px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:14px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#ff6f00,#ff8f00);
+          display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;">📚</div>
+        <div>
+          <div style="color:#fff;font-size:1.05rem;font-weight:900;line-height:1.1;">ICT <span style="color:#ff8f00;">Dashboard</span></div>
+          <div style="color:#9fa8da;font-size:.65rem;font-weight:700;">Teacher Control Panel</div>
+        </div>
+      </div>
+    </div>
     <ul class="sidebar-nav">
       <li><a onclick="showDashSection('overview')" data-sec="overview">📊 Overview</a></li>
       <li><a onclick="showDashSection('examcontrol')" data-sec="examcontrol">🎛️ Exam Control</a></li>
+      <li style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,.07);">
+        <div style="padding:4px 16px;font-size:.62rem;font-weight:900;color:rgba(255,255,255,.3);
+          text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;">Questions</div>
+      </li>
       <li><a onclick="showDashSection('upload')" data-sec="upload">📤 Upload Questions</a></li>
       <li><a onclick="showDashSection('editor')" data-sec="editor">✏️ Question Editor</a></li>
       <li><a onclick="showDashSection('papers')" data-sec="papers">📄 Question Papers</a></li>
       <li><a onclick="showDashSection('library')" data-sec="library">📚 Paper Library</a></li>
-      <li><a onclick="showDashSection('ai')" data-sec="ai" style="background:linear-gradient(135deg,rgba(138,43,226,.25),rgba(75,0,130,.15));border-left:3px solid #9c27b0 !important;">🤖 AI Generator</a></li>
+      <li><a onclick="showDashSection('ai')" data-sec="ai"
+        style="background:linear-gradient(135deg,rgba(138,43,226,.2),rgba(75,0,130,.12));
+          border-left:3px solid #9c27b0 !important;margin-top:2px;">🤖 AI Generator</a></li>
+      <li style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,.07);">
+        <div style="padding:4px 16px;font-size:.62rem;font-weight:900;color:rgba(255,255,255,.3);
+          text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;">Reports</div>
+      </li>
       <li><a onclick="showDashSection('results')" data-sec="results">📋 Student Results</a></li>
       <li><a onclick="showDashSection('analytics')" data-sec="analytics">📈 Analytics</a></li>
       <li><a onclick="showDashSection('settings')" data-sec="settings">⚙️ Settings</a></li>
-      <li><a onclick="teacherLogout()" style="color:#ff6b6b !important;">🚪 Logout</a></li>
+      <li style="margin-top:auto;padding-top:16px;border-top:1px solid rgba(255,255,255,.1);margin-top:16px;">
+        <a onclick="teacherLogout()" style="color:#ff8a80 !important;">🚪 Logout</a>
+      </li>
     </ul>
   </div>
   <div class="dash-main" id="dash-main">
-    <div style="display:flex; align-items:center; gap:12px; margin-bottom:24px;">
-      <button class="burger-btn" onclick="toggleSidebar()"><div class="ham"><span></span><span></span><span></span></div></button>
-      <div>
-        <h1 style="font-size:1.5rem; font-weight:900; color:var(--text);">Teacher Dashboard</h1>
-        <p style="color:var(--muted); font-size:0.85rem;">ICT Online Examination System</p>
+    <!-- Dashboard top bar -->
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;
+      flex-wrap:wrap;background:#fff;border-radius:16px;
+      padding:14px 20px;box-shadow:0 2px 12px rgba(26,35,126,.08);border:1px solid #e8eaf6;">
+      <button class="burger-btn" onclick="toggleSidebar()" style="flex-shrink:0;">
+        <div class="ham"><span></span><span></span><span></span></div>
+      </button>
+      <div style="flex:1;min-width:0;">
+        <h1 style="font-size:1.3rem;font-weight:900;color:var(--text);white-space:nowrap;
+          overflow:hidden;text-overflow:ellipsis;">Teacher Dashboard</h1>
+        <p style="color:var(--muted);font-size:.78rem;font-weight:700;">
+          ICT Online Examination System · Std V–VIII
+        </p>
       </div>
-      <div style="margin-left:auto;">
-        <button class="btn btn-success btn-sm" onclick="downloadExcel()">📥 Download Excel</button>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;flex-shrink:0;">
+        <button onclick="downloadExcel()"
+          style="padding:9px 16px;border-radius:10px;border:2px solid #00c853;
+            background:#e8f5e9;color:#1b5e20;font-family:inherit;font-weight:800;
+            font-size:.82rem;cursor:pointer;display:flex;align-items:center;gap:6px;">
+          📥 Excel
+        </button>
+        <button onclick="showDashSection('examcontrol')"
+          style="padding:9px 16px;border-radius:10px;border:none;
+            background:linear-gradient(135deg,#ff6f00,#ff8f00);color:#fff;
+            font-family:inherit;font-weight:800;font-size:.82rem;cursor:pointer;
+            display:flex;align-items:center;gap:6px;
+            box-shadow:0 3px 10px rgba(255,111,0,.3);">
+          🎛️ Exam Control
+        </button>
       </div>
     </div>
     <div id="dash-content"></div>
@@ -1153,12 +1727,38 @@
 
 <!-- SUBMIT MODAL -->
 <div class="modal-overlay" id="submit-modal" style="display:none;">
-  <div class="modal">
-    <h3>🏁 Submit Exam?</h3>
-    <p id="submit-modal-info">Are you sure you want to submit your exam? Once submitted, you cannot make any changes.</p>
-    <div class="modal-buttons">
-      <button class="btn btn-outline" onclick="document.getElementById('submit-modal').style.display='none'">Cancel</button>
-      <button class="btn btn-primary" onclick="submitExam()">Submit Now</button>
+  <div class="modal" style="border-radius:22px;max-width:440px;overflow:hidden;padding:0;">
+    <div style="background:linear-gradient(135deg,#1a237e,#3949ab);padding:22px 26px;
+      display:flex;align-items:center;gap:12px;">
+      <div style="width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.15);
+        display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;">
+        🏁
+      </div>
+      <div>
+        <div style="color:#fff;font-size:1.1rem;font-weight:900;">Submit Exam?</div>
+        <div style="color:#9fa8da;font-size:.78rem;font-weight:700;">This action cannot be undone</div>
+      </div>
+    </div>
+    <div style="padding:22px 26px;">
+      <p id="submit-modal-info" style="color:#546e7a;font-weight:700;font-size:.95rem;
+        margin-bottom:22px;line-height:1.6;">
+        Are you sure you want to submit your exam?
+      </p>
+      <div style="display:flex;gap:12px;justify-content:flex-end;">
+        <button onclick="document.getElementById('submit-modal').style.display='none'"
+          style="padding:11px 22px;border-radius:10px;border:2px solid #c5cae9;
+            background:#fff;color:var(--primary);font-family:inherit;font-weight:800;
+            font-size:.92rem;cursor:pointer;">
+          ← Continue Exam
+        </button>
+        <button onclick="submitExam()"
+          style="padding:11px 22px;border-radius:10px;border:none;
+            background:linear-gradient(135deg,#ff6f00,#ff8f00);color:#fff;
+            font-family:inherit;font-weight:900;font-size:.92rem;cursor:pointer;
+            box-shadow:0 4px 14px rgba(255,111,0,.35);">
+          Submit Now ✓
+        </button>
+      </div>
     </div>
   </div>
 </div>
@@ -1171,6 +1771,10 @@
 // CONFIGURATION — UPDATE THESE FOR YOUR GOOGLE SHEET
 // ============================================================
 const GOOGLE_SHEET_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
+// Dynamic URL: checks localStorage first (set via Settings page), then falls back to constant above
+function getSheetUrl() {
+  return localStorage.getItem('ict_sheets_url') || GOOGLE_SHEET_URL;
+}
 // Instructions to set up:
 // 1. Go to script.google.com
 // 2. Create new project, paste the Apps Script code below
@@ -1273,12 +1877,303 @@ const DEFAULT_QB = {
 };
 
 // Load from localStorage or use defaults
+// Per-standard default question banks (each standard has grade-appropriate questions)
+const DEFAULT_QB_PER_STD = {
+  // ── STD V — Basic ICT concepts ───────────────────────────────
+  V: {
+    mcq:[
+      {q:"What does CPU stand for?",opts:["Central Processing Unit","Computer Personal Use","Central Program Unit","Control Processing Unit"],ans:0},
+      {q:"Which device is used to input data into a computer?",opts:["Monitor","Printer","Keyboard","Speaker"],ans:2},
+      {q:"What is the full form of WWW?",opts:["World Wide Web","World Wide Wire","World Web Window","Web Wide World"],ans:0},
+      {q:"Which of the following is an output device?",opts:["Keyboard","Mouse","Monitor","Scanner"],ans:2},
+      {q:"What does RAM stand for?",opts:["Random Access Memory","Read Access Memory","Random Application Memory","Read Application Memory"],ans:0},
+      {q:"Which key is used to delete text to the left of the cursor?",opts:["Delete","End","Backspace","Escape"],ans:2},
+      {q:"What is the full form of ICT?",opts:["Information and Computer Technology","Information and Communication Technology","Internet Communication Technology","International Computer Technology"],ans:1},
+      {q:"Which software is used to create presentations?",opts:["MS Word","MS Excel","MS PowerPoint","MS Paint"],ans:2},
+      {q:"Which of the following is a web browser?",opts:["MS Word","Google Chrome","MS Excel","Adobe Photoshop"],ans:1},
+      {q:"What does USB stand for?",opts:["Universal Serial Bus","Universal System Boot","Uniform Serial Bus","United System Bus"],ans:0},
+      {q:"Which is the largest unit of storage?",opts:["Kilobyte","Megabyte","Gigabyte","Terabyte"],ans:3},
+      {q:"What does HTML stand for?",opts:["Hyper Text Markup Language","High Text Markup Language","Hyper Transfer Markup Language","Hyper Text Making Language"],ans:0},
+      {q:"Which component stores data permanently?",opts:["RAM","Cache","Hard Disk","Register"],ans:2},
+      {q:"What is the use of a scanner?",opts:["Print documents","Convert physical documents to digital","Display images","Store data"],ans:1},
+      {q:"Which key combination is used to copy?",opts:["Ctrl+V","Ctrl+X","Ctrl+C","Ctrl+Z"],ans:2}
+    ],
+    trueFalse:[
+      {q:"A computer can work without electricity.",ans:false},
+      {q:"The internet is a global network of computers.",ans:true},
+      {q:"RAM is a permanent storage device.",ans:false},
+      {q:"A printer is an input device.",ans:false},
+      {q:"MS Excel is used for making spreadsheets.",ans:true},
+      {q:"A keyboard is an output device.",ans:false},
+      {q:"Email stands for Electronic Mail.",ans:true},
+      {q:"A computer virus is a type of software.",ans:true},
+      {q:"The monitor displays the output of the computer.",ans:true},
+      {q:"A hard disk stores data temporarily.",ans:false},
+      {q:"Google is a search engine.",ans:true},
+      {q:"CPU is called the brain of the computer.",ans:true},
+      {q:"A joystick is used mainly for playing games.",ans:true},
+      {q:"HTTP stands for HyperText Transport Program.",ans:false},
+      {q:"A microphone is an input device.",ans:true}
+    ],
+    match:[
+      {a:"MS Word",b:"Word Processing",opts:["Word Processing","Spreadsheet","Presentation","Database","Internet Browser"]},
+      {a:"MS Excel",b:"Spreadsheet",opts:["Word Processing","Spreadsheet","Presentation","Database","Internet Browser"]},
+      {a:"MS PowerPoint",b:"Presentation",opts:["Word Processing","Spreadsheet","Presentation","Database","Internet Browser"]},
+      {a:"Google Chrome",b:"Internet Browser",opts:["Word Processing","Spreadsheet","Presentation","Database","Internet Browser"]},
+      {a:"CPU",b:"Brain of Computer",opts:["Brain of Computer","Memory","Output Device","Storage","Input Device"]},
+      {a:"RAM",b:"Temporary Memory",opts:["Brain of Computer","Temporary Memory","Output Device","Storage","Input Device"]},
+      {a:"Hard Disk",b:"Storage",opts:["Brain of Computer","Temporary Memory","Output Device","Storage","Input Device"]},
+      {a:"Monitor",b:"Output Device",opts:["Brain of Computer","Temporary Memory","Output Device","Storage","Input Device"]},
+      {a:"Keyboard",b:"Input Device",opts:["Brain of Computer","Temporary Memory","Output Device","Storage","Input Device"]},
+      {a:"Modem",b:"Connects to Internet",opts:["Connects to Internet","Prints Documents","Plays Audio","Captures Images","Stores Data"]},
+      {a:"Printer",b:"Prints Documents",opts:["Connects to Internet","Prints Documents","Plays Audio","Captures Images","Stores Data"]},
+      {a:"Webcam",b:"Captures Images",opts:["Connects to Internet","Prints Documents","Plays Audio","Captures Images","Stores Data"]},
+      {a:"Speaker",b:"Plays Audio",opts:["Connects to Internet","Prints Documents","Plays Audio","Captures Images","Stores Data"]},
+      {a:"Pendrive",b:"Portable Storage",opts:["Portable Storage","Processes Data","Sends Fax","Scans Documents","Controls Network"]},
+      {a:"Router",b:"Controls Network",opts:["Portable Storage","Processes Data","Sends Fax","Scans Documents","Controls Network"]}
+    ],
+    answer:[
+      {q:"What does PDF stand for?",opts:["Public Document Format","Portable Document Format","Personal Data File","Print Document Format"],ans:1},
+      {q:"Which company developed Windows OS?",opts:["Apple","Google","Microsoft","IBM"],ans:2},
+      {q:"What is the shortcut key to Undo?",opts:["Ctrl+Y","Ctrl+Z","Ctrl+X","Ctrl+U"],ans:1},
+      {q:"What is the full form of LAN?",opts:["Large Area Network","Local Area Network","Light Area Network","Long Area Network"],ans:1},
+      {q:"Which key is used to get help in most programs?",opts:["F1","F5","F10","Esc"],ans:0},
+      {q:"Which is the most popular spreadsheet software?",opts:["MS Word","MS Access","MS Excel","MS OneNote"],ans:2},
+      {q:"What does GPS stand for?",opts:["General Positioning System","Global Positioning System","Global Processing System","General Processing System"],ans:1},
+      {q:"What is the purpose of antivirus software?",opts:["Speed up computer","Design websites","Detect and remove malware","Create databases"],ans:2},
+      {q:"Which network connects computers in a small area?",opts:["WAN","MAN","LAN","PAN"],ans:2},
+      {q:"What does URL stand for?",opts:["Universal Resource Locator","Uniform Resource Locator","Universal Record Link","Unified Resource Locator"],ans:1},
+      {q:"Which device converts digital signals to analog?",opts:["Router","Scanner","Modem","Hub"],ans:2},
+      {q:"What does IC stand for in electronics?",opts:["Integrated Circuit","Internal Component","Interface Card","Input Controller"],ans:0},
+      {q:"Which protocol is used to send emails?",opts:["HTTP","FTP","SMTP","TCP"],ans:2},
+      {q:"What is the binary number system based on?",opts:["Base 8","Base 10","Base 2","Base 16"],ans:2},
+      {q:"Which generation of computers used transistors?",opts:["First","Second","Third","Fourth"],ans:1}
+    ]
+  },
+
+  // ── STD VI — Intermediate ICT ─────────────────────────────────
+  VI: {
+    mcq:[
+      {q:"Which type of memory is volatile?",opts:["ROM","Hard Disk","RAM","Flash Drive"],ans:2},
+      {q:"What does GUI stand for?",opts:["General User Interface","Graphical User Interface","Global Unit Interface","Generated User Input"],ans:1},
+      {q:"Which file extension is used for MS Word documents?",opts:[".xls",".ppt",".doc / .docx",".pdf"],ans:2},
+      {q:"What is the function of the 'Recycle Bin' in Windows?",opts:["Store temporary files","Store deleted files","Store downloads","Store system files"],ans:1},
+      {q:"Which of these is NOT an operating system?",opts:["Windows","Linux","MS Word","macOS"],ans:2},
+      {q:"What does the shortcut Ctrl+P do?",opts:["Paste","Print","Preview","Play"],ans:1},
+      {q:"Which unit is used to measure processor speed?",opts:["GB","MB","GHz","KB"],ans:2},
+      {q:"What is 'phishing'?",opts:["A type of virus","Fake website to steal info","A printer error","Slow internet"],ans:1},
+      {q:"Which of these is cloud storage?",opts:["USB Drive","External Hard Disk","Google Drive","CD-ROM"],ans:2},
+      {q:"Which key combination selects all text?",opts:["Ctrl+X","Ctrl+A","Ctrl+S","Ctrl+D"],ans:1},
+      {q:"What does FTP stand for?",opts:["Fast Transfer Protocol","File Transfer Protocol","Folder Transfer Program","File Transport Path"],ans:1},
+      {q:"Which of these is a programming language?",opts:["HTTP","Python","HTML","FTP"],ans:1},
+      {q:"What is the purpose of a firewall?",opts:["Speed up internet","Display graphics","Block unauthorized access","Store data"],ans:2},
+      {q:"Which key is used to rename a file in Windows?",opts:["F1","F2","F3","F4"],ans:1},
+      {q:"What does ISP stand for?",opts:["Internet Service Provider","Internal System Protocol","Integrated Software Package","Internet Speed Performance"],ans:0}
+    ],
+    trueFalse:[
+      {q:"A byte consists of 8 bits.",ans:true},
+      {q:"Linux is a paid operating system.",ans:false},
+      {q:"URL stands for Uniform Resource Locator.",ans:true},
+      {q:"A virus can spread through email attachments.",ans:true},
+      {q:"ROM stands for Read Only Memory.",ans:true},
+      {q:"The function key F5 is used to refresh a webpage.",ans:true},
+      {q:"MS Access is a spreadsheet application.",ans:false},
+      {q:"Bluetooth is a wireless communication technology.",ans:true},
+      {q:"A megabyte is smaller than a kilobyte.",ans:false},
+      {q:"Google Drive is an example of cloud storage.",ans:true},
+      {q:"BIOS stands for Basic Input Output System.",ans:true},
+      {q:"A screenshot saves text from a document.",ans:false},
+      {q:"Ctrl+Z is the shortcut for Redo.",ans:false},
+      {q:"An IP address identifies a device on a network.",ans:true},
+      {q:"Spyware is a type of harmful software.",ans:true}
+    ],
+    match:[
+      {a:"Python",b:"Programming Language",opts:["Programming Language","Operating System","Web Browser","Spreadsheet","Database"]},
+      {a:"Windows 11",b:"Operating System",opts:["Programming Language","Operating System","Web Browser","Spreadsheet","Database"]},
+      {a:"Firefox",b:"Web Browser",opts:["Programming Language","Operating System","Web Browser","Spreadsheet","Database"]},
+      {a:"MS Excel",b:"Spreadsheet",opts:["Programming Language","Operating System","Web Browser","Spreadsheet","Database"]},
+      {a:"MySQL",b:"Database",opts:["Programming Language","Operating System","Web Browser","Spreadsheet","Database"]},
+      {a:"Ctrl+S",b:"Save",opts:["Save","Copy","Paste","Undo","Print"]},
+      {a:"Ctrl+C",b:"Copy",opts:["Save","Copy","Paste","Undo","Print"]},
+      {a:"Ctrl+V",b:"Paste",opts:["Save","Copy","Paste","Undo","Print"]},
+      {a:"Ctrl+Z",b:"Undo",opts:["Save","Copy","Paste","Undo","Print"]},
+      {a:"Ctrl+P",b:"Print",opts:["Save","Copy","Paste","Undo","Print"]},
+      {a:"1 Byte",b:"8 Bits",opts:["8 Bits","1024 Bytes","1024 KB","1024 MB","1024 GB"]},
+      {a:"1 Kilobyte",b:"1024 Bytes",opts:["8 Bits","1024 Bytes","1024 KB","1024 MB","1024 GB"]},
+      {a:"1 Megabyte",b:"1024 KB",opts:["8 Bits","1024 Bytes","1024 KB","1024 MB","1024 GB"]},
+      {a:"Virus",b:"Harmful Software",opts:["Harmful Software","Cloud Storage","Search Engine","Programming Tool","Input Device"]},
+      {a:"Google Drive",b:"Cloud Storage",opts:["Harmful Software","Cloud Storage","Search Engine","Programming Tool","Input Device"]}
+    ],
+    answer:[
+      {q:"What does HTML stand for?",opts:["Hyper Text Markup Language","High Transfer Markup Language","Hyper Transfer Markup Language","Home Text Markup Language"],ans:0},
+      {q:"Which protocol is used to browse websites?",opts:["FTP","SMTP","HTTP","POP3"],ans:2},
+      {q:"What is the full form of WWW?",opts:["World Wide Web","World Web Wire","Wide World Web","Web World Wide"],ans:0},
+      {q:"Which device is used to connect to WiFi?",opts:["Printer","Wireless Network Adapter","Scanner","Hard Disk"],ans:1},
+      {q:"What does 'booting' a computer mean?",opts:["Installing software","Starting up the OS","Formatting a drive","Deleting files"],ans:1},
+      {q:"What does CTRL+ALT+DEL do in Windows?",opts:["Restart only","Open Task Manager / Security options","Shutdown immediately","Open settings"],ans:1},
+      {q:"Which of these stores the most data?",opts:["1 KB","1 MB","1 GB","1 TB"],ans:3},
+      {q:"What is a 'pixel'?",opts:["A type of software","Smallest unit of a digital image","A storage unit","A type of virus"],ans:1},
+      {q:"Which symbol is used in all email addresses?",opts:["#","@","&","*"],ans:1},
+      {q:"What is an avatar?",opts:["A type of virus","A computer chip","A digital image representing a user","A gaming console"],ans:2},
+      {q:"What does 'download' mean?",opts:["Transfer data from internet to your device","Transfer data from your device to internet","Delete files","Save to cloud"],ans:0},
+      {q:"Which of these is NOT a social media platform?",opts:["Facebook","Twitter","WhatsApp","Notepad"],ans:3},
+      {q:"What is 'spam'?",opts:["A helpful email","Unsolicited junk email","A type of antivirus","A cloud service"],ans:1},
+      {q:"What does Ctrl+F do?",opts:["Format text","Find text","File save","Font change"],ans:1},
+      {q:"What is a 'folder' in a computer?",opts:["A physical file","A container for organizing files","A type of software","A computer virus"],ans:1}
+    ]
+  },
+
+  // ── STD VII — Advanced ICT ────────────────────────────────────
+  VII: {
+    mcq:[
+      {q:"Which data type stores True or False values?",opts:["Integer","String","Boolean","Float"],ans:2},
+      {q:"What is the function of DNS?",opts:["Store files online","Translate domain names to IP addresses","Block viruses","Manage RAM"],ans:1},
+      {q:"Which topology connects all devices to a central hub?",opts:["Ring","Bus","Star","Mesh"],ans:2},
+      {q:"What does CSS stand for?",opts:["Computer Style Sheet","Cascading Style Sheets","Creative Style System","Computer Standard Syntax"],ans:1},
+      {q:"In a spreadsheet, what does the SUM function do?",opts:["Counts cells","Adds values in a range","Multiplies cells","Finds average"],ans:1},
+      {q:"What is 'open source' software?",opts:["Software that costs money","Software whose source code is freely available","Paid software","Government software"],ans:1},
+      {q:"Which generation of computers uses VLSI circuits?",opts:["First","Second","Third","Fourth"],ans:3},
+      {q:"What does 'bandwidth' refer to?",opts:["Physical size of a cable","Amount of data transmitted per second","Storage capacity","Screen resolution"],ans:1},
+      {q:"Which HTML tag creates a hyperlink?",opts:["<link>","<a>","<href>","<url>"],ans:1},
+      {q:"What is a compiler?",opts:["A type of input device","A program that translates code to machine language","A memory storage unit","A network device"],ans:1},
+      {q:"What does HTTPS mean?",opts:["Hyper Text Transfer Protocol Secure","High Tech Transport Protocol","Hyper Transfer Text Protocol","Hyper Text Test Protocol Secure"],ans:0},
+      {q:"Which of these is an example of an algorithm?",opts:["A computer virus","Step-by-step instructions to solve a problem","A storage unit","A web browser"],ans:1},
+      {q:"What is 'e-commerce'?",opts:["Electronic communication","Buying and selling goods online","Email service","Electronic government"],ans:1},
+      {q:"What does VPN stand for?",opts:["Virtual Private Network","Very Personal Network","Virtual Public Network","Verified Private Node"],ans:0},
+      {q:"Which of these is NOT a type of network?",opts:["LAN","WAN","MAN","PAN"],ans:3}
+    ],
+    trueFalse:[
+      {q:"JavaScript is used to make web pages interactive.",ans:true},
+      {q:"A compiler translates code one line at a time.",ans:false},
+      {q:"Wi-Fi stands for Wireless Fidelity.",ans:true},
+      {q:"In binary, 1010 equals 10 in decimal.",ans:true},
+      {q:"RAM is faster than a hard disk.",ans:true},
+      {q:"CSS is used to structure web content.",ans:false},
+      {q:"A switch is used to connect devices in a LAN.",ans:true},
+      {q:"Encryption protects data from unauthorized access.",ans:true},
+      {q:"A flowchart is a diagram that represents an algorithm.",ans:true},
+      {q:"4G is slower than 3G mobile network.",ans:false},
+      {q:"An interpreter translates the entire code before running.",ans:false},
+      {q:"Malware is software designed to harm computers.",ans:true},
+      {q:"JPEG is a file format for images.",ans:true},
+      {q:"The keyboard shortcut to open a new browser tab is Ctrl+N.",ans:false},
+      {q:"HTML stands for Hyper Text Markup Language.",ans:true}
+    ],
+    match:[
+      {a:"HTML",b:"Web Page Structure",opts:["Web Page Structure","Web Page Style","Web Interactivity","Database Query","Server Language"]},
+      {a:"CSS",b:"Web Page Style",opts:["Web Page Structure","Web Page Style","Web Interactivity","Database Query","Server Language"]},
+      {a:"JavaScript",b:"Web Interactivity",opts:["Web Page Structure","Web Page Style","Web Interactivity","Database Query","Server Language"]},
+      {a:"SQL",b:"Database Query",opts:["Web Page Structure","Web Page Style","Web Interactivity","Database Query","Server Language"]},
+      {a:"Star Topology",b:"Central Hub",opts:["Central Hub","Single Cable","Full Mesh","Ring Loop","Tree Branch"]},
+      {a:"Bus Topology",b:"Single Cable",opts:["Central Hub","Single Cable","Full Mesh","Ring Loop","Tree Branch"]},
+      {a:"Mesh Topology",b:"Full Mesh",opts:["Central Hub","Single Cable","Full Mesh","Ring Loop","Tree Branch"]},
+      {a:"Algorithm",b:"Step-by-step solution",opts:["Step-by-step solution","Data storage","Network device","Software type","Memory unit"]},
+      {a:"Flowchart",b:"Visual algorithm diagram",opts:["Visual algorithm diagram","Code editor","Search engine","Hardware device","Output unit"]},
+      {a:"Encryption",b:"Securing data",opts:["Securing data","Deleting data","Copying data","Formatting data","Transferring data"]},
+      {a:"DNS",b:"Domain Name System",opts:["Domain Name System","Digital Network Service","Data Node Server","Dynamic Name Syntax","Direct Network Switch"]},
+      {a:"IPv4",b:"32-bit IP address",opts:["32-bit IP address","64-bit IP address","128-bit IP address","16-bit IP address","8-bit IP address"]},
+      {a:"Phishing",b:"Identity Theft Scam",opts:["Identity Theft Scam","Virus Removal","Cloud Backup","Network Routing","File Compression"]},
+      {a:"Boolean",b:"True or False",opts:["True or False","Integer Number","Text String","Decimal Number","Date Value"]},
+      {a:"VPN",b:"Virtual Private Network",opts:["Virtual Private Network","Very Public Node","Verified Packet Network","Virtual Public Network","Video Processing Node"]}
+    ],
+    answer:[
+      {q:"What does 'debugging' mean in programming?",opts:["Writing new code","Finding and fixing errors in code","Deleting old code","Compiling code"],ans:1},
+      {q:"Which data structure works on LIFO principle?",opts:["Queue","Array","Stack","Tree"],ans:2},
+      {q:"What is the decimal value of binary 1101?",opts:["11","12","13","14"],ans:2},
+      {q:"Which protocol assigns IP addresses automatically?",opts:["DNS","FTP","DHCP","SMTP"],ans:2},
+      {q:"What is 'pseudocode'?",opts:["Machine language","Informal description of algorithm steps","A virus type","A database language"],ans:1},
+      {q:"What does RGB stand for?",opts:["Real Graphics Bytes","Red Green Blue","Random Generated Bits","Red Gray Black"],ans:1},
+      {q:"What is the purpose of a loop in programming?",opts:["Define variables","Store data","Repeat a set of instructions","Connect to network"],ans:2},
+      {q:"Which file format is used for lossless image compression?",opts:["JPEG","MP3","PNG","AVI"],ans:2},
+      {q:"What does 'cloud computing' mean?",opts:["Weather prediction software","Storing and accessing data via the internet","A type of RAM","Server virus"],ans:1},
+      {q:"What is a 'variable' in programming?",opts:["A fixed number","A named storage location for data","A type of loop","An error in code"],ans:1},
+      {q:"Which HTML tag is used for the largest heading?",opts:["<h6>","<h1>","<h3>","<head>"],ans:1},
+      {q:"What does 'resolution' mean in display?",opts:["Color depth","Number of pixels on screen","Refresh rate","Screen size in inches"],ans:1},
+      {q:"What is a cookie in web browsing?",opts:["A type of malware","Small data stored by a website on your browser","A web browser","A download manager"],ans:1},
+      {q:"What is the full form of API?",opts:["Application Programming Interface","Automated Protocol Integration","Application Process Input","Advanced Programming Index"],ans:0},
+      {q:"Which sorting algorithm repeatedly swaps adjacent elements?",opts:["Quick Sort","Merge Sort","Bubble Sort","Selection Sort"],ans:2}
+    ]
+  },
+
+  // ── STD VIII — Advanced & Applied ICT ────────────────────────
+  VIII: {
+    mcq:[
+      {q:"What is 'Artificial Intelligence'?",opts:["Internet security","Simulation of human intelligence by machines","A type of hardware","Online shopping"],ans:1},
+      {q:"Which of these is an example of Machine Learning?",opts:["Printing a document","Spam email detection","Saving a file","Changing screen brightness"],ans:1},
+      {q:"What does OOP stand for?",opts:["Object Oriented Programming","Online Output Processing","Ordered Output Procedure","Object Online Platform"],ans:0},
+      {q:"What is the main advantage of using a database?",opts:["Better graphics","Organized and efficient data management","Faster internet","Larger storage"],ans:1},
+      {q:"What is 'Big Data'?",opts:["Large physical storage devices","Extremely large datasets that need special processing","A type of RAM","Cloud file storage"],ans:1},
+      {q:"What does IoT stand for?",opts:["Internet of Things","Integrated Output Technology","Internet of Technology","Input Output Terminal"],ans:0},
+      {q:"Which of these is a cybersecurity threat?",opts:["Antivirus software","Firewall","Ransomware","Strong password"],ans:2},
+      {q:"What is 'blockchain' technology primarily used for?",opts:["Image editing","Secure distributed record-keeping","Video streaming","Social media"],ans:1},
+      {q:"What does AR stand for in technology?",opts:["Automated Routing","Augmented Reality","Artificial Reasoning","Advanced Resolution"],ans:1},
+      {q:"In Python, which symbol is used for single-line comments?",opts:["//","--","#","/*"],ans:2},
+      {q:"What is the function of an 'array' in programming?",opts:["Store a single value","Store multiple values of same type","Connect to network","Format a disk"],ans:1},
+      {q:"What does SQL stand for?",opts:["Structured Query Language","Simple Question Logic","System Query Loop","Standard Question Language"],ans:0},
+      {q:"What is 'responsive web design'?",opts:["Fast loading website","Website that adapts to different screen sizes","Website with animations","Website without images"],ans:1},
+      {q:"Which protocol secures communication on the web?",opts:["HTTP","FTP","HTTPS","SMTP"],ans:2},
+      {q:"What is 'two-factor authentication'?",opts:["Using two passwords","Using password + a second verification method","Using two email accounts","Logging in twice"],ans:1}
+    ],
+    trueFalse:[
+      {q:"Python is an object-oriented programming language.",ans:true},
+      {q:"Blockchain data can be easily modified after entry.",ans:false},
+      {q:"IoT connects physical devices to the internet.",ans:true},
+      {q:"A primary key in a database must be unique.",ans:true},
+      {q:"Machine learning requires data to train models.",ans:true},
+      {q:"HTTPS is less secure than HTTP.",ans:false},
+      {q:"VR stands for Virtual Reality.",ans:true},
+      {q:"An array index typically starts at 1 in most languages.",ans:false},
+      {q:"Big Data refers only to data stored on USB drives.",ans:false},
+      {q:"Ransomware encrypts files and demands payment.",ans:true},
+      {q:"OOP stands for Object Oriented Programming.",ans:true},
+      {q:"In Python, indentation is used to define code blocks.",ans:true},
+      {q:"A router operates at the Network layer of the OSI model.",ans:true},
+      {q:"Augmented Reality completely replaces the real environment.",ans:false},
+      {q:"SQL is used for managing relational databases.",ans:true}
+    ],
+    match:[
+      {a:"AI",b:"Artificial Intelligence",opts:["Artificial Intelligence","Virtual Reality","Machine Code","Network Security","Big Dataset"]},
+      {a:"IoT",b:"Internet of Things",opts:["Internet of Things","Integrated Output Terminal","Input Output Tech","Intelligent Online Tool","Internet of Terminals"]},
+      {a:"VR",b:"Virtual Reality",opts:["Virtual Reality","Variable Resolution","Verified Record","Video Rendering","Voice Recognition"]},
+      {a:"SQL",b:"Database Language",opts:["Database Language","Web Design Language","Mobile Language","System Language","Script Language"]},
+      {a:"Python",b:"High-level Language",opts:["High-level Language","Low-level Language","Machine Language","Assembly Language","Script Language"]},
+      {a:"Class",b:"OOP Blueprint",opts:["OOP Blueprint","Algorithm","Database","Network Device","File System"]},
+      {a:"Object",b:"Instance of Class",opts:["Instance of Class","Type of loop","Network node","Database table","File format"]},
+      {a:"Loop",b:"Repeat instructions",opts:["Repeat instructions","Store data","Define class","Connect network","Encrypt data"]},
+      {a:"Encryption",b:"Data Security",opts:["Data Security","Data Deletion","Data Transfer","Data Formatting","Data Display"]},
+      {a:"Big Data",b:"Large-scale datasets",opts:["Large-scale datasets","Small storage","Single file","RAM memory","Input device"]},
+      {a:"Machine Learning",b:"Training on data",opts:["Training on data","Manual programming","Hardware design","Network routing","File management"]},
+      {a:"Blockchain",b:"Distributed ledger",opts:["Distributed ledger","Centralized server","RAM type","Video codec","Image format"]},
+      {a:"API",b:"Interface between apps",opts:["Interface between apps","Physical connector","Screen display","Keyboard layout","Power supply"]},
+      {a:"Ransomware",b:"Encrypts & demands ransom",opts:["Encrypts & demands ransom","Speeds up computer","Removes viruses","Backs up data","Updates software"]},
+      {a:"2FA",b:"Two-factor Authentication",opts:["Two-factor Authentication","Two-frequency Access","Two-file Archive","Transfer File Automation","Terminal File Address"]}
+    ],
+    answer:[
+      {q:"What is 'inheritance' in OOP?",opts:["Creating a new class","A class deriving properties from another class","Storing data in arrays","Deleting an object"],ans:1},
+      {q:"What is 'polymorphism' in programming?",opts:["Same variable name, different types","One function having many forms","A type of array","A network protocol"],ans:1},
+      {q:"Which Python data type is immutable?",opts:["List","Dictionary","Set","Tuple"],ans:3},
+      {q:"What is the function of a 'primary key' in SQL?",opts:["Store passwords","Uniquely identify each record","Connect tables","Sort data"],ans:1},
+      {q:"What is the output of: print(2 ** 3) in Python?",opts:["6","8","9","5"],ans:1},
+      {q:"Which OSI layer is responsible for routing?",opts:["Physical","Data Link","Network","Transport"],ans:2},
+      {q:"What is 'DevOps'?",opts:["A programming language","Combining software development and operations","A type of database","A cybersecurity tool"],ans:1},
+      {q:"Which sorting has O(n log n) average complexity?",opts:["Bubble Sort","Selection Sort","Insertion Sort","Merge Sort"],ans:3},
+      {q:"What is a 'JOIN' operation in SQL?",opts:["Delete rows","Combine rows from two tables","Create a new database","Sort records"],ans:1},
+      {q:"What is 'machine code'?",opts:["Python code","Code written in binary that CPU executes directly","HTML code","High-level language"],ans:1},
+      {q:"What does 'encapsulation' mean in OOP?",opts:["Hiding data and functions inside a class","Linking two classes","Creating objects","Deleting variables"],ans:0},
+      {q:"What is the purpose of 'try-except' in Python?",opts:["Loop control","Handle runtime errors","Import modules","Define functions"],ans:1},
+      {q:"Which data structure uses FIFO principle?",opts:["Stack","Queue","Tree","Graph"],ans:1},
+      {q:"What is 'latency' in networking?",opts:["Network speed","Delay in data transmission","Bandwidth capacity","Data encryption"],ans:1},
+      {q:"What does CI/CD stand for in software development?",opts:["Computer Interface/Code Design","Continuous Integration/Continuous Deployment","Code Inspection/Code Delivery","Central Integration/Code Development"],ans:1}
+    ]
+  }
+};
+
 function loadStdBanks() {
   const saved = localStorage.getItem('ict_std_banks');
   if (saved) return JSON.parse(saved);
   const banks = {};
   ['V','VI','VII','VIII'].forEach(s => {
-    banks[s] = JSON.parse(JSON.stringify(DEFAULT_QB));
+    banks[s] = JSON.parse(JSON.stringify(DEFAULT_QB_PER_STD[s] || DEFAULT_QB_PER_STD.V));
   });
   return banks;
 }
@@ -1388,16 +2283,45 @@ function showPage(id) {
 // REGISTRATION
 // ============================================================
 function goToInstructions() {
-  const name = document.getElementById('reg-name').value.trim();
-  const roll = document.getElementById('reg-roll').value.trim();
-  const std = document.getElementById('reg-std').value;
-  const div = document.getElementById('reg-div').value;
-  const sub = document.getElementById('reg-sub').value;
+  // Clear previous errors
+  ['reg-name','reg-roll','reg-std','reg-div','reg-sub','reg-mobile'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.closest('.form-group').classList.remove('field-error'); const em = el.closest('.form-group').querySelector('.field-err-msg'); if(em) em.remove(); }
+  });
+
+  const name   = document.getElementById('reg-name').value.trim();
+  const roll   = document.getElementById('reg-roll').value.trim();
+  const std    = document.getElementById('reg-std').value;
+  const div    = document.getElementById('reg-div').value;
+  const sub    = document.getElementById('reg-sub').value;
   const mobile = document.getElementById('reg-mobile').value.trim();
-  if (!name || !roll || !std || !div || !sub || !mobile) {
-    alert('⚠️ Please fill all required fields!'); return;
+
+  let hasError = false;
+  function markError(id, msg) {
+    hasError = true;
+    const el = document.getElementById(id);
+    const grp = el.closest('.form-group');
+    grp.classList.add('field-error');
+    if (!grp.querySelector('.field-err-msg')) {
+      const em = document.createElement('div');
+      em.className = 'field-err-msg';
+      em.innerHTML = '⚠️ ' + msg;
+      grp.appendChild(em);
+    }
+    el.focus();
   }
-  if (!/^\d{10}$/.test(mobile)) { alert('⚠️ Please enter a valid 10-digit mobile number!'); return; }
+
+  if (!name || name.length < 3)      markError('reg-name',   'Enter your full name (min 3 characters)');
+  if (!roll || !/^[A-Za-z0-9]+$/.test(roll)) markError('reg-roll','Enter a valid roll number (letters/digits only)');
+  if (!std)                           markError('reg-std',    'Please select your standard');
+  if (!div)                           markError('reg-div',    'Please select your division');
+  if (!sub)                           markError('reg-sub',    'Please select your subject');
+  if (!mobile || !/^\d{10}$/.test(mobile)) markError('reg-mobile','Enter a valid 10-digit mobile number');
+
+  if (hasError) {
+    showToast('⚠️ Please fix the highlighted fields before continuing.', '#ff1744');
+    return;
+  }
 
   // CHECK IF EXAM IS ACTIVE FOR THIS STD
   if (!EXAM_CONTROL[std] || !EXAM_CONTROL[std].active) {
@@ -1411,7 +2335,10 @@ function goToInstructions() {
   preview.innerHTML = [
     ['👤 Name', name], ['🔢 Roll No', roll], ['📚 Standard', `Std ${std}`],
     ['🏫 Division', div], ['💻 Subject', sub], ['📱 Mobile', mobile]
-  ].map(([k, v]) => `<div style="text-align:center;"><div style="font-size:0.75rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">${k}</div><div style="font-weight:800;font-size:1rem;margin-top:4px;">${v}</div></div>`).join('');
+  ].map(([k, v]) => `<div style="background:rgba(255,255,255,.15);border-radius:10px;padding:10px 12px;text-align:center;">
+    <div style="font-size:.68rem;color:rgba(255,255,255,.7);font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;">${k}</div>
+    <div style="font-weight:900;font-size:.95rem;color:#fff;">${v}</div>
+  </div>`).join('');
 
   showPage('page-instructions');
 }
@@ -1469,6 +2396,14 @@ function startExam() {
   examState.submitted = false;
 
   showPage('page-exam');
+  // Update exam bar with student name
+  const nameEl = document.getElementById('exam-student-name');
+  if (nameEl) nameEl.textContent = examState.student.name + ' · Std ' + examState.student.std;
+  // Update section tab question counts
+  examState.sections.forEach((sec, i) => {
+    const tc = document.getElementById('tab-count-' + i);
+    if (tc) tc.textContent = sec.questions.length + ' Qs';
+  });
   startTimer();
   renderCurrentQ();
   renderNavigator();
@@ -1855,8 +2790,20 @@ function updateProgressBar(answered, total) {
   const pct = total > 0 ? (answered / total * 100).toFixed(1) : 0;
   const el = document.getElementById('overall-progress');
   const txt = document.getElementById('progress-text');
+  const pill = document.getElementById('exam-progress-pill');
   if (el) el.style.width = pct + '%';
   if (txt) txt.textContent = `${answered} / ${total} Answered`;
+  if (pill) pill.textContent = `${answered}/${total}`;
+  // Update section tab counts dynamically
+  examState.sections.forEach((sec, i) => {
+    const tc = document.getElementById('tab-count-' + i);
+    if (tc) {
+      const done = sec.answers.filter(x=>x!==null).length;
+      tc.textContent = done + '/' + sec.questions.length;
+      tc.style.background = done === sec.questions.length ? '#00c853' : 'rgba(0,0,0,.08)';
+      tc.style.color = done === sec.questions.length ? '#fff' : '';
+    }
+  });
 }
 
 // ============================================================
@@ -1953,8 +2900,9 @@ function submitExam() {
   const existing = JSON.parse(localStorage.getItem('ict_results')||'[]');
   existing.push(resultData);
   localStorage.setItem('ict_results', JSON.stringify(existing));
-  if(GOOGLE_SHEET_URL!=="YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE"){
-    fetch(GOOGLE_SHEET_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(resultData)}).catch(()=>{});
+  const _sheetUrl = getSheetUrl();
+  if(_sheetUrl!=="YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE" && _sheetUrl){
+    fetch(_sheetUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(resultData)}).catch(()=>{});
   }
 
   // ── RENDER FULL GRAPHICAL RESULT ────────────────────────────
@@ -2250,7 +3198,7 @@ ${secData.map((sd,si)=>{
 // ── DOWNLOAD RESULT (PDF/DOC) ────────────────────────────────
 function _downloadResult(fmt) {
   const R = window._lastResult;
-  if (!R) { alert('No result data'); return; }
+  if (!R) { showToast('⚠️ No result data available','#ff6f00'); return; }
   const { resultData:st, detail, s1,s2,s3,s4, total, maxMarks, pct, grade, gradeColor } = R;
   const dt = new Date().toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
   const KEYS=['A','B','C','D'];
@@ -2367,7 +3315,7 @@ ${secDefs.map((sd,i)=>{
 
     body += '</body></html>';
     const w = window.open('','_blank','width=850,height=720');
-    if(!w){alert('Allow popups to download PDF');return;}
+    if(!w){showToast('⚠️ Please allow popups in your browser to download PDF','#ff6f00');return;}
     w.document.write(body); w.document.close(); w.focus();
     setTimeout(()=>w.print(), 700);
     return;
@@ -2445,19 +3393,263 @@ ${secDefs.map((sd,i)=>`<tr style="background:${i%2?'#f5f7ff':'#fff'};">
 // ============================================================
 function goToTeacherLogin() { showPage('page-teacher-login'); }
 
-function teacherLogin() {
-  const u = document.getElementById('t-user').value.trim();
-  const p = document.getElementById('t-pass').value;
-  if (u === 'admin' && p === 'teacher123') {
-    document.getElementById('login-error').style.display = 'none';
-    showPage('page-dashboard');
-    showDashSection('overview');
-  } else {
-    document.getElementById('login-error').style.display = 'flex';
+// ════════════════════════════════════════════════════════════
+// TEACHER AUTH SYSTEM  — Multi-user accounts + login history
+// + Forgot Password with security question recovery
+// ════════════════════════════════════════════════════════════
+
+// ── Data model ───────────────────────────────────────────────
+// Account: { id, username, password, name, role, securityQ, securityA, createdAt, lastLogin, loginCount, active }
+// LoginLog: { username, name, time, status }  (kept in 'ict_login_log')
+
+const AUTH_QUESTIONS = [
+  "What is your school name?",
+  "What is the name of your first pet?",
+  "What is your mother's maiden name?",
+  "What city were you born in?",
+  "What is the name of your favourite teacher?",
+  "What was the name of your primary school?",
+  "What is your favourite subject?",
+  "What is your favourite colour?"
+];
+
+let _authLoginAttempts = 0;
+let _authLockedUntil   = 0;
+let _currentTeacher    = null; // logged-in account object
+
+function _authGetAccounts() {
+  try {
+    const d = JSON.parse(localStorage.getItem('ict_accounts') || 'null');
+    if (d && Array.isArray(d)) return d;
+  } catch(e) {}
+  // Default admin account
+  return [{
+    id: 'acc_admin',
+    username: 'admin',
+    password: 'teacher123',
+    name: 'Administrator',
+    role: 'admin',
+    securityQ: AUTH_QUESTIONS[0],
+    securityA: 'school name',
+    createdAt: new Date().toISOString(),
+    lastLogin: null,
+    loginCount: 0,
+    active: true
+  }];
+}
+function _authSaveAccounts(accounts) {
+  localStorage.setItem('ict_accounts', JSON.stringify(accounts));
+}
+function _authGetLog() {
+  try { return JSON.parse(localStorage.getItem('ict_login_log') || '[]'); } catch(e){ return []; }
+}
+function _authAddLog(username, name, status) {
+  const log = _authGetLog();
+  log.unshift({ username, name: name||username, time: new Date().toISOString(), status });
+  if (log.length > 100) log.length = 100; // keep last 100 entries
+  localStorage.setItem('ict_login_log', JSON.stringify(log));
+}
+
+// ── Panel switcher ──────────────────────────────────────────
+function authShowPanel(panel) {
+  ['login','forgot'].forEach(p => {
+    const el = document.getElementById('auth-panel-' + p);
+    if (el) el.style.display = (p === panel) ? 'block' : 'none';
+  });
+  // Reset forgot steps
+  if (panel === 'forgot') {
+    const s1 = document.getElementById('forgot-step1');
+    const s2 = document.getElementById('forgot-step2');
+    if (s1) s1.style.display = 'block';
+    if (s2) s2.style.display = 'none';
+    const fe = document.getElementById('forgot-error');
+    const fs = document.getElementById('forgot-success');
+    if (fe) fe.style.display = 'none';
+    if (fs) fs.style.display = 'none';
+    const fpu = document.getElementById('fp-user');
+    if (fpu) { fpu.value = ''; fpu.focus(); }
   }
 }
 
-function teacherLogout() { showPage('page-register'); }
+// ── Show/hide password toggle ────────────────────────────────
+function authTogglePass(inputId, btn) {
+  const inp = document.getElementById(inputId);
+  if (!inp) return;
+  const show = inp.type === 'password';
+  inp.type = show ? 'text' : 'password';
+  btn.textContent = show ? '🙈' : '👁️';
+}
+
+// ── LOGIN ────────────────────────────────────────────────────
+function teacherLogin() {
+  const now = Date.now();
+  const errEl   = document.getElementById('login-error');
+  const warnEl  = document.getElementById('login-attempts-warn');
+
+  // Lockout check (5 failed attempts = 2 min lockout)
+  if (_authLockedUntil > now) {
+    const rem = Math.ceil((_authLockedUntil - now) / 1000);
+    if (warnEl) { warnEl.style.display='block'; warnEl.textContent=`⏳ Too many failed attempts. Try again in ${rem}s.`; }
+    return;
+  }
+
+  const u = (document.getElementById('t-user')||{}).value?.trim() || '';
+  const p = (document.getElementById('t-pass')||{}).value || '';
+
+  if (!u || !p) {
+    if (errEl) { errEl.style.display='flex'; errEl.textContent='❌ Please enter both username and password.'; }
+    return;
+  }
+
+  const accounts = _authGetAccounts();
+  const acc = accounts.find(a => a.username.toLowerCase() === u.toLowerCase() && a.active);
+
+  if (!acc || acc.password !== p) {
+    _authLoginAttempts++;
+    _authAddLog(u, null, 'failed');
+    if (_authLoginAttempts >= 5) {
+      _authLockedUntil = Date.now() + 120000; // 2 min
+      _authLoginAttempts = 0;
+      if (warnEl) { warnEl.style.display='block'; warnEl.textContent='🔒 Account locked for 2 minutes due to too many failed attempts.'; }
+      if (errEl) errEl.style.display = 'none';
+    } else {
+      const rem = 5 - _authLoginAttempts;
+      if (errEl) { errEl.style.display='flex'; errEl.textContent=`❌ Invalid username or password. ${rem} attempt${rem!==1?'s':''} remaining.`; }
+      if (warnEl) warnEl.style.display = 'none';
+    }
+    return;
+  }
+
+  // ── SUCCESS ──────────────────────────────────────────────
+  _authLoginAttempts = 0;
+  _authLockedUntil   = 0;
+  _currentTeacher    = acc;
+
+  // Update last login
+  acc.lastLogin  = new Date().toISOString();
+  acc.loginCount = (acc.loginCount || 0) + 1;
+  _authSaveAccounts(accounts);
+  _authAddLog(acc.username, acc.name, 'success');
+
+  if (errEl)  errEl.style.display  = 'none';
+  if (warnEl) warnEl.style.display = 'none';
+
+  showPage('page-dashboard');
+  showDashSection('overview');
+
+  // Update sidebar with current user info
+  setTimeout(() => _authUpdateSidebarUser(), 100);
+}
+
+// ── Show logged-in user in sidebar ──────────────────────────
+function _authUpdateSidebarUser() {
+  const sidebar = document.getElementById('sidebar');
+  if (!sidebar || !_currentTeacher) return;
+  let badge = document.getElementById('sidebar-user-badge');
+  if (!badge) {
+    badge = document.createElement('div');
+    badge.id = 'sidebar-user-badge';
+    badge.style.cssText = 'margin:12px 8px 0;padding:10px 12px;background:rgba(255,255,255,.08);border-radius:12px;border:1px solid rgba(255,255,255,.12);';
+    sidebar.appendChild(badge);
+  }
+  const roleBg = _currentTeacher.role==='admin' ? '#ff6f00' : '#3949ab';
+  badge.innerHTML = `
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="width:34px;height:34px;border-radius:10px;background:${roleBg};
+        display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;">
+        ${_currentTeacher.role==='admin'?'👑':'👩‍🏫'}
+      </div>
+      <div style="overflow:hidden;">
+        <div style="color:#fff;font-weight:900;font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+          ${_escH(_currentTeacher.name)}
+        </div>
+        <div style="color:#9fa8da;font-size:.68rem;font-weight:700;">
+          @${_escH(_currentTeacher.username)} · ${_currentTeacher.role}
+        </div>
+      </div>
+    </div>`;
+}
+
+function _escH(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function teacherLogout() {
+  _currentTeacher = null;
+  const badge = document.getElementById('sidebar-user-badge');
+  if (badge) badge.remove();
+  showPage('page-register');
+}
+
+// ── FORGOT PASSWORD — Step 1: find username ──────────────────
+function authForgotStep1() {
+  const u = (document.getElementById('fp-user')||{}).value?.trim();
+  const fe = document.getElementById('forgot-error');
+  const fs = document.getElementById('forgot-success');
+  if (fe) fe.style.display = 'none';
+  if (fs) fs.style.display = 'none';
+
+  if (!u) { if(fe){fe.style.display='block';fe.textContent='⚠️ Please enter your username.';} return; }
+
+  const accounts = _authGetAccounts();
+  const acc = accounts.find(a => a.username.toLowerCase() === u.toLowerCase() && a.active);
+
+  if (!acc) {
+    if (fe) { fe.style.display='block'; fe.textContent='❌ No account found with that username.'; }
+    return;
+  }
+  if (!acc.securityQ || !acc.securityA) {
+    if (fe) { fe.style.display='block'; fe.textContent='❌ No security question set for this account. Contact the admin.'; }
+    return;
+  }
+
+  // Show step 2
+  const qd = document.getElementById('fp-question-display');
+  if (qd) qd.textContent = acc.securityQ;
+  document.getElementById('forgot-step1').style.display = 'none';
+  document.getElementById('forgot-step2').style.display = 'block';
+  document.getElementById('fp-answer').value = '';
+  document.getElementById('fp-newpass').value = '';
+  document.getElementById('fp-answer').focus();
+  // Store username temporarily in a data attribute
+  document.getElementById('forgot-step2').dataset.u = u;
+}
+
+// ── FORGOT PASSWORD — Step 2: verify answer + set new pass ───
+function authForgotStep2() {
+  const u = document.getElementById('forgot-step2').dataset.u;
+  const ans = (document.getElementById('fp-answer')||{}).value?.trim().toLowerCase();
+  const np  = (document.getElementById('fp-newpass')||{}).value;
+  const fe  = document.getElementById('forgot-error');
+  const fs  = document.getElementById('forgot-success');
+
+  if (fe) fe.style.display = 'none';
+  if (!ans) { if(fe){fe.style.display='block';fe.textContent='⚠️ Please answer the security question.';} return; }
+  if (!np || np.length < 6) { if(fe){fe.style.display='block';fe.textContent='⚠️ New password must be at least 6 characters.';} return; }
+
+  const accounts = _authGetAccounts();
+  const acc = accounts.find(a => a.username.toLowerCase() === u.toLowerCase());
+  if (!acc) { if(fe){fe.style.display='block';fe.textContent='❌ Account not found.';} return; }
+
+  if (acc.securityA.toLowerCase().trim() !== ans) {
+    if (fe) { fe.style.display='block'; fe.textContent='❌ Wrong answer. Please try again.'; }
+    return;
+  }
+
+  // Reset password
+  acc.password = np;
+  _authSaveAccounts(accounts);
+  _authAddLog(acc.username, acc.name, 'password_reset');
+
+  if (fs) { fs.style.display='block'; fs.textContent=`✅ Password reset successfully! You can now login with your new password.`; }
+  if (fe) fe.style.display = 'none';
+
+  setTimeout(() => {
+    authShowPanel('login');
+    const tu = document.getElementById('t-user');
+    if (tu) { tu.value = acc.username; }
+    const tp = document.getElementById('t-pass');
+    if (tp) { tp.value = ''; tp.focus(); }
+  }, 2000);
+}
 
 function toggleSidebar() {
   const s = document.getElementById('sidebar');
@@ -2482,32 +3674,90 @@ function showDashSection(sec) {
     const total = results.length;
     const avg = total ? (results.reduce((s, r) => s + r.total, 0) / total).toFixed(1) : 0;
     const topGrade = results.filter(r => r.grade === 'A+' || r.grade === 'A').length;
+    const passCount = results.filter(r => r.total >= 16).length;
     const activeStds = ['V','VI','VII','VIII'].filter(s => EXAM_CONTROL[s]?.active).length;
+    const passRate = total ? Math.round((passCount/total)*100) : 0;
 
     document.getElementById('dash-content').innerHTML = `
-      <div class="stats-grid">
-        <div class="stat-card"><div class="stat-icon" style="background:#e8eaf6;">👨‍🎓</div><div><h3>${total}</h3><p>Total Students</p></div></div>
-        <div class="stat-card"><div class="stat-icon" style="background:#e8f5e9;">📊</div><div><h3>${avg}</h3><p>Average Score</p></div></div>
-        <div class="stat-card"><div class="stat-icon" style="background:#fff8e1;">🏆</div><div><h3>${topGrade}</h3><p>A/A+ Grades</p></div></div>
-        <div class="stat-card"><div class="stat-icon" style="background:#e8f5e9;">🎛️</div><div><h3>${activeStds}/4</h3><p>Active Exams</p></div></div>
+<div style="animation:fadeIn .3s ease;">
+  <div style="background:linear-gradient(135deg,#1a237e,#283593,#3949ab);border-radius:18px;
+    padding:18px 22px;margin-bottom:20px;box-shadow:0 8px 28px rgba(26,35,126,.25);
+    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+    <div>
+      <div style="color:#fff;font-size:1.3rem;font-weight:900;">📊 Dashboard Overview</div>
+      <div style="color:#9fa8da;font-size:.8rem;font-weight:700;margin-top:3px;">
+        ICT Online Exam System · ${new Date().toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}
       </div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
-        ${['V','VI','VII','VIII'].map(s => {
-          const on = EXAM_CONTROL[s]?.active;
-          return `<div style="background:${on?'#e8f5e9':'#ffebee'};border-radius:12px;padding:14px;text-align:center;border:2px solid ${on?'#00c853':'#ff1744'};">
-            <div style="font-size:1.2rem;font-weight:900;color:${on?'#1b5e20':'#b71c1c'};">Std ${s}</div>
-            <div style="font-size:0.8rem;font-weight:800;margin-top:4px;color:${on?'#1b5e20':'#b71c1c'};">${on?'🟢 ACTIVE':'🔴 STOPPED'}</div>
-          </div>`;
-        }).join('')}
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button onclick="showDashSection('examcontrol')"
+        style="padding:9px 16px;border-radius:10px;border:none;
+          background:linear-gradient(135deg,#ff6f00,#ff8f00);color:#fff;
+          font-family:inherit;font-weight:800;font-size:.82rem;cursor:pointer;">🎛️ Exam Control</button>
+      <button onclick="showDashSection('results')"
+        style="padding:9px 16px;border-radius:10px;border:2px solid rgba(255,255,255,.25);
+          background:rgba(255,255,255,.1);color:#fff;
+          font-family:inherit;font-weight:800;font-size:.82rem;cursor:pointer;">📋 View Results</button>
+    </div>
+  </div>
+  <div class="stats-grid" style="margin-bottom:20px;">
+    <div class="stat-card" style="border-left:4px solid #3949ab;">
+      <div class="stat-icon" style="background:linear-gradient(135deg,#e8eaf6,#c5cae9);">👨‍🎓</div>
+      <div><h3 style="font-size:2rem;font-weight:900;">${total}</h3><p>Total Students</p>
+        ${total>0?`<div style="font-size:.7rem;color:#00c853;font-weight:800;margin-top:2px;">↑ ${passCount} passed</div>`:''}
       </div>
-      <div class="charts-grid">
-        <div class="card"><div class="card-header"><h2>Grade Distribution</h2></div>
-          <div class="card-body"><canvas id="gradeChart" height="200"></canvas></div></div>
-        <div class="card"><div class="card-header"><h2>Section-wise Average</h2></div>
-          <div class="card-body"><canvas id="secChart" height="200"></canvas></div></div>
+    </div>
+    <div class="stat-card" style="border-left:4px solid #ff6f00;">
+      <div class="stat-icon" style="background:linear-gradient(135deg,#fff3e0,#ffcc80);">📊</div>
+      <div><h3 style="font-size:2rem;font-weight:900;">${avg}<span style="font-size:1rem;color:var(--muted);font-weight:700;">/40</span></h3><p>Average Score</p>
+        ${total>0?`<div style="font-size:.7rem;color:#ff6f00;font-weight:800;margin-top:2px;">${passRate}% pass rate</div>`:''}
       </div>
-      <div class="card"><div class="card-header"><h2>Class-wise Performance</h2></div>
-        <div class="card-body"><canvas id="classChart" height="120"></canvas></div></div>`;
+    </div>
+    <div class="stat-card" style="border-left:4px solid #ffd600;">
+      <div class="stat-icon" style="background:linear-gradient(135deg,#fff8e1,#ffecb3);">🏆</div>
+      <div><h3 style="font-size:2rem;font-weight:900;">${topGrade}</h3><p>A / A+ Grades</p>
+        ${total>0?`<div style="font-size:.7rem;color:#ff8f00;font-weight:800;margin-top:2px;">${Math.round((topGrade/total)*100)}% of class</div>`:''}
+      </div>
+    </div>
+    <div class="stat-card" style="border-left:4px solid ${activeStds>0?'#00c853':'#ff1744'};">
+      <div class="stat-icon" style="background:${activeStds>0?'linear-gradient(135deg,#e8f5e9,#c8e6c9)':'linear-gradient(135deg,#ffebee,#ffcdd2)'};">🎛️</div>
+      <div><h3 style="font-size:2rem;font-weight:900;color:${activeStds>0?'#1b5e20':'#b71c1c'};">${activeStds}<span style="font-size:1rem;color:var(--muted);font-weight:700;">/4</span></h3><p>Active Exams</p>
+        <div style="font-size:.7rem;font-weight:800;margin-top:2px;color:${activeStds>0?'#00c853':'#ff1744'};">${activeStds>0?activeStds+' Standard(s) live':'All exams stopped'}</div>
+      </div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
+    ${['V','VI','VII','VIII'].map(s => {
+      const on=EXAM_CONTROL[s]?.active; const cnt=results.filter(r=>r.std===s).length;
+      return `<div onclick="showDashSection('examcontrol')" style="background:${on?'#e8f5e9':'#ffebee'};
+        border-radius:14px;padding:14px;text-align:center;border:2px solid ${on?'#00c853':'#ff1744'};
+        cursor:pointer;transition:transform .2s;"
+        onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+        <div style="font-size:1.4rem;font-weight:900;color:${on?'#1b5e20':'#b71c1c'};">Std ${s}</div>
+        <div style="font-size:.72rem;font-weight:800;margin-top:2px;color:${on?'#2e7d32':'#c62828'};">${on?'🟢 ACTIVE':'🔴 STOPPED'}</div>
+        <div style="font-size:.68rem;color:${on?'#4caf50':'#ef9a9a'};font-weight:700;margin-top:4px;">${cnt} result${cnt!==1?'s':''}</div>
+      </div>`;
+    }).join('')}
+  </div>
+  <div class="charts-grid">
+    <div class="card"><div class="card-header" style="padding:14px 18px;"><h2 style="font-size:1rem;">📊 Grade Distribution</h2></div>
+      <div class="card-body"><canvas id="gradeChart" height="200"></canvas></div></div>
+    <div class="card"><div class="card-header" style="padding:14px 18px;"><h2 style="font-size:1rem;">📈 Section-wise Average</h2></div>
+      <div class="card-body"><canvas id="secChart" height="200"></canvas></div></div>
+  </div>
+  <div class="card"><div class="card-header" style="padding:14px 18px;"><h2 style="font-size:1rem;">🏫 Class-wise Performance</h2></div>
+    <div class="card-body"><canvas id="classChart" height="120"></canvas></div></div>
+  <div style="background:#f5f7ff;border-radius:16px;padding:16px 18px;margin-top:16px;border:2px solid #e8eaf6;">
+    <div style="font-size:.75rem;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;">⚡ Quick Actions</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button onclick="showDashSection('upload')" style="padding:9px 16px;border-radius:10px;border:2px solid #c5cae9;background:#fff;color:var(--primary);font-family:inherit;font-weight:800;font-size:.82rem;cursor:pointer;">📤 Upload Questions</button>
+      <button onclick="showDashSection('ai')" style="padding:9px 16px;border-radius:10px;border:2px solid #ce93d8;background:linear-gradient(135deg,#f3e5f5,#fce4ec);color:#6a1b9a;font-family:inherit;font-weight:800;font-size:.82rem;cursor:pointer;">🤖 AI Generator</button>
+      <button onclick="showDashSection('editor')" style="padding:9px 16px;border-radius:10px;border:2px solid #c5cae9;background:#fff;color:var(--primary);font-family:inherit;font-weight:800;font-size:.82rem;cursor:pointer;">✏️ Question Editor</button>
+      <button onclick="showDashSection('analytics')" style="padding:9px 16px;border-radius:10px;border:2px solid #c5cae9;background:#fff;color:var(--primary);font-family:inherit;font-weight:800;font-size:.82rem;cursor:pointer;">📈 Analytics</button>
+      <button onclick="downloadExcel()" style="padding:9px 16px;border-radius:10px;border:2px solid #00c853;background:#e8f5e9;color:#1b5e20;font-family:inherit;font-weight:800;font-size:.82rem;cursor:pointer;">📥 Export Excel</button>
+    </div>
+  </div>
+</div>`;
     setTimeout(() => renderCharts(results), 100);
 
   } else if (sec === 'examcontrol') {
@@ -2533,18 +3783,298 @@ function showDashSection(sec) {
   } else if (sec === 'ai') {
     renderAIGenerator();
   } else if (sec === 'settings') {
+    const sheetsUrl = localStorage.getItem('ict_sheets_url') || '';
     document.getElementById('dash-content').innerHTML = `
-      <div class="card"><div class="card-header"><h2>⚙️ Settings</h2></div>
-        <div class="card-body">
-          <div class="sheet-note">📋 <strong>Google Sheets:</strong> Replace <code>GOOGLE_SHEET_URL</code> in the script with your Apps Script URL.</div>
-          <div class="form-group" style="margin-bottom:16px;"><label>Teacher Username</label><input type="text" value="admin" id="set-user"></div>
-          <div class="form-group" style="margin-bottom:24px;"><label>Teacher Password</label><input type="password" value="teacher123" id="set-pass"></div>
-          <button class="btn btn-primary" onclick="alert('Settings noted! To permanently save, update credentials in the HTML source.')">💾 Save Settings</button>
-          <div style="margin-top:24px;display:flex;gap:12px;flex-wrap:wrap;">
-            <button class="btn btn-danger btn-sm" onclick="if(confirm('Clear ALL student results?')){localStorage.removeItem('ict_results');alert('Results cleared!');}">🗑️ Clear All Results</button>
-            <button class="btn btn-outline btn-sm" onclick="if(confirm('Reset ALL question banks to default?')){localStorage.removeItem('ict_std_banks');STD_QUESTION_BANKS=loadStdBanks();alert('Question banks reset!');}">🔄 Reset Question Banks</button>
+<div style="max-width:800px;margin:0 auto;animation:fadeIn .3s ease;">
+
+  <!-- Settings header -->
+  <div style="background:linear-gradient(135deg,#1a237e,#3949ab);border-radius:18px;
+    padding:18px 22px;color:#fff;margin-bottom:20px;box-shadow:0 8px 28px rgba(26,35,126,.25);
+    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+    <div>
+      <div style="font-size:1.2rem;font-weight:900;">⚙️ System Settings</div>
+      <div style="font-size:.78rem;color:#9fa8da;margin-top:3px;">Manage accounts, Google Sheets, and data</div>
+    </div>
+    ${_currentTeacher?.role==='admin' ? `<div style="background:rgba(255,111,0,.25);border:1px solid rgba(255,111,0,.4);
+      border-radius:10px;padding:5px 14px;font-size:.75rem;font-weight:900;color:#ffcc80;">
+      👑 Logged in as Admin
+    </div>` : `<div style="background:rgba(255,255,255,.1);border-radius:10px;
+      padding:5px 14px;font-size:.75rem;font-weight:900;color:#9fa8da;">
+      👩‍🏫 Logged in as ${_escH(_currentTeacher?.username||'')}
+    </div>`}
+  </div>
+
+  <!-- ── SECTION: My Account ─────────────────────────────── -->
+  <div style="background:#fff;border-radius:16px;box-shadow:0 4px 20px rgba(26,35,126,.1);
+    overflow:hidden;margin-bottom:16px;">
+    <div style="background:#f5f7ff;padding:14px 20px;border-bottom:2px solid #e8eaf6;
+      display:flex;align-items:center;gap:10px;">
+      <span style="font-size:1.2rem;">👤</span>
+      <div>
+        <div style="font-weight:900;color:var(--text);">My Account</div>
+        <div style="font-size:.74rem;color:var(--muted);font-weight:700;">Update your own username, password &amp; security question</div>
+      </div>
+    </div>
+    <div style="padding:20px;" id="my-account-form">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+        <div>
+          <label style="font-size:.75rem;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px;display:block;">Full Name</label>
+          <input type="text" id="ma-name" value="${_escH(_currentTeacher?.name||'')}"
+            style="${_settingsInputStyle()}" placeholder="Your full name">
+        </div>
+        <div>
+          <label style="font-size:.75rem;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px;display:block;">Username</label>
+          <input type="text" id="ma-username" value="${_escH(_currentTeacher?.username||'')}"
+            style="${_settingsInputStyle()}" placeholder="Username (min 3 chars)">
+        </div>
+        <div>
+          <label style="font-size:.75rem;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px;display:block;">New Password <span style="font-weight:600;color:#bbb;">(leave blank to keep)</span></label>
+          <div style="position:relative;">
+            <input type="password" id="ma-pass"
+              style="${_settingsInputStyle()} padding-right:42px;" placeholder="New password (min 6)">
+            <button onclick="authTogglePass('ma-pass',this)"
+              style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:.95rem;">👁️</button>
           </div>
-        </div></div>`;
+        </div>
+        <div>
+          <label style="font-size:.75rem;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px;display:block;">Confirm Password</label>
+          <div style="position:relative;">
+            <input type="password" id="ma-pass2"
+              style="${_settingsInputStyle()} padding-right:42px;" placeholder="Repeat new password">
+            <button onclick="authTogglePass('ma-pass2',this)"
+              style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:.95rem;">👁️</button>
+          </div>
+        </div>
+      </div>
+      <div style="margin-bottom:14px;">
+        <label style="font-size:.75rem;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px;display:block;">🛡️ Security Question (for password recovery)</label>
+        <select id="ma-secq" style="${_settingsInputStyle()}">
+          ${AUTH_QUESTIONS.map(q=>`<option value="${_escH(q)}" ${_currentTeacher?.securityQ===q?'selected':''}>${_escH(q)}</option>`).join('')}
+        </select>
+      </div>
+      <div style="margin-bottom:18px;">
+        <label style="font-size:.75rem;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px;display:block;">💬 Security Answer</label>
+        <input type="text" id="ma-seca" value="${_escH(_currentTeacher?.securityA||'')}"
+          style="${_settingsInputStyle()}" placeholder="Your answer (case-insensitive)">
+      </div>
+      <button onclick="authSaveMyAccount()"
+        style="padding:11px 28px;border-radius:10px;border:none;
+          background:linear-gradient(135deg,#ff6f00,#ff8f00);color:#fff;
+          font-family:inherit;font-weight:900;font-size:.92rem;cursor:pointer;
+          box-shadow:0 4px 14px rgba(255,111,0,.3);">
+        💾 Save My Account
+      </button>
+    </div>
+  </div>
+
+  <!-- ── SECTION: All Accounts (admin only) ──────────────── -->
+  ${_currentTeacher?.role==='admin' ? `
+  <div style="background:#fff;border-radius:16px;box-shadow:0 4px 20px rgba(26,35,126,.1);
+    overflow:hidden;margin-bottom:16px;">
+    <div style="background:#f5f7ff;padding:14px 20px;border-bottom:2px solid #e8eaf6;
+      display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="font-size:1.2rem;">👥</span>
+        <div>
+          <div style="font-weight:900;color:var(--text);">Teacher Accounts</div>
+          <div style="font-size:.74rem;color:var(--muted);font-weight:700;">Create, edit, enable/disable teacher login accounts</div>
+        </div>
+      </div>
+      <button onclick="authShowCreateUser()"
+        style="padding:9px 18px;border-radius:10px;border:none;
+          background:linear-gradient(135deg,#1a237e,#3949ab);color:#fff;
+          font-family:inherit;font-weight:800;font-size:.82rem;cursor:pointer;
+          box-shadow:0 3px 10px rgba(26,35,126,.3);">
+        ➕ Add Teacher
+      </button>
+    </div>
+
+    <!-- Create/Edit form (hidden by default) -->
+    <div id="auth-create-form" style="display:none;padding:18px 20px;background:#fafbff;
+      border-bottom:2px solid #e8eaf6;">
+      <div style="font-weight:900;color:var(--text);margin-bottom:12px;" id="auth-create-title">➕ Add New Teacher</div>
+      <input type="hidden" id="edit-acc-id" value="">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div>
+          <label style="font-size:.72rem;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;display:block;">Full Name *</label>
+          <input type="text" id="cu-name" style="${_settingsInputStyle()}" placeholder="e.g. Mrs. Sharma">
+        </div>
+        <div>
+          <label style="font-size:.72rem;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;display:block;">Username *</label>
+          <input type="text" id="cu-username" style="${_settingsInputStyle()}" placeholder="e.g. teacher1">
+        </div>
+        <div>
+          <label style="font-size:.72rem;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;display:block;">Password *</label>
+          <div style="position:relative;">
+            <input type="password" id="cu-pass" style="${_settingsInputStyle()} padding-right:40px;" placeholder="Min 6 chars">
+            <button onclick="authTogglePass('cu-pass',this)" style="position:absolute;right:9px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:.9rem;">👁️</button>
+          </div>
+        </div>
+        <div>
+          <label style="font-size:.72rem;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;display:block;">Role</label>
+          <select id="cu-role" style="${_settingsInputStyle()}">
+            <option value="teacher">Teacher</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:.72rem;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;display:block;">Security Question</label>
+          <select id="cu-secq" style="${_settingsInputStyle()}">
+            ${AUTH_QUESTIONS.map(q=>`<option value="${_escH(q)}">${_escH(q)}</option>`).join('')}
+          </select>
+        </div>
+        <div>
+          <label style="font-size:.72rem;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;display:block;">Security Answer *</label>
+          <input type="text" id="cu-seca" style="${_settingsInputStyle()}" placeholder="Your answer">
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button onclick="authSaveUser()"
+          style="padding:10px 22px;border-radius:10px;border:none;
+            background:linear-gradient(135deg,#00c853,#00e676);color:#fff;
+            font-family:inherit;font-weight:800;font-size:.88rem;cursor:pointer;">
+          ✅ Save Account
+        </button>
+        <button onclick="document.getElementById('auth-create-form').style.display='none'"
+          style="padding:10px 18px;border-radius:10px;border:2px solid #c5cae9;background:#fff;
+            color:var(--muted);font-family:inherit;font-weight:800;font-size:.88rem;cursor:pointer;">
+          Cancel
+        </button>
+      </div>
+    </div>
+
+    <!-- Accounts table -->
+    <div style="padding:16px 20px;" id="auth-accounts-table">
+      ${_authRenderAccountsTable()}
+    </div>
+  </div>
+
+  <!-- ── Login History ──────────────────────────────────── -->
+  <div style="background:#fff;border-radius:16px;box-shadow:0 4px 20px rgba(26,35,126,.1);
+    overflow:hidden;margin-bottom:16px;">
+    <div style="background:#f5f7ff;padding:14px 20px;border-bottom:2px solid #e8eaf6;
+      display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="font-size:1.2rem;">📋</span>
+        <div>
+          <div style="font-weight:900;color:var(--text);">Login History</div>
+          <div style="font-size:.74rem;color:var(--muted);font-weight:700;">Recent login activity (last 20 entries)</div>
+        </div>
+      </div>
+      <button onclick="authClearLog()"
+        style="padding:7px 14px;border-radius:8px;border:2px solid #ffcdd2;background:#fff;
+          color:#e53935;font-family:inherit;font-weight:800;font-size:.78rem;cursor:pointer;">
+        🗑️ Clear Log
+      </button>
+    </div>
+    <div style="padding:0 20px 16px;max-height:260px;overflow-y:auto;" id="auth-login-log">
+      ${_authRenderLoginLog()}
+    </div>
+  </div>` : ''}
+
+  <!-- ── Google Sheets ────────────────────────────────────── -->
+  <div style="background:#fff;border-radius:16px;box-shadow:0 4px 20px rgba(26,35,126,.1);
+    overflow:hidden;margin-bottom:16px;">
+    <div style="background:#f5f7ff;padding:14px 20px;border-bottom:2px solid #e8eaf6;
+      display:flex;align-items:center;gap:10px;">
+      <span style="font-size:1.2rem;">📊</span>
+      <div>
+        <div style="font-weight:900;color:var(--text);">Google Sheets Integration</div>
+        <div style="font-size:.74rem;color:var(--muted);font-weight:700;">Results auto-sent to your Google Sheet</div>
+      </div>
+    </div>
+    <div style="padding:18px 20px;">
+      <div style="background:#e3f2fd;border-left:4px solid #2196f3;border-radius:8px;
+        padding:11px 14px;margin-bottom:12px;font-size:.82rem;color:#0d47a1;font-weight:700;">
+        📋 Setup: <strong>script.google.com</strong> → New project → Paste Apps Script code → Deploy as Web App → Copy URL below
+      </div>
+      <input type="url" id="set-sheets-url" value="${_escH(sheetsUrl)}"
+        placeholder="https://script.google.com/macros/s/.../exec"
+        style="${_settingsInputStyle()} margin-bottom:10px;">
+      <button onclick="saveSheetsUrl()"
+        style="padding:10px 22px;border-radius:10px;border:none;
+          background:linear-gradient(135deg,#00838f,#00acc1);color:#fff;
+          font-family:inherit;font-weight:800;font-size:.88rem;cursor:pointer;">
+        🔗 Save Sheets URL
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Backup & Restore ─────────────────────────────────── -->
+  <div style="background:#fff;border-radius:16px;box-shadow:0 4px 20px rgba(26,35,126,.1);
+    overflow:hidden;margin-bottom:16px;">
+    <div style="background:#f5f7ff;padding:14px 20px;border-bottom:2px solid #e8eaf6;
+      display:flex;align-items:center;gap:10px;">
+      <span style="font-size:1.2rem;">💾</span>
+      <div>
+        <div style="font-weight:900;color:var(--text);">Data Backup &amp; Restore</div>
+        <div style="font-size:.74rem;color:var(--muted);font-weight:700;">Export full system data as JSON</div>
+      </div>
+    </div>
+    <div style="padding:16px 20px;display:flex;gap:10px;flex-wrap:wrap;">
+      <button onclick="exportSystemData()"
+        style="padding:10px 18px;border-radius:10px;border:none;
+          background:linear-gradient(135deg,#2e7d32,#388e3c);color:#fff;
+          font-family:inherit;font-weight:800;font-size:.86rem;cursor:pointer;">
+        📥 Export (.json)
+      </button>
+      <label style="padding:10px 18px;border-radius:10px;border:2px solid #e8eaf6;
+        background:#f5f7ff;color:var(--text);font-family:inherit;
+        font-weight:800;font-size:.86rem;cursor:pointer;display:inline-flex;align-items:center;gap:6px;">
+        📤 Import (.json)
+        <input type="file" accept=".json" onchange="importSystemData(this)" style="display:none">
+      </label>
+    </div>
+  </div>
+
+  <!-- ── Danger Zone ──────────────────────────────────────── -->
+  ${_currentTeacher?.role==='admin' ? `
+  <div style="background:#fff;border-radius:16px;border:2px solid #ffcdd2;
+    box-shadow:0 4px 20px rgba(255,23,68,.07);overflow:hidden;">
+    <div style="background:#ffebee;padding:13px 20px;border-bottom:2px solid #ffcdd2;
+      display:flex;align-items:center;gap:10px;">
+      <span style="font-size:1.2rem;">⚠️</span>
+      <div>
+        <div style="font-weight:900;color:#b71c1c;">Danger Zone</div>
+        <div style="font-size:.74rem;color:#e57373;font-weight:700;">Irreversible — admin only</div>
+      </div>
+    </div>
+    <div style="padding:16px 20px;display:flex;gap:10px;flex-wrap:wrap;">
+      <button onclick="settingsClearResults()"
+        style="padding:9px 16px;border-radius:10px;border:2px solid #ff1744;background:#fff;
+          color:#ff1744;font-family:inherit;font-weight:800;font-size:.83rem;cursor:pointer;">
+        🗑️ Clear Results
+      </button>
+      <button onclick="settingsResetBanks()"
+        style="padding:9px 16px;border-radius:10px;border:2px solid #e65100;background:#fff;
+          color:#e65100;font-family:inherit;font-weight:800;font-size:.83rem;cursor:pointer;">
+        🔄 Reset Q-Banks
+      </button>
+      <button onclick="settingsResetAll()"
+        style="padding:9px 16px;border-radius:10px;border:2px solid #b71c1c;background:#ffebee;
+          color:#b71c1c;font-family:inherit;font-weight:800;font-size:.83rem;cursor:pointer;">
+        💥 Full Reset
+      </button>
+    </div>
+    <div id="danger-confirm" style="display:none;margin:0 20px 18px;
+      background:#fff3e0;border:2px solid #ff6f00;border-radius:10px;padding:12px 14px;">
+      <div id="danger-msg" style="font-weight:800;color:#e65100;margin-bottom:10px;"></div>
+      <div style="display:flex;gap:8px;">
+        <button id="danger-ok"
+          style="padding:8px 16px;border-radius:8px;border:none;background:#ff1744;
+            color:#fff;font-family:inherit;font-weight:800;font-size:.83rem;cursor:pointer;">
+          Yes, Proceed
+        </button>
+        <button onclick="document.getElementById('danger-confirm').style.display='none'"
+          style="padding:8px 16px;border-radius:8px;border:2px solid #ccc;background:#fff;
+            color:var(--muted);font-family:inherit;font-weight:800;font-size:.83rem;cursor:pointer;">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>` : ''}
+
+</div>`;
   }
 }
 
@@ -3361,8 +4891,398 @@ function showToast(msg,bg) {
   t.className='save-toast';
   t.style.background=bg||'linear-gradient(135deg,#00c853,#00e676)';
   t.innerHTML=msg;
-  _toastTimer=setTimeout(()=>{if(t&&t.parentNode)t.remove();},2600);
+  _toastTimer=setTimeout(()=>{if(t&&t.parentNode)t.remove();},2800);
 }
+
+// ── SETTINGS FUNCTIONS ─────────────────────────────────────────
+
+// Shared input style helper
+function _settingsInputStyle() {
+  return 'width:100%;border:2px solid #e8eaf6;border-radius:10px;padding:10px 13px;font-family:inherit;font-size:.88rem;outline:none;background:#f5f7ff;box-sizing:border-box;transition:border .2s;';
+}
+
+// ── Render accounts table (admin view) ─────────────────────────
+function _authRenderAccountsTable() {
+  const accounts = _authGetAccounts();
+  if (!accounts.length) return '<div style="color:var(--muted);padding:12px 0;font-weight:700;">No accounts found.</div>';
+  const now = new Date();
+  return `
+<div style="overflow-x:auto;">
+<table style="width:100%;border-collapse:collapse;font-size:.82rem;">
+  <thead>
+    <tr style="background:#f5f7ff;">
+      <th style="padding:10px 12px;text-align:left;font-weight:900;color:var(--muted);border-bottom:2px solid #e8eaf6;">User</th>
+      <th style="padding:10px 12px;text-align:left;font-weight:900;color:var(--muted);border-bottom:2px solid #e8eaf6;">Username</th>
+      <th style="padding:10px 12px;text-align:left;font-weight:900;color:var(--muted);border-bottom:2px solid #e8eaf6;">Role</th>
+      <th style="padding:10px 12px;text-align:left;font-weight:900;color:var(--muted);border-bottom:2px solid #e8eaf6;">Last Login</th>
+      <th style="padding:10px 12px;text-align:left;font-weight:900;color:var(--muted);border-bottom:2px solid #e8eaf6;">Logins</th>
+      <th style="padding:10px 12px;text-align:left;font-weight:900;color:var(--muted);border-bottom:2px solid #e8eaf6;">Status</th>
+      <th style="padding:10px 12px;text-align:left;font-weight:900;color:var(--muted);border-bottom:2px solid #e8eaf6;">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    ${accounts.map(acc => {
+      const isMe = _currentTeacher?.id === acc.id;
+      const lastLogin = acc.lastLogin ? new Date(acc.lastLogin).toLocaleString('en-IN',{day:'2-digit',month:'short',year:'2-digit',hour:'2-digit',minute:'2-digit'}) : 'Never';
+      const roleBg = acc.role==='admin' ? 'linear-gradient(135deg,#ff6f00,#ff8f00)' : 'linear-gradient(135deg,#1a237e,#3949ab)';
+      const roleIcon = acc.role==='admin' ? '👑' : '👩‍🏫';
+      const statusBg = acc.active ? '#e8f5e9' : '#ffebee';
+      const statusColor = acc.active ? '#1b5e20' : '#b71c1c';
+      const statusText = acc.active ? '🟢 Active' : '🔴 Disabled';
+      return `<tr style="border-bottom:1px solid #f0f2ff;${isMe?'background:#fffde7;':''}">
+        <td style="padding:10px 12px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:30px;height:30px;border-radius:8px;background:${roleBg};
+              display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0;">${roleIcon}</div>
+            <div>
+              <div style="font-weight:800;color:var(--text);">${_escH(acc.name)}${isMe?' <span style="background:#fff176;color:#f57f17;border-radius:4px;padding:1px 5px;font-size:.65rem;font-weight:900;">YOU</span>':''}</div>
+              <div style="color:var(--muted);font-size:.72rem;font-weight:700;">ID: ${acc.id}</div>
+            </div>
+          </div>
+        </td>
+        <td style="padding:10px 12px;font-weight:800;color:var(--primary);">@${_escH(acc.username)}</td>
+        <td style="padding:10px 12px;">
+          <span style="background:${roleBg};color:#fff;padding:3px 10px;border-radius:99px;font-size:.72rem;font-weight:900;">${acc.role}</span>
+        </td>
+        <td style="padding:10px 12px;color:var(--muted);font-weight:700;">${lastLogin}</td>
+        <td style="padding:10px 12px;font-weight:800;color:var(--text);">${acc.loginCount||0}</td>
+        <td style="padding:10px 12px;">
+          <span style="background:${statusBg};color:${statusColor};padding:3px 10px;border-radius:99px;font-size:.72rem;font-weight:900;">${statusText}</span>
+        </td>
+        <td style="padding:10px 12px;">
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <button onclick="authEditUser('${acc.id}')"
+              style="padding:5px 10px;border-radius:7px;border:2px solid #c5cae9;background:#fff;
+                color:var(--primary);font-family:inherit;font-weight:800;font-size:.72rem;cursor:pointer;">
+              ✏️ Edit
+            </button>
+            ${!isMe ? `<button onclick="authToggleUser('${acc.id}')"
+              style="padding:5px 10px;border-radius:7px;border:2px solid ${acc.active?'#ffcdd2':'#c8e6c9'};
+                background:#fff;color:${acc.active?'#e53935':'#2e7d32'};
+                font-family:inherit;font-weight:800;font-size:.72rem;cursor:pointer;">
+              ${acc.active?'🚫 Disable':'✅ Enable'}
+            </button>
+            <button onclick="authDeleteUser('${acc.id}')"
+              style="padding:5px 10px;border-radius:7px;border:2px solid #ffcdd2;background:#fff;
+                color:#e53935;font-family:inherit;font-weight:800;font-size:.72rem;cursor:pointer;">
+              🗑️
+            </button>` : ''}
+          </div>
+        </td>
+      </tr>`;
+    }).join('')}
+  </tbody>
+</table>
+</div>`;
+}
+
+// ── Render login history ────────────────────────────────────────
+function _authRenderLoginLog() {
+  const log = _authGetLog().slice(0,20);
+  if (!log.length) return '<div style="color:var(--muted);padding:16px 0;text-align:center;font-weight:700;">No login activity yet.</div>';
+  return `<table style="width:100%;border-collapse:collapse;font-size:.8rem;margin-top:8px;">
+    <thead><tr style="position:sticky;top:0;background:#f5f7ff;">
+      <th style="padding:8px 10px;text-align:left;font-weight:900;color:var(--muted);">Time</th>
+      <th style="padding:8px 10px;text-align:left;font-weight:900;color:var(--muted);">Username</th>
+      <th style="padding:8px 10px;text-align:left;font-weight:900;color:var(--muted);">Name</th>
+      <th style="padding:8px 10px;text-align:left;font-weight:900;color:var(--muted);">Status</th>
+    </tr></thead>
+    <tbody>
+      ${log.map(l => {
+        const t = new Date(l.time).toLocaleString('en-IN',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
+        const statusMap = {
+          success: {bg:'#e8f5e9',color:'#1b5e20',icon:'✅',label:'Login'},
+          failed:  {bg:'#ffebee',color:'#b71c1c',icon:'❌',label:'Failed'},
+          password_reset: {bg:'#e3f2fd',color:'#0d47a1',icon:'🔑',label:'Pwd Reset'}
+        };
+        const s = statusMap[l.status] || {bg:'#f5f5f5',color:'#666',icon:'ℹ️',label:l.status};
+        return `<tr style="border-bottom:1px solid #f0f2ff;">
+          <td style="padding:7px 10px;color:var(--muted);font-weight:700;">${t}</td>
+          <td style="padding:7px 10px;font-weight:800;color:var(--primary);">@${_escH(l.username)}</td>
+          <td style="padding:7px 10px;color:var(--text);font-weight:700;">${_escH(l.name||'-')}</td>
+          <td style="padding:7px 10px;">
+            <span style="background:${s.bg};color:${s.color};padding:2px 9px;border-radius:99px;font-size:.7rem;font-weight:900;">${s.icon} ${s.label}</span>
+          </td>
+        </tr>`;
+      }).join('')}
+    </tbody>
+  </table>`;
+}
+
+// ── Save my own account ─────────────────────────────────────────
+function authSaveMyAccount() {
+  if (!_currentTeacher) return;
+  const name = (document.getElementById('ma-name')||{}).value?.trim();
+  const uname = (document.getElementById('ma-username')||{}).value?.trim();
+  const pass  = (document.getElementById('ma-pass')||{}).value;
+  const pass2 = (document.getElementById('ma-pass2')||{}).value;
+  const secq  = (document.getElementById('ma-secq')||{}).value;
+  const seca  = (document.getElementById('ma-seca')||{}).value?.trim();
+
+  if (!name || name.length < 2)  { showToast('⚠️ Name must be at least 2 characters','#ff6f00'); return; }
+  if (!uname || uname.length < 3) { showToast('⚠️ Username must be at least 3 characters','#ff6f00'); return; }
+  if (!/^[a-zA-Z0-9_]+$/.test(uname)) { showToast('⚠️ Username: letters, numbers, underscore only','#ff6f00'); return; }
+  if (pass && pass.length < 6) { showToast('⚠️ Password must be at least 6 characters','#ff6f00'); return; }
+  if (pass && pass !== pass2) { showToast('⚠️ Passwords do not match','#ff6f00'); return; }
+  if (!seca) { showToast('⚠️ Please enter a security answer','#ff6f00'); return; }
+
+  const accounts = _authGetAccounts();
+  // Check username uniqueness (excluding self)
+  if (accounts.some(a => a.username.toLowerCase() === uname.toLowerCase() && a.id !== _currentTeacher.id)) {
+    showToast('⚠️ Username already taken by another account','#ff6f00'); return;
+  }
+
+  const idx = accounts.findIndex(a => a.id === _currentTeacher.id);
+  if (idx === -1) { showToast('❌ Account not found','#ff1744'); return; }
+
+  accounts[idx].name      = name;
+  accounts[idx].username  = uname;
+  if (pass) accounts[idx].password = pass;
+  accounts[idx].securityQ = secq;
+  accounts[idx].securityA = seca;
+  _authSaveAccounts(accounts);
+
+  // Update in-memory current teacher
+  _currentTeacher = accounts[idx];
+  _authUpdateSidebarUser();
+  _authAddLog(uname, name, 'account_updated');
+
+  showToast('✅ Your account updated successfully!','linear-gradient(135deg,#00c853,#1b5e20)');
+}
+
+// ── Show create-user form ───────────────────────────────────────
+function authShowCreateUser() {
+  const form = document.getElementById('auth-create-form');
+  const title = document.getElementById('auth-create-title');
+  if (!form) return;
+  document.getElementById('edit-acc-id').value = '';
+  document.getElementById('cu-name').value = '';
+  document.getElementById('cu-username').value = '';
+  document.getElementById('cu-pass').value = '';
+  document.getElementById('cu-role').value = 'teacher';
+  document.getElementById('cu-secq').value = AUTH_QUESTIONS[0];
+  document.getElementById('cu-seca').value = '';
+  if (title) title.textContent = '➕ Add New Teacher Account';
+  form.style.display = 'block';
+  document.getElementById('cu-name').focus();
+}
+
+// ── Edit existing user ──────────────────────────────────────────
+function authEditUser(id) {
+  const accounts = _authGetAccounts();
+  const acc = accounts.find(a => a.id === id);
+  if (!acc) return;
+  const form = document.getElementById('auth-create-form');
+  const title = document.getElementById('auth-create-title');
+  if (!form) return;
+  document.getElementById('edit-acc-id').value = id;
+  document.getElementById('cu-name').value = acc.name;
+  document.getElementById('cu-username').value = acc.username;
+  document.getElementById('cu-pass').value = '';
+  document.getElementById('cu-role').value = acc.role;
+  const secqEl = document.getElementById('cu-secq');
+  if (secqEl) secqEl.value = acc.securityQ || AUTH_QUESTIONS[0];
+  document.getElementById('cu-seca').value = acc.securityA || '';
+  if (title) title.innerHTML = `✏️ Edit Account — <span style="color:var(--primary);">@${_escH(acc.username)}</span>`;
+  form.style.display = 'block';
+  document.getElementById('cu-name').focus();
+}
+
+// ── Save new or edited user ─────────────────────────────────────
+function authSaveUser() {
+  const editId  = (document.getElementById('edit-acc-id')||{}).value;
+  const name    = (document.getElementById('cu-name')||{}).value?.trim();
+  const uname   = (document.getElementById('cu-username')||{}).value?.trim();
+  const pass    = (document.getElementById('cu-pass')||{}).value;
+  const role    = (document.getElementById('cu-role')||{}).value;
+  const secq    = (document.getElementById('cu-secq')||{}).value;
+  const seca    = (document.getElementById('cu-seca')||{}).value?.trim();
+
+  if (!name || name.length < 2) { showToast('⚠️ Name required (min 2 chars)','#ff6f00'); return; }
+  if (!uname || uname.length < 3) { showToast('⚠️ Username required (min 3 chars)','#ff6f00'); return; }
+  if (!/^[a-zA-Z0-9_]+$/.test(uname)) { showToast('⚠️ Username: letters, numbers, underscore only','#ff6f00'); return; }
+  if (!editId && (!pass || pass.length < 6)) { showToast('⚠️ Password required (min 6 chars) for new accounts','#ff6f00'); return; }
+  if (editId && pass && pass.length < 6) { showToast('⚠️ New password must be at least 6 chars','#ff6f00'); return; }
+  if (!seca) { showToast('⚠️ Security answer required','#ff6f00'); return; }
+
+  const accounts = _authGetAccounts();
+  // Check username uniqueness
+  if (accounts.some(a => a.username.toLowerCase() === uname.toLowerCase() && a.id !== editId)) {
+    showToast('⚠️ Username already taken','#ff6f00'); return;
+  }
+
+  if (editId) {
+    // Update existing
+    const idx = accounts.findIndex(a => a.id === editId);
+    if (idx === -1) { showToast('❌ Account not found','#ff1744'); return; }
+    accounts[idx].name      = name;
+    accounts[idx].username  = uname;
+    accounts[idx].role      = role;
+    accounts[idx].securityQ = secq;
+    accounts[idx].securityA = seca;
+    if (pass) accounts[idx].password = pass;
+    showToast(`✅ Account @${uname} updated!`,'linear-gradient(135deg,#00c853,#1b5e20)');
+  } else {
+    // Create new
+    accounts.push({
+      id: 'acc_' + Date.now(),
+      username: uname,
+      password: pass,
+      name: name,
+      role: role,
+      securityQ: secq,
+      securityA: seca,
+      createdAt: new Date().toISOString(),
+      lastLogin: null,
+      loginCount: 0,
+      active: true
+    });
+    showToast(`✅ Account @${uname} created!`,'linear-gradient(135deg,#1a237e,#3949ab)');
+  }
+
+  _authSaveAccounts(accounts);
+  document.getElementById('auth-create-form').style.display = 'none';
+  // Refresh the table
+  const tbl = document.getElementById('auth-accounts-table');
+  if (tbl) tbl.innerHTML = _authRenderAccountsTable();
+}
+
+// ── Toggle user active/disabled ─────────────────────────────────
+function authToggleUser(id) {
+  const accounts = _authGetAccounts();
+  const acc = accounts.find(a => a.id === id);
+  if (!acc) return;
+  acc.active = !acc.active;
+  _authSaveAccounts(accounts);
+  showToast(`${acc.active?'✅ Enabled':'🚫 Disabled'}: @${acc.username}`,'linear-gradient(135deg,#1a237e,#3949ab)');
+  const tbl = document.getElementById('auth-accounts-table');
+  if (tbl) tbl.innerHTML = _authRenderAccountsTable();
+}
+
+// ── Delete a user ───────────────────────────────────────────────
+function authDeleteUser(id) {
+  const accounts = _authGetAccounts();
+  const acc = accounts.find(a => a.id === id);
+  if (!acc) return;
+  if (acc.id === (_currentTeacher?.id)) { showToast('⚠️ You cannot delete your own account','#ff6f00'); return; }
+  // Inline confirm via danger-confirm in page, or simple inline
+  const tbl = document.getElementById('auth-accounts-table');
+  if (!tbl) return;
+  // Show inline confirm row
+  const confirmed = true; // use our danger system
+  _settingsDanger(`Delete account @${acc.username} (${acc.name})? This cannot be undone.`, () => {
+    const updated = _authGetAccounts().filter(a => a.id !== id);
+    _authSaveAccounts(updated);
+    showToast(`🗑️ Account @${acc.username} deleted`,'linear-gradient(135deg,#ff1744,#ff4569)');
+    const t2 = document.getElementById('auth-accounts-table');
+    if (t2) t2.innerHTML = _authRenderAccountsTable();
+  });
+}
+
+// ── Clear login history ─────────────────────────────────────────
+function authClearLog() {
+  localStorage.removeItem('ict_login_log');
+  showToast('🗑️ Login history cleared','linear-gradient(135deg,#ff1744,#ff4569)');
+  const el = document.getElementById('auth-login-log');
+  if (el) el.innerHTML = _authRenderLoginLog();
+}
+
+// ── END SETTINGS FUNCTIONS ─────────────────────────────────────
+
+function saveSheetsUrl() {
+  const url = (document.getElementById('set-sheets-url')||{}).value?.trim();
+  if (url && !url.startsWith('https://script.google.com')) {
+    showToast('⚠️ URL must start with https://script.google.com','#ff6f00'); return;
+  }
+  localStorage.setItem('ict_sheets_url', url || '');
+  showToast(url ? '✅ Google Sheets URL saved!' : '🗑️ Google Sheets URL cleared','linear-gradient(135deg,#00838f,#00acc1)');
+}
+
+function exportSystemData() {
+  const data = {
+    exportedAt: new Date().toISOString(),
+    version: '5.0',
+    ict_std_banks:    localStorage.getItem('ict_std_banks'),
+    ict_paper_lib:    localStorage.getItem('ict_paper_lib'),
+    ict_active_papers:localStorage.getItem('ict_active_papers'),
+    ict_exam_control: localStorage.getItem('ict_exam_control'),
+    ict_results:      localStorage.getItem('ict_results'),
+    ict_accounts:     localStorage.getItem('ict_accounts'),
+    ict_login_log:    localStorage.getItem('ict_login_log'),
+    ict_sheets_url:   localStorage.getItem('ict_sheets_url'),
+    // legacy key kept for backwards compat
+    ict_teacher_creds:localStorage.getItem('ict_teacher_creds'),
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const url  = URL.createObjectURL(blob);
+  const a    = Object.assign(document.createElement('a'), {
+    href: url,
+    download: `ICT_Exam_Backup_${new Date().toISOString().slice(0,10)}.json`
+  });
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('✅ Full system data exported!','linear-gradient(135deg,#2e7d32,#388e3c)');
+}
+
+function importSystemData(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!data.version) throw new Error('Invalid backup file');
+      const keys = ['ict_std_banks','ict_paper_lib','ict_active_papers','ict_exam_control',
+                    'ict_results','ict_accounts','ict_login_log','ict_teacher_creds','ict_sheets_url'];
+      keys.forEach(k => { if (data[k]) localStorage.setItem(k, data[k]); });
+      // Reload in-memory state
+      STD_QUESTION_BANKS = loadStdBanks();
+      EXAM_CONTROL = loadExamControl();
+      PAPER_LIBRARY = loadPaperLibrary();
+      ACTIVE_PAPERS = loadActivePapers();
+      showToast('✅ Data imported successfully! Page reloading…','linear-gradient(135deg,#00838f,#00acc1)');
+      setTimeout(() => showDashSection('settings'), 1200);
+    } catch(err) {
+      showToast('❌ Invalid backup file: ' + err.message,'#ff1744');
+    }
+  };
+  reader.readAsText(file);
+  input.value = '';
+}
+
+function _settingsDanger(msg, onOk) {
+  const box = document.getElementById('danger-confirm');
+  if (!box) return;
+  document.getElementById('danger-msg').textContent = msg;
+  document.getElementById('danger-ok').onclick = () => { box.style.display='none'; onOk(); };
+  box.style.display = 'block';
+}
+function settingsClearResults() {
+  _settingsDanger('⚠️ This will permanently delete ALL student exam results. Are you sure?', () => {
+    localStorage.removeItem('ict_results');
+    showToast('🗑️ All student results cleared.','linear-gradient(135deg,#ff1744,#ff4569)');
+  });
+}
+function settingsResetBanks() {
+  _settingsDanger('⚠️ This will reset ALL question banks to factory defaults. Custom questions will be lost!', () => {
+    localStorage.removeItem('ict_std_banks');
+    STD_QUESTION_BANKS = loadStdBanks();
+    showToast('🔄 Question banks reset to defaults.','linear-gradient(135deg,#e65100,#ff6f00)');
+  });
+}
+function settingsResetAll() {
+  _settingsDanger('💥 FULL RESET: This will delete ALL data including results, question banks, papers, and settings. This cannot be undone!', () => {
+    ['ict_std_banks','ict_paper_lib','ict_active_papers','ict_exam_control',
+     'ict_results','ict_accounts','ict_login_log','ict_teacher_creds','ict_sheets_url'].forEach(k => localStorage.removeItem(k));
+    STD_QUESTION_BANKS = loadStdBanks();
+    EXAM_CONTROL = loadExamControl();
+    PAPER_LIBRARY = loadPaperLibrary();
+    ACTIVE_PAPERS = loadActivePapers();
+    showToast('💥 System reset complete. All data cleared.','#b71c1c');
+    setTimeout(() => showDashSection('settings'), 1200);
+  });
+}
+// ── END SETTINGS FUNCTIONS ─────────────────────────────────────
 
 // Legacy aliases
 function renderEditorList() { qedRenderList(); }
@@ -3952,7 +5872,7 @@ function plPreviewShuffle(pid,sec){
   const n=Math.min(p.settings[sk]||10,p.sections[sec].length);
   const arr=shuffle([...p.sections[sec]]).slice(0,n);
   const lbl={mcq:'MCQ',trueFalse:'T/F',match:'Match',answer:'Full Form'}[sec];
-  alert(`🔀 Preview — ${lbl}: ${n} of ${p.sections[sec].length}\n\n`+arr.map((q,i)=>`${i+1}. ${sec==='match'?(q.a||'?'):(q.q||'?')}`).join('\n'));
+  showToast(`🔀 ${lbl}: ${n} questions shuffled`,`linear-gradient(135deg,#1a237e,#3949ab)`);
 }
 
 // ── CRUD ──
@@ -7047,7 +8967,7 @@ function showFullPreview(filename, rawText, converted, parsed, log) {
       <div class="card"><div class="card-header"><h2>🔄 Auto-Converted Format</h2><p>This is how your questions were interpreted. You can copy this and use as template.</p></div>
         <div class="card-body">
           <textarea readonly style="width:100%;height:400px;font-family:monospace;font-size:0.8rem;border:2px solid #e8eaf6;border-radius:10px;padding:14px;resize:vertical;line-height:1.6;">${converted.replace(/</g,'&lt;')}</textarea>
-          <button class="btn btn-secondary btn-sm" style="margin-top:8px;" onclick="navigator.clipboard.writeText(document.querySelector('#preview-panel-converted textarea').value).then(()=>alert('Copied!'))">📋 Copy to Clipboard</button>
+          <button class="btn btn-secondary btn-sm" style="margin-top:8px;" onclick="navigator.clipboard.writeText(document.querySelector('#preview-panel-converted textarea').value).then(()=>showToast('✅ Copied to clipboard!','linear-gradient(135deg,#00c853,#1b5e20)'))">📋 Copy to Clipboard</button>
         </div>
       </div>
     </div>
@@ -7165,7 +9085,7 @@ function loadParsedIntoExam() {
   const p = window._parsedQuestions;
   if (!p) return;
   const std = getSelectedUploadStd();
-  if (!std) { alert('Please select a Standard first!'); return; }
+  if (!std) { showToast('⚠️ Please select a Standard first!','#ff6f00'); return; }
 
   let loaded = [], skipped = [];
   const bank = STD_QUESTION_BANKS[std];
@@ -7242,7 +9162,7 @@ function loadParsedIntoExam() {
 // ============================================================
 function downloadExcel() {
   const results = getResults();
-  if (!results.length) { alert('No results to download!'); return; }
+  if (!results.length) { showToast('⚠️ No results to download!','#ff6f00'); return; }
 
   const ws_data = [
     ['#', 'Date', 'Name', 'Roll No', 'Standard', 'Division', 'Subject', 'Mobile', 'Sec1 MCQ', 'Sec2 T/F', 'Sec3 Match', 'Sec4 Full Form', 'Total', 'Grade'],
