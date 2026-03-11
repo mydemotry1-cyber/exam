@@ -1099,36 +1099,20 @@
           </div>
         </div>
 
-        <!-- Exam Pattern preview -->
-        <div style="margin-top:22px;background:#f5f7ff;border-radius:14px;padding:16px 18px;
-          border:2px solid #e8eaf6;">
-          <div style="font-size:.78rem;font-weight:900;color:var(--muted);text-transform:uppercase;
-            letter-spacing:.5px;margin-bottom:12px;">📋 Exam Pattern Overview</div>
-          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">
-            <div style="background:#fff;border-radius:10px;padding:10px;text-align:center;
-              border:2px solid #e8eaf6;border-top:3px solid #3949ab;">
-              <div style="font-size:.68rem;font-weight:800;color:#3949ab;text-transform:uppercase;letter-spacing:.3px;margin-bottom:4px;">Section 1</div>
-              <div style="font-size:.9rem;font-weight:900;color:var(--text);">MCQ</div>
-              <div style="font-size:.7rem;color:var(--muted);font-weight:700;margin-top:2px;">10 × 1 Mark</div>
-            </div>
-            <div style="background:#fff;border-radius:10px;padding:10px;text-align:center;
-              border:2px solid #e8eaf6;border-top:3px solid #00838f;">
-              <div style="font-size:.68rem;font-weight:800;color:#00838f;text-transform:uppercase;letter-spacing:.3px;margin-bottom:4px;">Section 2</div>
-              <div style="font-size:.9rem;font-weight:900;color:var(--text);">True/False</div>
-              <div style="font-size:.7rem;color:var(--muted);font-weight:700;margin-top:2px;">10 × 1 Mark</div>
-            </div>
-            <div style="background:#fff;border-radius:10px;padding:10px;text-align:center;
-              border:2px solid #e8eaf6;border-top:3px solid #2e7d32;">
-              <div style="font-size:.68rem;font-weight:800;color:#2e7d32;text-transform:uppercase;letter-spacing:.3px;margin-bottom:4px;">Section 3</div>
-              <div style="font-size:.9rem;font-weight:900;color:var(--text);">Match</div>
-              <div style="font-size:.7rem;color:var(--muted);font-weight:700;margin-top:2px;">10 × 1 Mark</div>
-            </div>
-            <div style="background:#fff;border-radius:10px;padding:10px;text-align:center;
-              border:2px solid #e8eaf6;border-top:3px solid #e65100;">
-              <div style="font-size:.68rem;font-weight:800;color:#e65100;text-transform:uppercase;letter-spacing:.3px;margin-bottom:4px;">Section 4</div>
-              <div style="font-size:.9rem;font-weight:900;color:var(--text);">Full Form</div>
-              <div style="font-size:.7rem;color:var(--muted);font-weight:700;margin-top:2px;">10 × 1 Mark</div>
-            </div>
+        <!-- Exam Pattern Overview -->
+        <div class="epo-wrap" style="margin-top:24px;">
+          <!-- Header row -->
+          <div class="epo-header">
+            <span class="epo-header-icon">📋</span>
+            <span class="epo-header-text">Exam Pattern Overview</span>
+          </div>
+          <!-- 4 section cards -->
+          <div class="epo-grid" id="reg-pattern-grid">
+            <!-- populated dynamically by updateRegPatternGrid() -->
+          </div>
+          <!-- Summary bar -->
+          <div class="epo-summary" id="reg-total-summary">
+            <!-- populated dynamically -->
           </div>
         </div>
 
@@ -1163,6 +1147,179 @@
 @media(max-width:600px){
   .reg-form-grid { grid-template-columns:1fr !important; }
 }
+
+/* ════════════════════════════════════════════════
+   EXAM PATTERN OVERVIEW  — matches screenshot
+   Light card design, colored top border per section
+   ════════════════════════════════════════════════ */
+
+/* Outer wrapper — light blue-grey tinted panel */
+.epo-wrap {
+  background: #f0f2ff;
+  border-radius: 16px;
+  padding: 18px 18px 14px;
+  border: 1.5px solid #dde1f5;
+}
+
+/* Header row */
+.epo-header {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 14px;
+}
+.epo-header-icon { font-size: .95rem; }
+.epo-header-text {
+  font-size: .72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .7px;
+  color: #1a237e;
+}
+
+/* 4-column grid, drops to 2-col on small screens */
+.epo-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 12px;
+}
+@media (max-width: 520px) {
+  .epo-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+}
+
+/* Individual section card */
+.epo-card {
+  background: #fff;
+  border-radius: 12px;
+  border: 1.5px solid #e4e8f5;
+  border-top: 3.5px solid var(--epc, #3949ab);
+  padding: 16px 10px 14px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(26,35,126,.07);
+  transition: transform .18s ease, box-shadow .18s ease;
+  cursor: default;
+  position: relative;
+  overflow: hidden;
+}
+.epo-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(26,35,126,.13);
+}
+/* Subtle top-right glow accent */
+.epo-card::after {
+  content: '';
+  position: absolute;
+  top: -18px; right: -18px;
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: var(--epc, #3949ab);
+  opacity: .07;
+  pointer-events: none;
+}
+
+.epo-card-sec {
+  font-size: .62rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .55px;
+  color: var(--epc, #3949ab);
+  margin-bottom: 5px;
+}
+.epo-card-name {
+  font-size: .97rem;
+  font-weight: 900;
+  color: #1a237e;
+  margin-bottom: 5px;
+  line-height: 1.2;
+}
+/* Shrink label on very small screens */
+@media (max-width: 360px) {
+  .epo-card-name { font-size: .82rem; }
+  .epo-card { padding: 12px 6px 10px; }
+}
+.epo-card-marks {
+  font-size: .74rem;
+  font-weight: 700;
+  color: #6b7a99;
+}
+
+/* Summary bar below the grid */
+.epo-summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 10px 14px;
+  border: 1.5px solid #dde1f5;
+  font-size: .8rem;
+}
+.epo-sum-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 800;
+}
+.epo-sum-dot {
+  color: #c5cae9;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+/* ── Instructions page pattern (dark bg variant) ── */
+.instr-epo-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+@media (max-width: 520px) {
+  .instr-epo-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+}
+.instr-epo-card {
+  background: rgba(255,255,255,.1);
+  border: 1.5px solid rgba(255,255,255,.15);
+  border-top: 3px solid var(--iepc, rgba(255,255,255,.5));
+  border-radius: 12px;
+  padding: 14px 10px;
+  text-align: center;
+  transition: background .2s;
+}
+.instr-epo-card:hover { background: rgba(255,255,255,.16); }
+.instr-epo-sec {
+  font-size: .62rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: #9fa8da;
+  margin-bottom: 4px;
+}
+.instr-epo-name {
+  font-size: .9rem;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 4px;
+}
+.instr-epo-marks {
+  font-size: .72rem;
+  font-weight: 800;
+  color: var(--iepc, #ffcc80);
+}
+
+/* Old classes kept for backward compat (exam-pattern-grid, epc etc.) */
+.exam-pattern-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+@media(max-width:540px){ .exam-pattern-grid { grid-template-columns:repeat(2,1fr); gap:8px; } }
+.epc { background:#fff; border-radius:12px; border:1.5px solid #e8eaf6; border-top:3px solid currentColor;
+  padding:14px 10px 12px; text-align:center; box-shadow:0 2px 10px rgba(26,35,126,.06); }
+.epc-icon { font-size:1.4rem; margin-bottom:5px; }
+.epc-sec  { font-size:.65rem; font-weight:900; text-transform:uppercase; letter-spacing:.5px; margin-bottom:3px; }
+.epc-name { font-size:.92rem; font-weight:900; color:#1a237e; margin-bottom:5px; }
+.epc-marks { font-size:.72rem; font-weight:700; color:#546e7a; margin-bottom:4px; }
+.epc-total { display:inline-block; font-size:.72rem; font-weight:900; border-radius:99px; padding:2px 10px; }
+.epc-dark  { background:rgba(255,255,255,.1); border-radius:12px; padding:13px 10px; text-align:center; }
 </style>
 
 <!-- ===================== PAGE 2: INSTRUCTIONS ===================== -->
@@ -1219,7 +1376,7 @@
             <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#fff3e0,#ffe0b2);
               display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">⏱️</div>
             <div><strong style="color:var(--text);">Time Limit:</strong>
-              <span style="color:#546e7a;"> The exam has a 45-minute time limit. Timer shown at the top turns red at 5 minutes — auto-submits at 0:00.</span></div>
+              <span id="instr-time-text" style="color:#546e7a;"> The exam has a 45-minute time limit. Timer shown at the top turns red at 5 minutes — auto-submits at 0:00.</span></div>
           </div>
           <div style="display:flex;gap:14px;padding:13px 0;border-bottom:1px solid #f0f2ff;align-items:flex-start;">
             <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#e8f5e9,#c8e6c9);
@@ -1261,39 +1418,20 @@
       </div>
     </div>
 
-    <!-- Exam Pattern -->
+    <!-- Exam Pattern — dynamic from EXAM_SETTINGS -->
     <div style="background:linear-gradient(135deg,#1a237e,#283593,#3949ab);border-radius:18px;
-      padding:20px 24px;margin-bottom:22px;animation:slideInUp .5s ease;">
-      <div style="color:#fff;font-size:1rem;font-weight:900;margin-bottom:14px;">
-        📊 Exam Pattern Summary
+      padding:20px 24px;margin-bottom:22px;animation:slideInUp .5s ease;"
+      id="instructions-pattern-card">
+      <div style="color:#fff;font-size:1rem;font-weight:900;margin-bottom:14px;
+        display:flex;align-items:center;gap:8px;">
+        <span>📊</span> Exam Pattern Summary
       </div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;">
-        <div style="background:rgba(255,255,255,.1);border-radius:12px;padding:12px;text-align:center;">
-          <div style="font-size:.7rem;color:#9fa8da;font-weight:700;text-transform:uppercase;letter-spacing:.3px;margin-bottom:4px;">Sec 1</div>
-          <div style="color:#fff;font-weight:900;font-size:.95rem;">MCQ</div>
-          <div style="color:#ffcc80;font-size:.72rem;font-weight:800;margin-top:3px;">10 × 1</div>
-        </div>
-        <div style="background:rgba(255,255,255,.1);border-radius:12px;padding:12px;text-align:center;">
-          <div style="font-size:.7rem;color:#9fa8da;font-weight:700;text-transform:uppercase;letter-spacing:.3px;margin-bottom:4px;">Sec 2</div>
-          <div style="color:#fff;font-weight:900;font-size:.95rem;">True/False</div>
-          <div style="color:#80deea;font-size:.72rem;font-weight:800;margin-top:3px;">10 × 1</div>
-        </div>
-        <div style="background:rgba(255,255,255,.1);border-radius:12px;padding:12px;text-align:center;">
-          <div style="font-size:.7rem;color:#9fa8da;font-weight:700;text-transform:uppercase;letter-spacing:.3px;margin-bottom:4px;">Sec 3</div>
-          <div style="color:#fff;font-weight:900;font-size:.95rem;">Match</div>
-          <div style="color:#a5d6a7;font-size:.72rem;font-weight:800;margin-top:3px;">10 × 1</div>
-        </div>
-        <div style="background:rgba(255,255,255,.1);border-radius:12px;padding:12px;text-align:center;">
-          <div style="font-size:.7rem;color:#9fa8da;font-weight:700;text-transform:uppercase;letter-spacing:.3px;margin-bottom:4px;">Sec 4</div>
-          <div style="color:#fff;font-weight:900;font-size:.95rem;">Full Form</div>
-          <div style="color:#ffab91;font-size:.72rem;font-weight:800;margin-top:3px;">10 × 1</div>
-        </div>
-      </div>
+      <div class="instr-epo-grid" id="instructions-pattern-grid"></div>
       <div style="background:rgba(255,255,255,.1);border-radius:10px;padding:11px 16px;
         display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-        <span style="color:#fff;font-weight:900;font-size:1.05rem;">Total: 40 Marks</span>
-        <span style="color:#ffcc80;font-weight:900;">⏱️ Duration: 45 Minutes</span>
-        <span style="color:#a5d6a7;font-weight:800;font-size:.88rem;">Passing: 16/40 (40%)</span>
+        <span style="color:#fff;font-weight:900;font-size:1rem;" id="instructions-total-marks">Total: 40 Marks</span>
+        <span style="color:#ffcc80;font-weight:900;font-size:.9rem;" id="instructions-duration">⏱️ Duration: 45 Minutes</span>
+        <span style="color:#a5d6a7;font-weight:800;font-size:.88rem;" id="instructions-pass">Passing: 16/40 (40%)</span>
       </div>
     </div>
 
@@ -1548,14 +1686,6 @@
         </button>
       </div>
 
-      <!-- Default hint -->
-      <div style="margin-top:18px;background:#f5f7ff;border-radius:10px;
-        padding:11px 14px;font-size:.76rem;color:var(--muted);
-        text-align:center;border:1px dashed #c5cae9;">
-        🔒 Default: <strong style="color:var(--text);">admin</strong> /
-        <strong style="color:var(--text);">teacher123</strong>
-        &nbsp;|&nbsp; Security Q: <em>school name</em>
-      </div>
     </div>
 
     <!-- ── PANEL: Forgot Password ── -->
@@ -1770,7 +1900,7 @@
 // ============================================================
 // CONFIGURATION — UPDATE THESE FOR YOUR GOOGLE SHEET
 // ============================================================
-const GOOGLE_SHEET_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
+const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbyaLsGQaYcdackZ1udj0fD0mEe5Zp1oLQH1AyMLUMS5GaMlrRRhQjk_jJtLeeYUBENo/exec";
 // Dynamic URL: checks localStorage first (set via Settings page), then falls back to constant above
 function getSheetUrl() {
   return localStorage.getItem('ict_sheets_url') || GOOGLE_SHEET_URL;
@@ -2245,6 +2375,37 @@ function getExamQuestions(std) {
 
 // ============================================================
 // EXAM STATE
+// ── EXAM SETTINGS (teacher-configurable) ─────────────────────
+// Loaded from localStorage key 'ict_exam_settings', defaults below
+const DEFAULT_EXAM_SETTINGS = {
+  sections: [
+    { key:'mcq',       name:'MCQ',          icon:'📝', qCount:10, marksPerQ:1, color:'#3949ab' },
+    { key:'trueFalse', name:'True/False',   icon:'✅', qCount:10, marksPerQ:1, color:'#00838f' },
+    { key:'match',     name:'Match',        icon:'🔗', qCount:10, marksPerQ:1, color:'#2e7d32' },
+    { key:'answer',    name:'Full Form',    icon:'💡', qCount:10, marksPerQ:1, color:'#e65100' },
+  ],
+  durationMinutes: 45,
+};
+
+function loadExamSettings() {
+  try {
+    const s = JSON.parse(localStorage.getItem('ict_exam_settings') || 'null');
+    if (s && s.sections && s.durationMinutes) return s;
+  } catch(e){}
+  return JSON.parse(JSON.stringify(DEFAULT_EXAM_SETTINGS));
+}
+function saveExamSettings(s) {
+  localStorage.setItem('ict_exam_settings', JSON.stringify(s));
+}
+function getExamTotalMarks(settings) {
+  return (settings||loadExamSettings()).sections.reduce((t,s)=>t+(s.qCount*s.marksPerQ),0);
+}
+function getExamTotalQuestions(settings) {
+  return (settings||loadExamSettings()).sections.reduce((t,s)=>t+s.qCount,0);
+}
+
+let EXAM_SETTINGS = loadExamSettings();
+
 // ============================================================
 let examState = {
   student: {},
@@ -2273,10 +2434,54 @@ function shuffle(arr) {
 // ============================================================
 // PAGES
 // ============================================================
+function updateRegPatternGrid() {
+  const grid = document.getElementById('reg-pattern-grid');
+  if (!grid) return;
+  const ES = loadExamSettings();
+  const cfg = [
+    { color:'#3949ab', label:'MCQ'        },
+    { color:'#00838f', label:'True/False'  },
+    { color:'#2e7d32', label:'Match'       },
+    { color:'#e65100', label:'Full Form'   },
+  ];
+  const totalMarks = getExamTotalMarks(ES);
+
+  // Build section cards — exactly matching screenshot style
+  grid.innerHTML = ES.sections.map((sec, i) => {
+    const c = cfg[i];
+    const marksText = sec.qCount + ' × ' + sec.marksPerQ + ' Mark' + (sec.marksPerQ > 1 ? 's' : '');
+    return `<div class="epo-card" style="--epc:${c.color};" title="${c.label} — ${marksText}">
+      <div class="epo-card-sec">Section ${i + 1}</div>
+      <div class="epo-card-name">${c.label}</div>
+      <div class="epo-card-marks">${marksText}</div>
+    </div>`;
+  }).join('');
+
+  // Build summary bar
+  const summaryEl = document.getElementById('reg-total-summary');
+  if (summaryEl) {
+    const passM = Math.ceil(totalMarks * 0.4);
+    summaryEl.innerHTML = `
+      <div class="epo-sum-item" style="color:#1a237e;">
+        <span>📊</span><span>Total: <strong>${totalMarks} Marks</strong></span>
+      </div>
+      <span class="epo-sum-dot">·</span>
+      <div class="epo-sum-item" style="color:#5c6bc0;">
+        <span>⏱️</span><span>${ES.durationMinutes} Minutes</span>
+      </div>
+      <span class="epo-sum-dot">·</span>
+      <div class="epo-sum-item" style="color:#2e7d32;">
+        <span>✅</span><span>Pass: ${passM}/${totalMarks}</span>
+      </div>`;
+  }
+}
+
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo(0, 0);
+  // Refresh exam pattern whenever registration page is shown
+  if (id === 'page-register') updateRegPatternGrid();
 }
 
 // ============================================================
@@ -2341,6 +2546,40 @@ function goToInstructions() {
   </div>`).join('');
 
   showPage('page-instructions');
+
+  // ── Populate dynamic exam pattern card ──────────────────────
+  const ES     = loadExamSettings();
+  const iCfg   = [
+    { color:'#ffcc80', label:'MCQ'        },
+    { color:'#80deea', label:'True/False'  },
+    { color:'#a5d6a7', label:'Match'       },
+    { color:'#ffab91', label:'Full Form'   },
+  ];
+  const grid   = document.getElementById('instructions-pattern-grid');
+  if (grid) {
+    grid.innerHTML = ES.sections.map((sec, i) => {
+      const c = iCfg[i];
+      const marksText = sec.qCount + ' × ' + sec.marksPerQ + ' Mark' + (sec.marksPerQ > 1 ? 's' : '');
+      return `<div class="instr-epo-card" style="--iepc:${c.color};">
+        <div class="instr-epo-sec">Section ${i + 1}</div>
+        <div class="instr-epo-name">${c.label}</div>
+        <div class="instr-epo-marks">${marksText}</div>
+      </div>`;
+    }).join('');
+  }
+  const totalM = getExamTotalMarks(ES);
+  const passM  = Math.ceil(totalM * 0.4);
+  const tmEl   = document.getElementById('instructions-total-marks');
+  const tdEl   = document.getElementById('instructions-duration');
+  const tpEl   = document.getElementById('instructions-pass');
+  if (tmEl) tmEl.textContent = `Total: ${totalM} Marks`;
+  if (tdEl) tdEl.textContent = `⏱️ Duration: ${ES.durationMinutes} Minutes`;
+  if (tpEl) tpEl.textContent = `Passing: ${passM}/${totalM} (40%)`;
+
+  // Also update time instruction text
+  const timeInstr = document.getElementById('instr-time-text');
+  if (timeInstr) timeInstr.textContent =
+    `The exam has a ${ES.durationMinutes}-minute time limit. Timer shown at the top turns red at 5 minutes — auto-submits at 0:00.`;
 }
 
 function showExamNotAvailable(std) {
@@ -2373,18 +2612,35 @@ function showExamNotAvailable(std) {
 // ============================================================
 function startExam() {
   const std = examState.student.std;
+  EXAM_SETTINGS = loadExamSettings(); // reload fresh settings
   const QB  = getExamQuestions(std);
 
-  examState.sections[0].questions = QB.mcq.map(q => {
+  // Apply per-section question count from EXAM_SETTINGS
+  const cfg = EXAM_SETTINGS.sections;
+  const mcqCount   = Math.min(cfg[0].qCount, QB.mcq.length);
+  const tfCount    = Math.min(cfg[1].qCount, QB.trueFalse.length);
+  const matchCount = Math.min(cfg[2].qCount, QB.match.length);
+  const ansCount   = Math.min(cfg[3].qCount, QB.answer.length);
+
+  examState.sections[0].questions = QB.mcq.slice(0,mcqCount).map(q => {
     const shuffledOpts = shuffle(q.opts.map((o,i) => ({ text:o, orig:i })));
     return { ...q, shuffledOpts, shuffledAns: shuffledOpts.findIndex(o => o.orig === q.ans) };
   });
-  examState.sections[1].questions = QB.trueFalse;
-  examState.sections[2].questions = QB.match;
-  examState.sections[3].questions = QB.answer.map(q => {
+  examState.sections[1].questions = QB.trueFalse.slice(0,tfCount);
+  examState.sections[2].questions = QB.match.slice(0,matchCount);
+  examState.sections[3].questions = QB.answer.slice(0,ansCount).map(q => {
     const shuffledOpts = shuffle(q.opts.map((o,i) => ({ text:o, orig:i })));
     return { ...q, shuffledOpts, shuffledAns: shuffledOpts.findIndex(o => o.orig === q.ans) };
   });
+
+  // Copy marks-per-question into section state
+  examState.sections[0].marksPerQ = cfg[0].marksPerQ;
+  examState.sections[1].marksPerQ = cfg[1].marksPerQ;
+  examState.sections[2].marksPerQ = cfg[2].marksPerQ;
+  examState.sections[3].marksPerQ = cfg[3].marksPerQ;
+
+  // Set dynamic timer
+  examState.timerSeconds = EXAM_SETTINGS.durationMinutes * 60;
 
   // Init answers
   examState.sections.forEach((s, i) => {
@@ -2396,14 +2652,27 @@ function startExam() {
   examState.submitted = false;
 
   showPage('page-exam');
-  // Update exam bar with student name
+
+  // Update exam bar with student name + total marks
   const nameEl = document.getElementById('exam-student-name');
   if (nameEl) nameEl.textContent = examState.student.name + ' · Std ' + examState.student.std;
-  // Update section tab question counts
+
+  // Update timer display
+  const timerEl = document.getElementById('timer-display');
+  const dm = EXAM_SETTINGS.durationMinutes;
+  if (timerEl) timerEl.textContent = String(Math.floor(dm)).padStart(2,'0') + ':00';
+
+  // Update progress pill total - use actual loaded questions, not settings
+  const actualTotalQ = examState.sections.reduce((t, s) => t + s.questions.length, 0);
+  const progEl = document.getElementById('exam-progress-pill');
+  if (progEl) progEl.textContent = '0/' + actualTotalQ;
+
+  // Update section tab question counts + names
   examState.sections.forEach((sec, i) => {
     const tc = document.getElementById('tab-count-' + i);
-    if (tc) tc.textContent = sec.questions.length + ' Qs';
+    if (tc) tc.textContent = sec.questions.length + 'Q ×' + sec.marksPerQ + 'M';
   });
+
   startTimer();
   renderCurrentQ();
   renderNavigator();
@@ -2569,7 +2838,8 @@ function startTimer() {
     const el = document.getElementById('timer-display');
     if (el) {
       el.textContent = `${m}:${s}`;
-      if (examState.timerSeconds <= 300) el.classList.add('warning');
+      const warnAt = Math.max(300, Math.floor(EXAM_SETTINGS.durationMinutes * 60 * 0.1));
+      if (examState.timerSeconds <= warnAt) el.classList.add('warning');
     }
     if (examState.timerSeconds <= 0) { clearInterval(examState.timerInterval); submitExam(); }
   }, 1000);
@@ -2586,6 +2856,10 @@ function switchSection(i) {
   });
   renderCurrentQ();
   renderNavigator();
+  // Scroll question area to top on section change
+  const sc = document.getElementById('section-content');
+  if (sc) sc.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch(e) {}
 }
 
 function renderCurrentQ() {
@@ -2594,9 +2868,15 @@ function renderCurrentQ() {
   const q = sec.questions[qi];
   const container = document.getElementById('section-content');
 
-  // ── BUGFIX: guard against undefined question ──────────────
-  if (!q) {
-    if (container) container.innerHTML = '<div class="question-card" style="text-align:center;padding:40px 20px;"><div style="font-size:2rem;margin-bottom:12px;">✅</div><div style="font-weight:800;font-size:1.1rem;color:var(--text);">All questions in this section are done.</div></div>';
+  // ── Guard: for match section render whole section (doesn't use single q)
+  // For other sections guard against undefined question
+  if (examState.currentSection !== 2 && !q) {
+    if (container) container.innerHTML = '<div class="question-card" style="text-align:center;padding:40px 20px;"><div style="font-size:2rem;margin-bottom:12px;">✅</div><div style="font-weight:800;font-size:1.1rem;color:var(--text);">No questions loaded for this section. Please contact your teacher.</div></div>';
+    return;
+  }
+  // Guard: match section with no questions
+  if (examState.currentSection === 2 && !sec.questions.length) {
+    if (container) container.innerHTML = '<div class="question-card" style="text-align:center;padding:40px 20px;"><div style="font-size:2rem;margin-bottom:12px;">⚠️</div><div style="font-weight:800;font-size:1.1rem;color:var(--text);">No match questions in this paper.</div></div>';
     return;
   }
 
@@ -2604,9 +2884,10 @@ function renderCurrentQ() {
 
   if (examState.currentSection === 0 || examState.currentSection === 3) {
     // MCQ / Answer
+    const mPerQ = sec.marksPerQ || 1;
     html += `<div class="question-card">
       <div class="q-number">Question ${qi + 1} of ${sec.questions.length}</div>
-      <div class="q-marks">📌 1 Mark</div>
+      <div class="q-marks">📌 ${mPerQ} Mark${mPerQ>1?'s':''}</div>
       <div class="q-text">${q.q}</div>
       <div class="options">`;
     q.shuffledOpts.forEach((opt, oi) => {
@@ -2620,55 +2901,153 @@ function renderCurrentQ() {
     html += `</div></div>`;
   } else if (examState.currentSection === 1) {
     // True/False
+    const mPerQ = sec.marksPerQ || 1;
     html += `<div class="question-card">
       <div class="q-number">Question ${qi + 1} of ${sec.questions.length}</div>
-      <div class="q-marks">📌 1 Mark</div>
+      <div class="q-marks">📌 ${mPerQ} Mark${mPerQ>1?'s':''}</div>
       <div class="q-text">${q.q}</div>
       <div class="tf-options" style="margin-top:16px;">
         <div class="tf-btn true-btn ${sec.answers[qi] === true ? 'selected' : ''}" onclick="selectTF(true)">✅ True</div>
         <div class="tf-btn false-btn ${sec.answers[qi] === false ? 'selected' : ''}" onclick="selectTF(false)">❌ False</div>
       </div></div>`;
   } else if (examState.currentSection === 2) {
-    // Match - show all at once, one-click lock with clear UI
-    const answered = sec.answers.filter(a => a !== null).length;
-    html += `<div class="question-card">
-      <div class="q-number">Match the Following — All ${sec.questions.length} Questions</div>
-      <div class="q-marks">📌 1 Mark Each &nbsp;|&nbsp; Answered: ${answered}/${sec.questions.length}</div>
-      <div class="alert alert-warning" style="margin:12px 0;">⚠️ Select an answer from the dropdown, then click <strong>🔒 Lock</strong>. Locked answers cannot be changed!</div>
-      <div style="overflow-x:auto;">
-        <table class="match-table">
-          <thead><tr><th>#</th><th>Column A — Term</th><th>Column C — Select Answer</th><th>Status</th></tr></thead>
-          <tbody>`;
-    sec.questions.forEach((mq, mi) => {
-      const isLocked = sec.locked[mi];
-      const sel = sec.answers[mi];
-      const rowBg = isLocked ? 'background:#e8f5e9;' : '';
-      html += `<tr style="${rowBg}">
-        <td style="font-weight:800;color:var(--muted);width:36px;">${mi + 1}</td>
-        <td style="font-weight:800;font-size:1rem;">${mq.a}</td>
-        <td style="min-width:200px;">
-          ${isLocked
-            ? `<div style="display:flex;align-items:center;gap:8px;">
-                <span style="background:#1b5e20;color:#fff;padding:6px 14px;border-radius:8px;font-weight:800;font-size:0.9rem;">✅ ${sel}</span>
-               </div>`
-            : `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-                <select class="match-select" id="match-sel-${mi}" style="flex:1;min-width:140px;">
-                  <option value="">-- Select Answer --</option>
-                  ${mq.opts.map(o => `<option value="${o}">${o}</option>`).join('')}
-                </select>
-                <button class="btn btn-primary btn-sm" onclick="lockMatch(${mi})" style="white-space:nowrap;border-radius:8px;">🔒 Lock</button>
-               </div>`
-          }
-        </td>
-        <td style="width:110px;text-align:center;">
-          ${isLocked
-            ? `<span style="color:#1b5e20;font-weight:800;font-size:0.85rem;">✅ Locked</span>`
-            : `<span style="color:#b71c1c;font-weight:700;font-size:0.8rem;">🔴 Pending</span>`
-          }
-        </td>
-      </tr>`;
-    });
-    html += `</tbody></table></div></div>`;
+    // ── MATCH — Scrollable card layout, one card per pair ───────
+    const matchSec = examState.sections[2];
+    const answered  = matchSec.answers.filter(a => a !== null).length;
+    const total     = matchSec.questions.length;
+    const pct       = total ? Math.round((answered/total)*100) : 0;
+    const mPerQ     = matchSec.marksPerQ || 1;
+    const secMarks  = total * mPerQ;
+
+    html += `
+<div class="question-card" style="padding:0;overflow:hidden;">
+
+  <!-- Section header -->
+  <div style="background:linear-gradient(135deg,#1b5e20,#2e7d32);padding:14px 18px;
+    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+    <div>
+      <div style="color:#fff;font-weight:900;font-size:1rem;">🔗 Match the Following</div>
+      <div style="color:#a5d6a7;font-size:.76rem;font-weight:700;margin-top:2px;">
+        ${total} pairs × ${mPerQ} mark each = <strong style="color:#fff;">${secMarks} Marks</strong>
+      </div>
+    </div>
+    <div style="text-align:right;">
+      <div style="color:#fff;font-weight:900;font-size:1.1rem;">${answered}/${total}</div>
+      <div style="color:#a5d6a7;font-size:.7rem;font-weight:700;">Answered</div>
+    </div>
+  </div>
+
+  <!-- Progress bar -->
+  <div style="height:6px;background:rgba(0,0,0,.1);">
+    <div style="height:100%;width:${pct}%;background:${pct===100?'#00c853':'#66bb6a'};
+      transition:width .4s ease;"></div>
+  </div>
+
+  <!-- Instruction banner -->
+  <div style="background:#fff8e1;border-bottom:2px solid #ffe082;
+    padding:10px 18px;display:flex;align-items:center;gap:8px;font-size:.82rem;
+    color:#e65100;font-weight:800;">
+    <span style="font-size:1.1rem;">💡</span>
+    Select an answer → click <strong>🔒 Lock</strong>. Locked answers <strong>cannot</strong> be changed!
+  </div>
+
+  <!-- Scrollable cards container -->
+  <div id="match-cards-container" style="
+    max-height:calc(100vh - 340px);
+    min-height:320px;
+    overflow-y:auto;
+    padding:14px 16px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    scroll-behavior:smooth;
+    -webkit-overflow-scrolling:touch;
+  ">
+    ${matchSec.questions.map((mq, mi) => {
+      const isLocked  = matchSec.locked[mi];
+      const selVal    = matchSec.answers[mi];
+      const statusBg  = isLocked ? '#e8f5e9' : '#fff';
+      const statusBdr = isLocked ? '2px solid #00c853' : '2px solid #e8eaf6';
+      return `
+<div id="match-card-${mi}" style="
+  background:${statusBg};
+  border:${statusBdr};
+  border-radius:14px;
+  padding:14px 16px;
+  transition:all .25s;
+  ${isLocked ? 'opacity:.88;' : ''}
+">
+  <!-- Row header -->
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+    <div style="width:28px;height:28px;border-radius:8px;
+      background:${isLocked?'linear-gradient(135deg,#00c853,#00e676)':'linear-gradient(135deg,#1a237e,#3949ab)'};
+      color:#fff;display:flex;align-items:center;justify-content:center;
+      font-weight:900;font-size:.82rem;flex-shrink:0;">${mi+1}</div>
+    <div style="font-weight:900;font-size:.95rem;color:var(--text);flex:1;">${mq.a}</div>
+    <div style="font-size:.8rem;font-weight:900;
+      color:${isLocked?'#1b5e20':'#b71c1c'};">
+      ${isLocked ? '✅ Locked' : '🔴 Pending'}
+    </div>
+  </div>
+
+  <!-- Answer area -->
+  ${isLocked
+    ? `<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;
+        background:linear-gradient(135deg,#e8f5e9,#f1f8e9);border-radius:10px;
+        border:2px solid #a5d6a7;">
+        <span style="font-size:1.2rem;">✅</span>
+        <span style="font-weight:900;color:#1b5e20;font-size:.95rem;">${selVal}</span>
+       </div>`
+    : `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <select id="match-sel-${mi}"
+          style="flex:1;min-width:150px;border:2px solid #c5cae9;border-radius:10px;
+            padding:10px 14px;font-family:inherit;font-size:.9rem;font-weight:700;
+            background:#f5f7ff;outline:none;color:var(--text);cursor:pointer;
+            transition:border .2s;"
+          onfocus="this.style.borderColor='#3949ab'"
+          onblur="this.style.borderColor='#c5cae9'"
+          onchange="matchPreSelect(${mi},this.value)">
+          <option value="">— Select Answer —</option>
+          ${mq.opts.map(o => `<option value="${o}">${o}</option>`).join('')}
+        </select>
+        <button onclick="lockMatch(${mi})"
+          style="padding:10px 18px;border-radius:10px;border:none;
+            background:linear-gradient(135deg,#1a237e,#3949ab);color:#fff;
+            font-family:inherit;font-weight:900;font-size:.88rem;cursor:pointer;
+            white-space:nowrap;box-shadow:0 3px 10px rgba(26,35,126,.3);
+            transition:all .2s;"
+          onmouseover="this.style.transform='scale(1.04)'"
+          onmouseout="this.style.transform=''">
+          🔒 Lock
+        </button>
+       </div>`
+  }
+</div>`;
+    }).join('')}
+
+    <!-- Bottom padding so last card isn't hidden by floating elements -->
+    <div style="height:12px;"></div>
+  </div>
+
+  <!-- Footer summary -->
+  <div style="padding:12px 18px;background:#f5f7ff;border-top:2px solid #e8eaf6;
+    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+    <div style="display:flex;gap:12px;font-size:.78rem;font-weight:800;flex-wrap:wrap;">
+      <span id="match-footer-locked" style="color:#1b5e20;">✅ Locked: ${answered}</span>
+      <span id="match-footer-pending" style="color:#b71c1c;">🔴 Pending: ${total - answered}</span>
+      <span style="color:var(--muted);">Total: ${total}</span>
+    </div>
+    <div id="match-all-done" style="display:${answered===total?'block':'none'};
+      background:#e8f5e9;color:#1b5e20;border-radius:99px;
+      padding:4px 14px;font-size:.78rem;font-weight:900;border:2px solid #a5d6a7;">
+      🎉 All Matched!
+    </div>
+    <div style="color:var(--muted);font-size:.78rem;font-weight:700;
+      ${answered===total?'display:none':''}">
+      Scroll ↕ to see all ${total} pairs
+    </div>
+  </div>
+</div>`;
   }
 
   container.innerHTML = html;
@@ -2687,36 +3066,106 @@ function selectTF(val) {
   renderNavigator();
 }
 
+// Pre-select highlight (visual only, not locked yet)
+function matchPreSelect(mi, val) {
+  const card = document.getElementById(`match-card-${mi}`);
+  if (card && val) {
+    card.style.borderColor = '#3949ab';
+    card.style.background  = '#f0f4ff';
+  }
+}
+
 function lockMatch(mi) {
   const sec = examState.sections[2];
   if (sec.locked[mi]) return;
   const sel = document.getElementById(`match-sel-${mi}`);
   if (!sel || !sel.value) {
-    // Flash the select red briefly to indicate selection needed
     sel.style.borderColor = '#ff1744';
-    sel.style.background = '#ffebee';
-    setTimeout(() => { sel.style.borderColor = ''; sel.style.background = ''; }, 1200);
+    sel.style.background  = '#ffebee';
+    setTimeout(() => { sel.style.borderColor = '#c5cae9'; sel.style.background = '#f5f7ff'; }, 1200);
+    showToast('⚠️ Select an answer first!', '#ff6f00');
     return;
   }
   sec.answers[mi] = sel.value;
-  sec.locked[mi] = true;
-  renderCurrentQ();
+  sec.locked[mi]  = true;
+
+  // ── Animate the card locked immediately (no full re-render = keeps scroll pos) ──
+  const card = document.getElementById(`match-card-${mi}`);
+  if (card) {
+    card.style.borderColor  = '#00c853';
+    card.style.background   = '#e8f5e9';
+    card.style.opacity      = '0.88';
+    card.innerHTML = `
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:28px;height:28px;border-radius:8px;
+          background:linear-gradient(135deg,#00c853,#00e676);
+          color:#fff;display:flex;align-items:center;justify-content:center;
+          font-weight:900;font-size:.82rem;flex-shrink:0;">${mi+1}</div>
+        <div style="font-weight:900;font-size:.95rem;color:var(--text);flex:1;">${sec.questions[mi].a}</div>
+        <div style="font-size:.8rem;font-weight:900;color:#1b5e20;">✅ Locked</div>
+      </div>
+      <div style="margin-top:10px;display:flex;align-items:center;gap:10px;padding:10px 14px;
+        background:linear-gradient(135deg,#e8f5e9,#f1f8e9);border-radius:10px;
+        border:2px solid #a5d6a7;">
+        <span style="font-size:1.2rem;">✅</span>
+        <span style="font-weight:900;color:#1b5e20;font-size:.95rem;">${sel.value}</span>
+      </div>`;
+  }
+
+  // Update footer stats
+  const answered = sec.answers.filter(a => a !== null).length;
+  const total    = sec.questions.length;
+  const lockedEl  = document.getElementById('match-footer-locked');
+  const pendEl    = document.getElementById('match-footer-pending');
+  const allDoneEl = document.getElementById('match-all-done');
+  if (lockedEl) lockedEl.textContent = `✅ Locked: ${answered}`;
+  if (pendEl)   pendEl.textContent   = `🔴 Pending: ${total - answered}`;
+  if (allDoneEl && answered === total) {
+    allDoneEl.style.display = 'block';
+  }
+
+  // ── Auto-scroll to next unanswered card ──
+  const container = document.getElementById('match-cards-container');
+  if (container) {
+    const nextIdx = sec.answers.findIndex((a, i) => a === null && i > mi);
+    const targetIdx = nextIdx >= 0 ? nextIdx : sec.answers.findIndex(a => a === null);
+    if (targetIdx >= 0) {
+      const nextCard = document.getElementById(`match-card-${targetIdx}`);
+      if (nextCard) {
+        setTimeout(() => {
+          nextCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          // Briefly highlight the next card
+          nextCard.style.boxShadow = '0 0 0 3px #3949ab';
+          setTimeout(() => { nextCard.style.boxShadow = ''; }, 1000);
+        }, 180);
+      }
+    }
+  }
+
   renderNavigator();
 }
 
 // ============================================================
 // NAVIGATION
 // ============================================================
+function _scrollToQuestion() {
+  const sc = document.getElementById('section-content');
+  if (sc) sc.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch(e) {}
+}
+
 function nextQuestion() {
   const sec = examState.sections[examState.currentSection];
   if (examState.currentSection === 2) {
-    if (examState.currentSection < 3) switchSection(examState.currentSection + 1);
+    // From Match → go to next section
+    switchSection(3);
     return;
   }
   if (examState.currentQ < sec.questions.length - 1) {
     examState.currentQ++;
     renderCurrentQ();
     renderNavigator();
+    _scrollToQuestion();
   } else if (examState.currentSection < 3) {
     switchSection(examState.currentSection + 1);
   }
@@ -2724,13 +3173,15 @@ function nextQuestion() {
 
 function prevQuestion() {
   if (examState.currentSection === 2) {
-    if (examState.currentSection > 0) switchSection(examState.currentSection - 1);
+    // From Match → go to previous section
+    switchSection(1);
     return;
   }
   if (examState.currentQ > 0) {
     examState.currentQ--;
     renderCurrentQ();
     renderNavigator();
+    _scrollToQuestion();
   } else if (examState.currentSection > 0) {
     switchSection(examState.currentSection - 1);
     examState.currentQ = examState.sections[examState.currentSection].questions.length - 1;
@@ -2775,7 +3226,17 @@ function renderNavigator() {
 
 function gotoQ(si, qi) {
   if (si !== examState.currentSection) switchSection(si);
-  if (examState.sections[si].questions.length <= 1 || si === 2) return;
+  // For match section: scroll to the specific card instead of changing currentQ
+  if (si === 2) {
+    const card = document.getElementById('match-card-' + qi);
+    if (card) {
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // Briefly highlight the target card
+      card.style.outline = '3px solid #3949ab';
+      setTimeout(() => { card.style.outline = ''; }, 800);
+    }
+    return;
+  }
   examState.currentQ = qi;
   renderCurrentQ();
   renderNavigator();
@@ -2798,10 +3259,12 @@ function updateProgressBar(answered, total) {
   examState.sections.forEach((sec, i) => {
     const tc = document.getElementById('tab-count-' + i);
     if (tc) {
-      const done = sec.answers.filter(x=>x!==null).length;
-      tc.textContent = done + '/' + sec.questions.length;
-      tc.style.background = done === sec.questions.length ? '#00c853' : 'rgba(0,0,0,.08)';
-      tc.style.color = done === sec.questions.length ? '#fff' : '';
+      const done  = sec.answers.filter(x=>x!==null).length;
+      const total = sec.questions.length;
+      const mPerQ = sec.marksPerQ || 1;
+      tc.textContent = done + '/' + total + (mPerQ > 1 ? ' ×' + mPerQ + 'M' : '');
+      tc.style.background = done === total && total > 0 ? '#00c853' : 'rgba(0,0,0,.08)';
+      tc.style.color = done === total && total > 0 ? '#fff' : '';
     }
   });
 }
@@ -2829,12 +3292,18 @@ function submitExam() {
   // ── SCORE CALCULATION ────────────────────────────────────────
   // Track per-question correct/wrong for display
   const detail = { mcq:[], trueFalse:[], match:[], answer:[] };
+  const mPerQ  = [
+    examState.sections[0].marksPerQ || 1,
+    examState.sections[1].marksPerQ || 1,
+    examState.sections[2].marksPerQ || 1,
+    examState.sections[3].marksPerQ || 1,
+  ];
 
   let s1=0;
   examState.sections[0].questions.forEach((q,i)=>{
     if(!q) return;
     const correct = examState.sections[0].answers[i] === q.shuffledAns;
-    if(correct) s1++;
+    if(correct) s1 += mPerQ[0];
     detail.mcq.push({
       q: q.q||'',
       opts: (q.shuffledOpts||[]).map(o=>o.text||o),
@@ -2848,7 +3317,7 @@ function submitExam() {
   examState.sections[1].questions.forEach((q,i)=>{
     if(!q) return;
     const correct = examState.sections[1].answers[i] === q.ans;
-    if(correct) s2++;
+    if(correct) s2 += mPerQ[1];
     detail.trueFalse.push({
       q: q.q||'', chosen: examState.sections[1].answers[i],
       correct: q.ans, isRight: correct
@@ -2859,7 +3328,7 @@ function submitExam() {
   examState.sections[2].questions.forEach((q,i)=>{
     if(!q) return;
     const correct = examState.sections[2].answers[i] === q.b;
-    if(correct) s3++;
+    if(correct) s3 += mPerQ[2];
     detail.match.push({
       a: q.a||'', b: q.b||'',
       chosen: examState.sections[2].answers[i],
@@ -2871,7 +3340,7 @@ function submitExam() {
   examState.sections[3].questions.forEach((q,i)=>{
     if(!q) return;
     const correct = examState.sections[3].answers[i] === q.shuffledAns;
-    if(correct) s4++;
+    if(correct) s4 += mPerQ[3];
     detail.answer.push({
       q: q.q||'',
       opts: (q.shuffledOpts||[]).map(o=>o.text||o),
@@ -2881,9 +3350,10 @@ function submitExam() {
     });
   });
 
-  const total   = s1+s2+s3+s4;
-  const maxMarks = 40;
-  const pct     = (total/maxMarks)*100;
+  const total    = s1+s2+s3+s4;
+  const ES       = loadExamSettings();
+  const maxMarks = getExamTotalMarks(ES);
+  const pct      = maxMarks > 0 ? (total/maxMarks)*100 : 0;
   let grade='D', gradeColor='#c62828', gradeMsg='Keep practising!', gradeEmoji='📉';
   if(pct>=90){grade='A+';gradeColor='#00897b';gradeMsg='Outstanding! 🎉';gradeEmoji='🏆';}
   else if(pct>=75){grade='A';gradeColor='#2e7d32';gradeMsg='Excellent work!';gradeEmoji='⭐';}
@@ -2891,28 +3361,54 @@ function submitExam() {
   else if(pct>=40){grade='C';gradeColor='#e65100';gradeMsg='You can do better!';gradeEmoji='📚';}
 
   const st = examState.student;
+  // ── FIX: resultData field names match Apps Script (mcq/trueFalse/match/answer not sec1-4) ──
   const resultData = {
-    ...st, sec1:s1, sec2:s2, sec3:s3, sec4:s4,
-    total, grade, date: new Date().toISOString()
+    ...st,
+    mcq: s1, trueFalse: s2, match: s3, answer: s4,
+    sec1:s1, sec2:s2, sec3:s3, sec4:s4, // keep legacy keys for teacher results table
+    total, maxMarks, pct: parseFloat(pct.toFixed(1)), grade,
+    date: new Date().toISOString()
   };
 
-  // Save
-  const existing = JSON.parse(localStorage.getItem('ict_results')||'[]');
-  existing.push(resultData);
-  localStorage.setItem('ict_results', JSON.stringify(existing));
-  const _sheetUrl = getSheetUrl();
-  if(_sheetUrl!=="YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE" && _sheetUrl){
-    fetch(_sheetUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(resultData)}).catch(()=>{});
-  }
+  // Save to localStorage
+  try {
+    const existing = JSON.parse(localStorage.getItem('ict_results')||'[]');
+    existing.push(resultData);
+    localStorage.setItem('ict_results', JSON.stringify(existing));
+  } catch(e) { console.warn('Could not save result:', e); }
 
-  // ── RENDER FULL GRAPHICAL RESULT ────────────────────────────
+  // Send to Google Sheets (fire-and-forget, never blocks UI)
+  try {
+    const _sheetUrl = getSheetUrl();
+    if (_sheetUrl && _sheetUrl !== 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE') {
+      fetch(_sheetUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        mode: 'no-cors',
+        body: JSON.stringify(resultData)
+      }).catch(() => {}); // intentionally ignore - no-cors never resolves
+    }
+  } catch(e) {}
+
+  // ── Store result data for download/re-render ──
+  window._lastResult = { resultData, detail, s1, s2, s3, s4, total, maxMarks, pct, grade, gradeColor, gradeEmoji, gradeMsg };
+
+  // ── FIX: avoid UI freeze — show result page first, then render content via RAF ──
   document.getElementById('result-topbar-name').textContent = st.name + ' — Std ' + st.std;
-
-  // Store for download
-  window._lastResult = { resultData, detail, s1,s2,s3,s4, total, maxMarks, pct, grade, gradeColor, gradeEmoji, gradeMsg };
-
-  _renderResultPage(window._lastResult);
+  document.getElementById('result-full-body').innerHTML =
+    `<div style="text-align:center;padding:60px 20px;">
+      <div style="font-size:2.5rem;margin-bottom:16px;">⏳</div>
+      <div style="font-weight:900;font-size:1.1rem;color:#1a237e;">Calculating your result…</div>
+      <div style="color:#9fa8da;font-size:.84rem;margin-top:6px;">Please wait a moment</div>
+    </div>`;
   showPage('page-result');
+
+  // Render after browser has painted the loading screen (prevents white freeze)
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      _renderResultPage(window._lastResult);
+    }, 80);
+  });
 }
 
 // ── DRAW DONUT SVG ───────────────────────────────────────────
@@ -2936,12 +3432,28 @@ function _renderResultPage(R) {
   const {resultData,detail,s1,s2,s3,s4,total,maxMarks,pct,grade,gradeColor,gradeEmoji,gradeMsg} = R;
   const st = resultData;
   const KEYS=['A','B','C','D'];
+  // Load settings to get marksPerQ per section
+  const ES = loadExamSettings();
+  const mPerQ = [ES.sections[0].marksPerQ||1, ES.sections[1].marksPerQ||1,
+                 ES.sections[2].marksPerQ||1, ES.sections[3].marksPerQ||1];
+  // correctCount = number of correct answers (not marks)
   const secData=[
-    {label:'MCQ',       icon:'📝',score:s1, color:'#3949ab', bg:'#e8eaf6', items:detail.mcq},
-    {label:'True/False',icon:'✅',score:s2, color:'#00838f', bg:'#e0f7fa', items:detail.trueFalse},
-    {label:'Match',     icon:'🔗',score:s3, color:'#2e7d32', bg:'#e8f5e9', items:detail.match},
-    {label:'Full Form', icon:'💡',score:s4, color:'#e65100', bg:'#fff3e0', items:detail.answer},
+    {label:'MCQ',       icon:'📝', marks:s1, mPerQ:mPerQ[0],
+      correctCount: mPerQ[0]>0?Math.round(s1/mPerQ[0]):0,
+      color:'#3949ab', bg:'#e8eaf6', items:detail.mcq},
+    {label:'True/False',icon:'✅', marks:s2, mPerQ:mPerQ[1],
+      correctCount: mPerQ[1]>0?Math.round(s2/mPerQ[1]):0,
+      color:'#00838f', bg:'#e0f7fa', items:detail.trueFalse},
+    {label:'Match',     icon:'🔗', marks:s3, mPerQ:mPerQ[2],
+      correctCount: mPerQ[2]>0?Math.round(s3/mPerQ[2]):0,
+      color:'#2e7d32', bg:'#e8f5e9', items:detail.match},
+    {label:'Full Form', icon:'💡', marks:s4, mPerQ:mPerQ[3],
+      correctCount: mPerQ[3]>0?Math.round(s4/mPerQ[3]):0,
+      color:'#e65100', bg:'#fff3e0', items:detail.answer},
   ];
+  // Build scale labels for score bar (0, 25%, 50%, 75%, 100% of maxMarks)
+  const scaleLabels = [0, Math.round(maxMarks*0.25), Math.round(maxMarks*0.5),
+                       Math.round(maxMarks*0.75), maxMarks];
 
   let html = `
 <!-- HERO BANNER -->
@@ -2969,15 +3481,15 @@ function _renderResultPage(R) {
   <div style="font-size:1.1rem;color:#c5cae9;font-weight:700;margin-bottom:6px;">${gradeMsg}</div>
   <div style="font-size:.88rem;color:#9fa8da;">${pct.toFixed(1)}% · ${st.name} · Std ${st.std}-${st.div}</div>
 
-  <!-- Score bar -->
+  <!-- Score bar (dynamic scale) -->
   <div style="margin:20px auto 0;max-width:360px;">
     <div style="height:10px;background:rgba(255,255,255,.15);border-radius:99px;overflow:hidden;">
-      <div style="height:100%;width:${pct}%;background:${gradeColor};
+      <div style="height:100%;width:${Math.min(pct,100)}%;background:${gradeColor};
         border-radius:99px;transition:width 1.2s ease;"></div>
     </div>
     <div style="display:flex;justify-content:space-between;font-size:.72rem;
       color:#9fa8da;font-weight:700;margin-top:5px;">
-      <span>0</span><span>10</span><span>20</span><span>30</span><span>40</span>
+      ${scaleLabels.map(v=>`<span>${v}</span>`).join('')}
     </div>
   </div>
 
@@ -3006,22 +3518,26 @@ function _renderResultPage(R) {
 
 <!-- SECTION SCORE CARDS (donut charts) -->
 <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
-  ${secData.map((sd,si)=>`
+  ${secData.map((sd,si)=>{
+    const secMaxMarks = sd.items.length * sd.mPerQ;
+    const secPct = secMaxMarks > 0 ? Math.round((sd.marks / secMaxMarks)*100) : 0;
+    return `
   <div style="background:#fff;border-radius:16px;padding:16px 10px;text-align:center;
     border:2px solid ${sd.color}22;box-shadow:0 3px 12px rgba(0,0,0,.07);
     animation:slideInUp .35s ease both;animation-delay:${si*.07}s;">
-    <div>${_donutSvg(sd.items.length>0?Math.round((sd.score/sd.items.length)*100):0, sd.color, 80)}</div>
+    <div>${_donutSvg(secPct, sd.color, 80)}</div>
     <div style="font-size:1.5rem;font-weight:900;color:${sd.color};margin-top:4px;">
-      ${sd.score}<span style="font-size:.75rem;color:var(--muted);">/${sd.items.length}</span>
+      ${sd.marks}<span style="font-size:.75rem;color:var(--muted);">/${secMaxMarks}</span>
     </div>
     <div style="font-size:.7rem;font-weight:800;color:var(--muted);margin-top:2px;">${sd.icon} ${sd.label}</div>
-    <div style="display:flex;gap:4px;justify-content:center;margin-top:6px;">
+    <div style="display:flex;gap:4px;justify-content:center;margin-top:6px;flex-wrap:wrap;">
       <span style="font-size:.6rem;background:#e8f5e9;color:#2e7d32;border-radius:99px;padding:1px 7px;font-weight:800;">
-        ✅ ${sd.score}</span>
+        ✅ ${sd.correctCount}/${sd.items.length}</span>
       <span style="font-size:.6rem;background:#ffebee;color:#b71c1c;border-radius:99px;padding:1px 7px;font-weight:800;">
-        ❌ ${sd.items.length-sd.score}</span>
+        ❌ ${sd.items.length - sd.correctCount}</span>
     </div>
-  </div>`).join('')}
+  </div>`;
+  }).join('')}
 </div>
 
 <!-- STUDENT INFO -->
@@ -3060,15 +3576,15 @@ ${secData.map((sd,si)=>{
         <div>
           <div style="font-weight:900;font-size:1rem;">${sd.label}</div>
           <div style="font-size:.75rem;color:var(--muted);font-weight:700;">
-            ${sd.score} correct of ${sd.items.length} questions
+            ${sd.correctCount} correct of ${sd.items.length} questions · ${sd.marks}/${sd.items.length * sd.mPerQ} marks
           </div>
         </div>
       </div>
       <div style="display:flex;gap:6px;align-items:center;">
         <div style="background:#e8f5e9;border-radius:8px;padding:5px 12px;
-          font-size:.78rem;font-weight:900;color:#2e7d32;">✅ ${sd.score} Right</div>
+          font-size:.78rem;font-weight:900;color:#2e7d32;">✅ ${sd.correctCount} Right</div>
         <div style="background:#ffebee;border-radius:8px;padding:5px 12px;
-          font-size:.78rem;font-weight:900;color:#b71c1c;">❌ ${sd.items.length-sd.score} Wrong</div>
+          font-size:.78rem;font-weight:900;color:#b71c1c;">❌ ${sd.items.length-sd.correctCount} Wrong</div>
       </div>
     </div>
 
@@ -3314,10 +3830,8 @@ ${secDefs.map((sd,i)=>{
     });
 
     body += '</body></html>';
-    const w = window.open('','_blank','width=850,height=720');
-    if(!w){showToast('⚠️ Please allow popups in your browser to download PDF','#ff6f00');return;}
-    w.document.write(body); w.document.close(); w.focus();
-    setTimeout(()=>w.print(), 700);
+    // Use Blob + hidden iframe — no popup permission needed
+    _openPdfInFrame(body, `Result_${st.name.replace(/[^a-zA-Z0-9]/g,'_')}_Std${st.std}`);
     return;
   }
 
@@ -3639,13 +4153,27 @@ function authForgotStep2() {
   _authSaveAccounts(accounts);
   _authAddLog(acc.username, acc.name, 'password_reset');
 
-  if (fs) { fs.style.display='block'; fs.textContent=`✅ Password reset successfully! You can now login with your new password.`; }
+  if (fs) { fs.style.display='block'; fs.textContent=`✅ Password reset! Returning to login…`; }
   if (fe) fe.style.display = 'none';
 
   setTimeout(() => {
+    // Reset forgot panel back to step1 for next use
+    const s1 = document.getElementById('forgot-step1');
+    const s2 = document.getElementById('forgot-step2');
+    if (s1) s1.style.display = 'block';
+    if (s2) s2.style.display = 'none';
+    const fpU = document.getElementById('fp-username');
+    if (fpU) fpU.value = '';
+    const fpA = document.getElementById('fp-answer');
+    if (fpA) fpA.value = '';
+    const fpN = document.getElementById('fp-newpass');
+    if (fpN) fpN.value = '';
+    if (fe) fe.style.display = 'none';
+    if (fs) fs.style.display = 'none';
+
     authShowPanel('login');
     const tu = document.getElementById('t-user');
-    if (tu) { tu.value = acc.username; }
+    if (tu) tu.value = acc.username;
     const tp = document.getElementById('t-pass');
     if (tp) { tp.value = ''; tp.focus(); }
   }, 2000);
@@ -3984,19 +4512,80 @@ function showDashSection(sec) {
       </div>
     </div>
     <div style="padding:18px 20px;">
-      <div style="background:#e3f2fd;border-left:4px solid #2196f3;border-radius:8px;
-        padding:11px 14px;margin-bottom:12px;font-size:.82rem;color:#0d47a1;font-weight:700;">
-        📋 Setup: <strong>script.google.com</strong> → New project → Paste Apps Script code → Deploy as Web App → Copy URL below
+
+      <!-- Status badge -->
+      <div id="sheets-status-badge" style="margin-bottom:14px;">
+        ${(()=>{
+          const u = localStorage.getItem('ict_sheets_url')||'';
+          if(!u || u==='YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE') {
+            return `<div style="background:#fff8e1;border-left:4px solid #ff8f00;border-radius:8px;padding:10px 14px;font-size:.82rem;color:#e65100;font-weight:800;">
+              ⚠️ <strong>Not connected.</strong> Enter your Apps Script URL below and click Save.
+            </div>`;
+          }
+          return `<div style="background:#e8f5e9;border-left:4px solid #00c853;border-radius:8px;padding:10px 14px;font-size:.82rem;color:#1b5e20;font-weight:800;">
+            ✅ <strong>URL saved.</strong> Click "Test Connection" to verify it's working.
+          </div>`;
+        })()}
       </div>
-      <input type="url" id="set-sheets-url" value="${_escH(sheetsUrl)}"
-        placeholder="https://script.google.com/macros/s/.../exec"
-        style="${_settingsInputStyle()} margin-bottom:10px;">
-      <button onclick="saveSheetsUrl()"
-        style="padding:10px 22px;border-radius:10px;border:none;
-          background:linear-gradient(135deg,#00838f,#00acc1);color:#fff;
-          font-family:inherit;font-weight:800;font-size:.88rem;cursor:pointer;">
-        🔗 Save Sheets URL
-      </button>
+
+      <!-- Setup guide -->
+      <div style="background:#e3f2fd;border-left:4px solid #2196f3;border-radius:8px;
+        padding:11px 14px;margin-bottom:14px;font-size:.81rem;color:#0d47a1;font-weight:700;">
+        📋 <strong>Setup:</strong> script.google.com → New project → Paste the Apps Script code below → Deploy as Web App → Copy URL
+        <details style="margin-top:8px;cursor:pointer;">
+          <summary style="font-weight:900;color:#1565c0;font-size:.8rem;">▶ Show Apps Script code</summary>
+          <pre style="background:#1a237e;color:#e8eaf6;border-radius:6px;padding:10px;margin-top:6px;
+            font-size:.72rem;overflow-x:auto;white-space:pre-wrap;">function doPost(e){
+  var s=SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var d=JSON.parse(e.postData.contents);
+  if(s.getLastRow()===0){
+    s.appendRow(['Name','Roll','Std','Div','Subject','Mobile',
+                 'MCQ','T/F','Match','FullForm','Total','MaxMarks','Pct','Grade','Date']);
+  }
+  s.appendRow([d.name,d.roll,d.std,d.div,d.subject||'ICT',d.mobile,
+               d.mcq||0,d.trueFalse||0,d.match||0,d.answer||0,
+               d.total||0,d.maxMarks||40,d.pct||0,d.grade||'',
+               new Date().toLocaleString()]);
+  return ContentService.createTextOutput('OK')
+    .setMimeType(ContentService.MimeType.TEXT);
+}</pre>
+        </details>
+      </div>
+
+      <!-- URL input -->
+      <div style="margin-bottom:12px;">
+        <label style="font-size:.75rem;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px;display:block;">Apps Script Web App URL</label>
+        <input type="url" id="set-sheets-url" value="${_escH(sheetsUrl)}"
+          placeholder="https://script.google.com/macros/s/.../exec"
+          style="${_settingsInputStyle()}">
+      </div>
+
+      <!-- Buttons -->
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+        <button onclick="saveSheetsUrl()"
+          style="padding:10px 22px;border-radius:10px;border:none;
+            background:linear-gradient(135deg,#00838f,#00acc1);color:#fff;
+            font-family:inherit;font-weight:900;font-size:.88rem;cursor:pointer;
+            box-shadow:0 3px 10px rgba(0,131,143,.3);">
+          💾 Save URL
+        </button>
+        <button onclick="testSheetsConnection()"
+          style="padding:10px 20px;border-radius:10px;border:2px solid #1a237e;
+            background:#f5f7ff;color:#1a237e;
+            font-family:inherit;font-weight:900;font-size:.88rem;cursor:pointer;">
+          🔌 Test Connection
+        </button>
+        <button onclick="saveSheetsUrl();testSheetsConnection()"
+          style="padding:10px 20px;border-radius:10px;border:none;
+            background:linear-gradient(135deg,#1a237e,#3949ab);color:#fff;
+            font-family:inherit;font-weight:900;font-size:.88rem;cursor:pointer;">
+          💾 Save &amp; Test
+        </button>
+      </div>
+
+      <!-- Test result box -->
+      <div id="sheets-test-result" style="display:none;margin-top:12px;border-radius:10px;
+        padding:12px 14px;font-size:.84rem;font-weight:800;"></div>
     </div>
   </div>
 
@@ -4285,8 +4874,36 @@ function renderExamControl() {
 </div>
 
 <div style="background:#e3f2fd;border:2px solid #90caf9;border-radius:12px;
-  padding:13px 16px;font-size:.82rem;color:#0d47a1;font-weight:700;">
+  padding:13px 16px;font-size:.82rem;color:#0d47a1;font-weight:700;margin-bottom:18px;">
   💡 Tip: Start/stop each Standard independently. Active paper = students get that paper's questions, shuffled each attempt.
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     EXAM SETTINGS — Questions, Marks & Duration
+     ══════════════════════════════════════════════════════ -->
+<div style="background:#fff;border-radius:18px;box-shadow:0 4px 20px rgba(26,35,126,.1);
+  overflow:hidden;margin-bottom:16px;">
+
+  <!-- Header -->
+  <div style="background:linear-gradient(135deg,#4a148c,#7b1fa2);padding:16px 20px;color:#fff;
+    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+    <div>
+      <div style="font-size:1.05rem;font-weight:900;">⚙️ Exam Settings — Questions, Marks &amp; Duration</div>
+      <div style="font-size:.74rem;color:#ce93d8;margin-top:3px;">
+        Change question count, marks per question, and exam time. Updates apply to next exam attempt.
+      </div>
+    </div>
+    <button onclick="examSettingsReset()"
+      style="padding:7px 14px;border-radius:9px;border:2px solid rgba(255,255,255,.35);
+        background:rgba(255,255,255,.1);color:#fff;font-family:inherit;
+        font-weight:800;font-size:.78rem;cursor:pointer;">
+      🔄 Reset Defaults
+    </button>
+  </div>
+
+  <div style="padding:20px;" id="exam-settings-body">
+    ${_renderExamSettingsBody()}
+  </div>
 </div>
 
 </div>`;
@@ -4331,6 +4948,173 @@ function ecDeactivate(std){
   renderExamControl();
 }
 
+// ── EXAM SETTINGS helpers ─────────────────────────────────────
+function _renderExamSettingsBody() {
+  const ES = loadExamSettings();
+  const secColors = ['#3949ab','#00838f','#2e7d32','#e65100'];
+  const secIcons  = ['📝','✅','🔗','💡'];
+  const totalMarks = getExamTotalMarks(ES);
+  const totalQs    = getExamTotalQuestions(ES);
+
+  return `
+<!-- Live summary strip -->
+<div id="es-summary" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px;">
+  <div style="background:#f5f7ff;border-radius:12px;padding:12px;text-align:center;border:2px solid #e8eaf6;">
+    <div style="font-size:1.4rem;font-weight:900;color:#1a237e;" id="es-total-q">${totalQs}</div>
+    <div style="font-size:.72rem;font-weight:800;color:var(--muted);">Total Questions</div>
+  </div>
+  <div style="background:#fff8e1;border-radius:12px;padding:12px;text-align:center;border:2px solid #ffe082;">
+    <div style="font-size:1.4rem;font-weight:900;color:#e65100;" id="es-total-m">${totalMarks}</div>
+    <div style="font-size:.72rem;font-weight:800;color:var(--muted);">Total Marks</div>
+  </div>
+  <div style="background:#e8f5e9;border-radius:12px;padding:12px;text-align:center;border:2px solid #a5d6a7;">
+    <div style="font-size:1.4rem;font-weight:900;color:#1b5e20;" id="es-duration">${ES.durationMinutes}</div>
+    <div style="font-size:.72rem;font-weight:800;color:var(--muted);">Minutes</div>
+  </div>
+</div>
+
+<!-- Per-section rows -->
+<div style="display:flex;flex-direction:column;gap:10px;margin-bottom:18px;">
+  ${ES.sections.map((sec,i) => `
+  <div style="background:#fafbff;border:2px solid #e8eaf6;border-left:4px solid ${secColors[i]};
+    border-radius:12px;padding:14px 16px;">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+      <span style="font-size:1.1rem;">${secIcons[i]}</span>
+      <div style="font-weight:900;color:var(--text);font-size:.95rem;">Section ${i+1}: ${sec.name}</div>
+      <div id="es-sec-preview-${i}"
+        style="margin-left:auto;background:${secColors[i]};color:#fff;border-radius:99px;
+          padding:3px 12px;font-size:.72rem;font-weight:900;">
+        ${sec.qCount} × ${sec.marksPerQ}M = ${sec.qCount*sec.marksPerQ}M
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div>
+        <label style="font-size:.72rem;font-weight:900;color:var(--muted);text-transform:uppercase;
+          letter-spacing:.4px;margin-bottom:5px;display:block;">Questions (1–50)</label>
+        <input type="number" id="es-qcount-${i}" value="${sec.qCount}" min="1" max="50"
+          oninput="examSettingsPreview()"
+          style="width:100%;border:2px solid #e8eaf6;border-radius:10px;padding:9px 13px;
+            font-family:inherit;font-size:.95rem;font-weight:800;outline:none;
+            background:#f5f7ff;box-sizing:border-box;transition:border .2s;"
+          onfocus="this.style.borderColor='${secColors[i]}'"
+          onblur="this.style.borderColor='#e8eaf6'">
+      </div>
+      <div>
+        <label style="font-size:.72rem;font-weight:900;color:var(--muted);text-transform:uppercase;
+          letter-spacing:.4px;margin-bottom:5px;display:block;">Marks per Question</label>
+        <input type="number" id="es-marks-${i}" value="${sec.marksPerQ}" min="1" max="10"
+          oninput="examSettingsPreview()"
+          style="width:100%;border:2px solid #e8eaf6;border-radius:10px;padding:9px 13px;
+            font-family:inherit;font-size:.95rem;font-weight:800;outline:none;
+            background:#f5f7ff;box-sizing:border-box;transition:border .2s;"
+          onfocus="this.style.borderColor='${secColors[i]}'"
+          onblur="this.style.borderColor='#e8eaf6'">
+      </div>
+    </div>
+  </div>`).join('')}
+</div>
+
+<!-- Duration row -->
+<div style="background:#fafbff;border:2px solid #e8eaf6;border-left:4px solid #4a148c;
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;">
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+    <span style="font-size:1.1rem;">⏱️</span>
+    <div style="font-weight:900;color:var(--text);font-size:.95rem;">Exam Duration</div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 2fr;gap:12px;align-items:center;">
+    <div>
+      <label style="font-size:.72rem;font-weight:900;color:var(--muted);text-transform:uppercase;
+        letter-spacing:.4px;margin-bottom:5px;display:block;">Duration (minutes)</label>
+      <input type="number" id="es-duration-input" value="${ES.durationMinutes}" min="5" max="180"
+        oninput="examSettingsPreview()"
+        style="width:100%;border:2px solid #e8eaf6;border-radius:10px;padding:9px 13px;
+          font-family:inherit;font-size:.95rem;font-weight:800;outline:none;
+          background:#f5f7ff;box-sizing:border-box;transition:border .2s;"
+        onfocus="this.style.borderColor='#4a148c'"
+        onblur="this.style.borderColor='#e8eaf6'">
+    </div>
+    <div style="background:#f3e5f5;border-radius:10px;padding:12px 16px;">
+      <div style="font-size:.78rem;font-weight:700;color:#4a148c;">⏱️ Timer starts at
+        <strong id="es-timer-preview">${ES.durationMinutes}:00</strong> and counts down.
+        Turns red at <strong>${Math.max(5, Math.floor(ES.durationMinutes*0.1))} min</strong> remaining.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Save button -->
+<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+  <button onclick="examSettingsSave()"
+    style="padding:12px 28px;border-radius:11px;border:none;
+      background:linear-gradient(135deg,#4a148c,#7b1fa2);color:#fff;
+      font-family:inherit;font-weight:900;font-size:.95rem;cursor:pointer;
+      box-shadow:0 4px 14px rgba(74,20,140,.35);">
+    💾 Save Exam Settings
+  </button>
+  <div style="font-size:.78rem;font-weight:700;color:var(--muted);">
+    Changes apply from the next exam attempt.
+  </div>
+</div>`;
+}
+
+function examSettingsPreview() {
+  let totalQ = 0, totalM = 0;
+  for (let i = 0; i < 4; i++) {
+    const qc = parseInt(document.getElementById(`es-qcount-${i}`)?.value||0)||0;
+    const mp = parseInt(document.getElementById(`es-marks-${i}`)?.value||1)||1;
+    totalQ += qc;
+    totalM += qc * mp;
+    const prev = document.getElementById(`es-sec-preview-${i}`);
+    if (prev) prev.textContent = `${qc} × ${mp}M = ${qc*mp}M`;
+  }
+  const dur = parseInt(document.getElementById('es-duration-input')?.value||45)||45;
+  const tq = document.getElementById('es-total-q');
+  const tm = document.getElementById('es-total-m');
+  const td = document.getElementById('es-duration');
+  const tp = document.getElementById('es-timer-preview');
+  if (tq) tq.textContent = totalQ;
+  if (tm) tm.textContent = totalM;
+  if (td) td.textContent = dur;
+  if (tp) tp.textContent = `${dur}:00`;
+}
+
+function examSettingsSave() {
+  const ES = loadExamSettings();
+  let valid = true;
+  for (let i = 0; i < 4; i++) {
+    const qc = parseInt(document.getElementById(`es-qcount-${i}`)?.value)||0;
+    const mp = parseInt(document.getElementById(`es-marks-${i}`)?.value)||0;
+    if (qc < 1 || qc > 50) { showToast(`⚠️ Section ${i+1}: questions must be 1–50`,'#ff6f00'); valid=false; break; }
+    if (mp < 1 || mp > 10) { showToast(`⚠️ Section ${i+1}: marks per Q must be 1–10`,'#ff6f00'); valid=false; break; }
+    ES.sections[i].qCount    = qc;
+    ES.sections[i].marksPerQ = mp;
+  }
+  if (!valid) return;
+  const dur = parseInt(document.getElementById('es-duration-input')?.value)||45;
+  if (dur < 5 || dur > 180) { showToast('⚠️ Duration must be 5–180 minutes','#ff6f00'); return; }
+  ES.durationMinutes = dur;
+  saveExamSettings(ES);
+  EXAM_SETTINGS = ES;
+
+  const totalM = getExamTotalMarks(ES);
+  const totalQ = getExamTotalQuestions(ES);
+  showToast(`✅ Settings saved! ${totalQ} Qs · ${totalM} Marks · ${dur} min`,'linear-gradient(135deg,#4a148c,#7b1fa2)');
+
+  // Refresh the settings body to reflect saved state
+  const body = document.getElementById('exam-settings-body');
+  if (body) body.innerHTML = _renderExamSettingsBody();
+}
+
+function examSettingsReset() {
+  _settingsDanger('Reset exam settings to default? (10 questions × 1 mark × 45 minutes)', () => {
+    saveExamSettings(JSON.parse(JSON.stringify(DEFAULT_EXAM_SETTINGS)));
+    EXAM_SETTINGS = loadExamSettings();
+    const body = document.getElementById('exam-settings-body');
+    if (body) body.innerHTML = _renderExamSettingsBody();
+    showToast('🔄 Exam settings reset to defaults','linear-gradient(135deg,#ff6f00,#ff8f00)');
+  });
+}
+
 function setAllExams(active) {
   ['V','VI','VII','VIII'].forEach(s => { EXAM_CONTROL[s].active = active; });
   saveExamControl();
@@ -4345,7 +5129,31 @@ function setAllExams(active) {
 // ============================================================
 // QUESTION EDITOR — FULL REDESIGN
 // ============================================================
-let editorState = { std: 'V', section: 'mcq' };
+let editorState = { std: 'V', section: 'mcq', srcFilter: 'all' };
+
+function qedSetSrcFilter(src) {
+  editorState.srcFilter = src;
+  renderQuestionEditor();
+}
+
+function qedSetActivePaper(paperId) {
+  const std = editorState.std;
+  const p = PAPER_LIBRARY.find(x => x.id === paperId);
+  if (!p) { showToast('Paper not found','#ff6f00'); return; }
+  ACTIVE_PAPERS[std] = paperId;
+  p.published = true;
+  savePaperLibrary(); saveActivePapers();
+  showToast(`✅ "${p.name}" is now the active paper for Std ${std}!`, '#1b5e20');
+  renderQuestionEditor();
+}
+
+function qedClearActivePaper() {
+  const std = editorState.std;
+  delete ACTIVE_PAPERS[std];
+  saveActivePapers();
+  showToast(`⏹️ Active paper cleared for Std ${std}`, '#ff6f00');
+  renderQuestionEditor();
+}
 
 function renderQuestionEditor(std, section) {
   if (std)     editorState.std     = std;
@@ -4509,6 +5317,111 @@ function renderQuestionEditor(std, section) {
     </div>
   </div>
 
+  <!-- ── PAPER SELECTOR & SOURCE FILTER PANEL ── -->
+  <div style="background:linear-gradient(135deg,#e8eaf6 0%,#f5f7ff 100%);border-radius:16px;
+    border:2px solid #c5cae9;padding:16px 18px;margin-bottom:16px;
+    box-shadow:0 3px 14px rgba(26,35,126,.08);animation:slideInUp .35s ease;">
+
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+      <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#3949ab,#1a237e);
+        display:flex;align-items:center;justify-content:center;font-size:1rem;color:#fff;">📄</div>
+      <div>
+        <div style="font-weight:900;font-size:.95rem;color:#1a237e;">Paper Selection &amp; Source Filter</div>
+        <div style="font-size:.74rem;color:#5c6bc0;font-weight:700;">Select which paper to set active · Filter questions by source</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+
+      <!-- Left: Paper selector for this Std -->
+      <div style="background:#fff;border-radius:12px;padding:13px 15px;border:2px solid #e8eaf6;">
+        <div style="font-size:.72rem;font-weight:900;color:var(--muted);text-transform:uppercase;
+          letter-spacing:.5px;margin-bottom:8px;">📄 Papers for Std ${s}</div>
+        ${(()=>{
+          const papers = PAPER_LIBRARY.filter(p => p.std === s);
+          const activePid = ACTIVE_PAPERS[s] || '';
+          if (!papers.length) return `<div style="color:#9fa8da;font-size:.82rem;font-weight:700;
+            text-align:center;padding:12px 0;">No papers yet for Std ${s}.<br>
+            <button onclick="showDashSection('papers');setTimeout(()=>{paperViewState.std='${s}';renderPaperLibrary('${s}');},100)"
+              style="margin-top:8px;padding:6px 14px;border-radius:8px;border:2px solid #3949ab;
+              background:#e8eaf6;color:#1a237e;font-family:inherit;font-weight:800;font-size:.78rem;cursor:pointer;">
+              ➕ Create a Paper
+            </button></div>`;
+          return `<div style="display:flex;flex-direction:column;gap:6px;max-height:180px;overflow-y:auto;">
+            ${papers.map(p => {
+              const isActive = p.id === activePid;
+              const srcIcon = p.source==='ai'?'🤖':p.source==='upload'?'📤':'✏️';
+              const srcLabel = p.source==='ai'?'AI':'Upload'==='upload'?'Upload':'Manual';
+              const totalQ = (p.sections?.mcq?.length||0)+(p.sections?.trueFalse?.length||0)+(p.sections?.match?.length||0)+(p.sections?.answer?.length||0);
+              return `<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;
+                border-radius:9px;border:2px solid ${isActive?'#00c853':'#e8eaf6'};
+                background:${isActive?'#e8f5e9':'#fafbff'};
+                transition:all .2s;">
+                <span style="font-size:1rem;">${srcIcon}</span>
+                <div style="flex:1;min-width:0;">
+                  <div style="font-weight:900;font-size:.82rem;color:${isActive?'#1b5e20':'var(--text)'};
+                    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.name}</div>
+                  <div style="font-size:.68rem;color:var(--muted);font-weight:700;">${totalQ}Q · ${p.source||'manual'}</div>
+                </div>
+                ${isActive
+                  ? `<span style="font-size:.65rem;font-weight:900;background:#00c853;color:#fff;
+                      border-radius:99px;padding:2px 8px;white-space:nowrap;">✅ Active</span>`
+                  : `<button onclick="qedSetActivePaper('${p.id}')"
+                      style="font-size:.68rem;font-weight:900;background:#1a237e;color:#fff;
+                      border:none;border-radius:7px;padding:4px 10px;cursor:pointer;white-space:nowrap;
+                      font-family:inherit;">Set Active</button>`
+                }
+              </div>`;
+            }).join('')}
+          </div>
+          <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;">
+            <button onclick="showDashSection('papers');setTimeout(()=>{paperViewState.std='${s}';renderPaperLibrary('${s}');},100)"
+              style="font-size:.72rem;font-weight:800;padding:5px 12px;border-radius:7px;
+              border:2px solid #3949ab;background:#e8eaf6;color:#1a237e;font-family:inherit;cursor:pointer;">
+              📚 Manage Papers
+            </button>
+            ${activePid?`<button onclick="qedClearActivePaper()"
+              style="font-size:.72rem;font-weight:800;padding:5px 12px;border-radius:7px;
+              border:2px solid #ff8f00;background:#fff8e1;color:#e65100;font-family:inherit;cursor:pointer;">
+              ⏹️ Deactivate
+            </button>`:''}
+          </div>`;
+        })()}
+      </div>
+
+      <!-- Right: Source Filter -->
+      <div style="background:#fff;border-radius:12px;padding:13px 15px;border:2px solid #e8eaf6;">
+        <div style="font-size:.72rem;font-weight:900;color:var(--muted);text-transform:uppercase;
+          letter-spacing:.5px;margin-bottom:8px;">🔍 Filter by Source</div>
+        <div style="display:flex;flex-direction:column;gap:6px;" id="qed-src-filter-btns">
+          ${['all','ai','upload','manual'].map(src => {
+            const icon = src==='all'?'🗂️':src==='ai'?'🤖':src==='upload'?'📤':'✏️';
+            const label = src==='all'?'All Questions':src==='ai'?'AI Generated':src==='upload'?'Uploaded':'Manually Added';
+            const cnt = src==='all' ? bank[sec].length
+              : bank[sec].filter(q=>(q.source||'manual')===src).length;
+            const isSel = (editorState.srcFilter||'all')===src;
+            return `<button onclick="qedSetSrcFilter('${src}')"
+              style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:9px;
+              border:2px solid ${isSel?curSec?.color:'#e8eaf6'};
+              background:${isSel?curSec?.color+'18':'#fafbff'};
+              font-family:inherit;font-size:.8rem;font-weight:800;cursor:pointer;
+              color:${isSel?curSec?.color:'var(--text)'};
+              transition:all .2s;text-align:left;">
+              <span>${icon}</span>
+              <span style="flex:1;">${label}</span>
+              <span style="font-size:.72rem;font-weight:900;background:${isSel?curSec?.color:'#e8eaf6'};
+                color:${isSel?'#fff':'var(--muted)'};border-radius:99px;padding:1px 8px;">${cnt}</span>
+            </button>`;
+          }).join('')}
+        </div>
+        <div style="margin-top:10px;padding:8px 10px;background:#f5f7ff;border-radius:8px;
+          font-size:.72rem;color:#5c6bc0;font-weight:700;border:1px solid #e8eaf6;">
+          💡 Source is set when questions are imported via AI Generator, File Upload, or added manually.
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div id="qed-list"></div>
 
   <div style="display:flex;justify-content:space-between;align-items:center;
@@ -4560,22 +5473,57 @@ function qedDeleteStd() {
 }
 
 function qedRenderList() {
-  const { std, section } = editorState;
-  const qs = STD_QUESTION_BANKS[std][section];
+  const { std, section, srcFilter } = editorState;
+  const allQs = STD_QUESTION_BANKS[std][section];
   const el = document.getElementById('qed-list');
   if (!el) return;
-  if (qs.length===0) {
+
+  // Apply source filter
+  const filter = srcFilter || 'all';
+  const qs = filter === 'all' ? allQs : allQs.filter(q => (q.source || 'manual') === filter);
+  const filterLabel = filter === 'all' ? '' : ` (${filter === 'ai' ? 'AI Generated' : filter === 'upload' ? 'Uploaded' : 'Manual'} only)`;
+
+  if (allQs.length === 0) {
     el.innerHTML=`<div class="qed-empty" style="background:#fff;border-radius:16px;
       border:2px dashed #c5cae9;margin-bottom:12px;">
       <span class="qed-empty-ico">📭</span>
       <div style="font-size:1.1rem;font-weight:800;color:var(--text);margin-bottom:8px;">No questions in this section yet</div>
-      <div style="color:var(--muted);font-size:.88rem;margin-bottom:20px;">Click <strong>Add New Question</strong> to get started.</div>
-      <button class="btn btn-primary" onclick="qedAddQuestion()">➕ Add First Question</button>
+      <div style="color:var(--muted);font-size:.88rem;margin-bottom:20px;">Use <strong>AI Generator</strong>, <strong>Upload Questions</strong>, or click <strong>Add New Question</strong>.</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;">
+        <button class="btn btn-primary" onclick="qedAddQuestion()">✏️ Add Manually</button>
+        <button class="btn btn-secondary" onclick="showDashSection('ai')">🤖 AI Generator</button>
+        <button class="btn btn-outline" onclick="showDashSection('upload')">📤 Upload File</button>
+      </div>
     </div>`;
     return;
   }
-  el.innerHTML = qs.map((q,qi)=>qedBuildCard(q,qi,std,section)).join('');
-  el.querySelectorAll('.qed-card').forEach((c,i)=>c.style.animationDelay=(i*.04)+'s');
+
+  if (qs.length === 0) {
+    el.innerHTML=`<div class="qed-empty" style="background:#fff;border-radius:16px;
+      border:2px dashed #c5cae9;margin-bottom:12px;">
+      <span class="qed-empty-ico">🔍</span>
+      <div style="font-size:1.1rem;font-weight:800;color:var(--text);margin-bottom:8px;">No ${filterLabel.trim()} questions found</div>
+      <div style="color:var(--muted);font-size:.88rem;margin-bottom:16px;">There are ${allQs.length} total questions but none match the current filter.</div>
+      <button class="btn btn-outline" onclick="qedSetSrcFilter('all')">🗂️ Show All ${allQs.length} Questions</button>
+    </div>`;
+    return;
+  }
+
+  // Render question cards, using real indices in allQs for editing
+  el.innerHTML = `
+    ${filter !== 'all' ? `<div style="background:#e8eaf6;border-radius:10px;padding:8px 14px;
+      margin-bottom:12px;font-size:.8rem;font-weight:800;color:#3949ab;
+      display:flex;align-items:center;gap:8px;">
+      <span>🔍 Showing ${qs.length} of ${allQs.length} questions${filterLabel}</span>
+      <button onclick="qedSetSrcFilter('all')" style="margin-left:auto;font-size:.72rem;
+        padding:3px 10px;border-radius:6px;border:1px solid #3949ab;background:#fff;
+        color:#1a237e;font-family:inherit;font-weight:800;cursor:pointer;">✕ Clear Filter</button>
+    </div>` : ''}
+    ${qs.map((q) => {
+      const qi = allQs.indexOf(q); // real index for editing
+      return qedBuildCard(q, qi, std, section);
+    }).join('')}`;
+  el.querySelectorAll('.qed-card').forEach((c,i) => c.style.animationDelay = (i*.04)+'s');
 }
 
 function qedBuildCard(q, qi, std, section) {
@@ -4669,11 +5617,17 @@ function qedBuildCard(q, qi, std, section) {
       </div>`;
   }
 
+  const srcIcon  = q.source==='ai'?'🤖':q.source==='upload'?'📤':'✏️';
+  const srcColor = q.source==='ai'?'#7b1fa2':q.source==='upload'?'#0277bd':'#4e342e';
+  const srcBg    = q.source==='ai'?'#f3e5f5':q.source==='upload'?'#e1f5fe':'#efebe9';
+
   return `
   <div class="qed-card" id="qcard-${qi}">
     <div class="qed-card-head" onclick="qedToggle(${qi})">
       <div class="qed-num-badge" style="background:linear-gradient(135deg,${col},${col}bb);">${qi+1}</div>
       <div class="qed-preview" title="${escHtml(preview)}">${escHtml(preview)}</div>
+      <div style="font-size:.68rem;font-weight:900;flex-shrink:0;margin-right:4px;
+        background:${srcBg};border-radius:7px;padding:2px 7px;color:${srcColor};">${srcIcon} ${q.source||'manual'}</div>
       <div style="font-size:.72rem;font-weight:800;flex-shrink:0;margin-right:6px;
         background:#f0f2ff;border-radius:7px;padding:3px 9px;color:#5c6bc0;">${ansTag}</div>
       <div class="qed-head-btns" onclick="event.stopPropagation()">
@@ -4855,12 +5809,16 @@ function qedDelete(qi) {
 function qedAddQuestion() {
   const {std,section}=editorState;
   const bank=STD_QUESTION_BANKS[std][section];
-  if(section==='mcq'||section==='answer') bank.push({q:'',opts:['','','',''],ans:0});
-  else if(section==='trueFalse')          bank.push({q:'',ans:true});
+  if(section==='mcq'||section==='answer') bank.push({q:'',opts:['','','',''],ans:0,source:'manual'});
+  else if(section==='trueFalse')          bank.push({q:'',ans:true,source:'manual'});
   else if(section==='match'){
     const allB=[...new Set(bank.map(m=>m.b).filter(Boolean))];
     if(allB.length<2) allB.push('Answer 1','Answer 2');
-    bank.push({a:'',b:'',opts:allB.slice(0,5)});
+    bank.push({a:'',b:'',opts:allB.slice(0,5),source:'manual'});
+  }
+  // Reset filter to 'all' so the new question is visible
+  if(editorState.srcFilter && editorState.srcFilter !== 'all' && editorState.srcFilter !== 'manual') {
+    editorState.srcFilter = 'manual';
   }
   saveStdBanks();
   qedRenderList();
@@ -4884,6 +5842,80 @@ function shakeCard(card) {
 }
 
 let _toastTimer;
+// ── PDF VIEWER — uses Blob + full-screen overlay (no popup permission needed) ──
+function _openPdfInFrame(htmlContent, title) {
+  // Remove existing overlay if any
+  const old = document.getElementById('pdf-print-overlay');
+  if (old) old.remove();
+
+  const blob = new Blob([htmlContent], {type: 'text/html;charset=utf-8'});
+  const blobUrl = URL.createObjectURL(blob);
+
+  const overlay = document.createElement('div');
+  overlay.id = 'pdf-print-overlay';
+  overlay.style.cssText = `
+    position:fixed;inset:0;z-index:99999;
+    background:rgba(10,10,30,.88);
+    display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+    padding:0;animation:fadeIn .25s ease;
+  `;
+
+  overlay.innerHTML = `
+    <div style="width:100%;background:linear-gradient(135deg,#1a237e,#3949ab);
+      padding:10px 16px;display:flex;align-items:center;justify-content:space-between;
+      gap:10px;flex-wrap:wrap;flex-shrink:0;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="font-size:1.3rem;">📕</span>
+        <div>
+          <div style="color:#fff;font-weight:900;font-size:.95rem;">${title || 'Document'}</div>
+          <div style="color:#9fa8da;font-size:.72rem;font-weight:700;">Press Print (Ctrl+P) → choose "Save as PDF" to download</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button id="pdf-print-btn"
+          style="padding:9px 18px;border-radius:10px;border:none;
+            background:linear-gradient(135deg,#ff6f00,#ff8f00);color:#fff;
+            font-family:inherit;font-weight:900;font-size:.88rem;cursor:pointer;
+            box-shadow:0 3px 12px rgba(255,111,0,.4);">
+          🖨️ Print / Save as PDF
+        </button>
+        <button onclick="document.getElementById('pdf-print-overlay').remove();URL.revokeObjectURL('${blobUrl}')"
+          style="padding:9px 16px;border-radius:10px;border:2px solid rgba(255,255,255,.3);
+            background:rgba(255,255,255,.1);color:#fff;
+            font-family:inherit;font-weight:800;font-size:.88rem;cursor:pointer;">
+          ✕ Close
+        </button>
+      </div>
+    </div>
+    <iframe id="pdf-frame" src="${blobUrl}"
+      style="width:100%;flex:1;border:none;background:#fff;"
+      onload="this.style.opacity=1"></iframe>
+  `;
+
+  document.body.appendChild(overlay);
+
+  // Wire print button to iframe's print
+  setTimeout(() => {
+    const btn  = document.getElementById('pdf-print-btn');
+    const frm  = document.getElementById('pdf-frame');
+    if (btn && frm) {
+      btn.onclick = () => {
+        try {
+          frm.contentWindow.focus();
+          frm.contentWindow.print();
+        } catch(e) {
+          // fallback: open blob in new tab
+          window.open(blobUrl, '_blank');
+        }
+      };
+    }
+    // Auto-show after iframe loads
+  }, 300);
+
+  // Revoke blob after 5 minutes to free memory
+  setTimeout(() => URL.revokeObjectURL(blobUrl), 300000);
+}
+
 function showToast(msg,bg) {
   clearTimeout(_toastTimer);
   let t=document.getElementById('save-toast-el');
@@ -5195,7 +6227,111 @@ function saveSheetsUrl() {
     showToast('⚠️ URL must start with https://script.google.com','#ff6f00'); return;
   }
   localStorage.setItem('ict_sheets_url', url || '');
+
+  // Update status badge
+  const badge = document.getElementById('sheets-status-badge');
+  if (badge) {
+    if (!url) {
+      badge.innerHTML = `<div style="background:#fff8e1;border-left:4px solid #ff8f00;border-radius:8px;padding:10px 14px;font-size:.82rem;color:#e65100;font-weight:800;">
+        ⚠️ <strong>Not connected.</strong> Enter your Apps Script URL below and click Save.</div>`;
+    } else {
+      badge.innerHTML = `<div style="background:#e8f5e9;border-left:4px solid #00c853;border-radius:8px;padding:10px 14px;font-size:.82rem;color:#1b5e20;font-weight:800;">
+        ✅ <strong>URL saved.</strong> Click "Test Connection" to verify it's working.</div>`;
+    }
+  }
   showToast(url ? '✅ Google Sheets URL saved!' : '🗑️ Google Sheets URL cleared','linear-gradient(135deg,#00838f,#00acc1)');
+}
+
+async function testSheetsConnection() {
+  // First save if there's a value in input
+  const inputEl = document.getElementById('set-sheets-url');
+  if (inputEl?.value?.trim()) saveSheetsUrl();
+
+  const url = getSheetUrl();
+  const resultEl = document.getElementById('sheets-test-result');
+
+  if (!url || url === 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE') {
+    if (resultEl) {
+      resultEl.style.display = 'block';
+      resultEl.style.background = '#fff3e0';
+      resultEl.style.border = '2px solid #ff8f00';
+      resultEl.style.color = '#e65100';
+      resultEl.innerHTML = '⚠️ No URL saved yet. Enter a valid Google Apps Script URL and click Save first.';
+    }
+    return;
+  }
+
+  if (resultEl) {
+    resultEl.style.display = 'block';
+    resultEl.style.background = '#f5f7ff';
+    resultEl.style.border = '2px solid #c5cae9';
+    resultEl.style.color = '#3949ab';
+    resultEl.innerHTML = '⏳ Sending test ping to your Google Sheet…';
+  }
+
+  // Send a test ping with dummy data (uses correct field names matching resultData)
+  const testPayload = {
+    name: 'TEST_PING', roll: '000', std: 'TEST', div: 'Test',
+    subject: 'ICT', mobile: '0000000000',
+    mcq: 0, trueFalse: 0, match: 0, answer: 0,
+    sec1:0, sec2:0, sec3:0, sec4:0,
+    total: 0, maxMarks: 40, pct: 0, grade: 'TEST',
+    _test: true, date: new Date().toISOString()
+  };
+
+  try {
+    await fetch(url, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(testPayload),
+      mode: 'no-cors'  // Google Apps Script requires no-cors
+    });
+    // ── IMPORTANT: with no-cors, fetch() ALWAYS resolves (even on error).
+    // The only way it throws is if the URL is unreachable (network error).
+    // So "success" here means the request was SENT — not that Sheets received it.
+    // Teacher must verify by checking their Google Sheet for the TEST_PING row.
+    if (resultEl) {
+      resultEl.style.background = '#e8f5e9';
+      resultEl.style.border = '2px solid #00c853';
+      resultEl.style.color = '#1b5e20';
+      resultEl.innerHTML = `✅ <strong>Test ping sent!</strong><br>
+        <span style="font-size:.78rem;font-weight:700;line-height:1.6;">
+          The test data was dispatched to your Apps Script URL.<br>
+          ⚠️ <em>Due to browser security (no-cors), we cannot read the response.</em><br>
+          👉 <strong>Open your Google Sheet and check if a "TEST_PING" row appeared.</strong><br>
+          If yes → fully connected ✅ &nbsp; If no row → check the troubleshooting steps below.<br><br>
+          🔧 <strong>Troubleshoot if no row appears:</strong><br>
+          1️⃣ Script must be deployed as <strong>Web App</strong> → Execute as: <em>Me</em> → Access: <em>Anyone</em><br>
+          2️⃣ Always <strong>re-deploy</strong> (new deployment) after editing the script<br>
+          3️⃣ URL must end in <code>/exec</code> (not <code>/dev</code>)<br>
+          4️⃣ Copy the exact deployment URL — not the project URL<br>
+          URL saved: <code style="word-break:break-all;font-size:.7rem;">${url.substring(0,60)}…</code>
+        </span>`;
+    }
+    showToast('📡 Test ping sent — check your Google Sheet!','linear-gradient(135deg,#00838f,#00acc1)');
+    const badge = document.getElementById('sheets-status-badge');
+    if (badge) {
+      badge.innerHTML = `<div style="background:#e8f5e9;border-left:4px solid #00c853;border-radius:8px;padding:10px 14px;font-size:.82rem;color:#1b5e20;font-weight:800;">
+        ✅ <strong>URL saved &amp; ping sent.</strong> Check your Google Sheet for a TEST_PING row to confirm it's working.</div>`;
+    }
+  } catch(err) {
+    if (resultEl) {
+      resultEl.style.background = '#ffebee';
+      resultEl.style.border = '2px solid #ff1744';
+      resultEl.style.color = '#b71c1c';
+      resultEl.innerHTML = `❌ <strong>Network error — could not reach the URL.</strong><br>
+        <span style="font-size:.78rem;font-weight:700;line-height:1.6;">
+          Error: ${err.message}<br><br>
+          🔧 <strong>Fix steps:</strong><br>
+          1️⃣ Check your internet connection<br>
+          2️⃣ Make sure the Apps Script URL is correct (ends in /exec)<br>
+          3️⃣ Deployed as Web App with access set to <strong>Anyone</strong>?<br>
+          4️⃣ Re-deploy the script — click New Deployment each time<br>
+          5️⃣ Try opening the URL directly in your browser — it should show some text
+        </span>`;
+    }
+    showToast('❌ Cannot reach Google Sheets URL','#ff1744');
+  }
 }
 
 function exportSystemData() {
@@ -6360,13 +7496,8 @@ function _plDlPdf(paperId) {
 
   const fullHtml = html + body + '</body></html>';
   const safeName = paper.name.replace(/[^a-zA-Z0-9_\- ]/g,'_').replace(/\s+/g,'_');
-  const w = window.open('','_blank','width=900,height=700');
-  if (!w) { showToast('⚠️ Allow popups to download PDF','#ff6f00'); return; }
-  w.document.write(fullHtml);
-  w.document.close();
-  w.focus();
-  setTimeout(()=>{ w.print(); }, 600);
-  showToast('📕 PDF opened — use Print > Save as PDF','#b71c1c');
+  _openPdfInFrame(fullHtml, safeName);
+  showToast('📕 PDF ready — use Print → Save as PDF to save','linear-gradient(135deg,#b71c1c,#c62828)');
 }
 
 // ── DOC DOWNLOAD (HTML-based .doc with answers) ──
@@ -7537,6 +8668,7 @@ function aiAddAndCreatePaper() {
     std,
     name: `${aiState.topic} — AI (Std ${std})`,
     published: false,
+    source: 'ai',
     createdAt: new Date().toISOString(),
     settings: {
       mcqShow:   Math.max(1, paperSecs.mcq.length),
@@ -9196,11 +10328,12 @@ function downloadExcel() {
 }
 
 function resetExam() {
-  examState.sections.forEach(s => { s.answers = []; s.questions = []; s.marks = 0; });
+  examState.sections.forEach(s => { s.answers = []; s.questions = []; s.marks = 0; if(s.locked) s.locked=[]; });
   examState.currentSection = 0;
   examState.currentQ = 0;
   examState.submitted = false;
-  examState.timerSeconds = 45 * 60;
+  const ES = loadExamSettings();
+  examState.timerSeconds = (ES.durationMinutes || 45) * 60;
   clearInterval(examState.timerInterval);
 }
 
@@ -9213,6 +10346,9 @@ window.addEventListener('load', () => {
     ls.style.opacity = '0';
     setTimeout(() => ls.style.display = 'none', 600);
   }, 2200);
+
+  // Populate exam pattern grid on initial page load
+  setTimeout(() => updateRegPatternGrid(), 100);
 
   // Keyboard nav
   document.addEventListener('keydown', e => {
